@@ -1,0 +1,17 @@
+{
+  "name": "sphero-v2",
+  "version": "0.0.1",
+  "description": "V2 api version for sphero toys (not official)",
+  "main": "index.js",
+  "author": "igbopie",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@types/noble": "^0.0.34",
+    "noble": "^1.9.0",
+    "ts-node": "^5.0.0",
+    "typescript": "^2.7.2"
+  }
+}
