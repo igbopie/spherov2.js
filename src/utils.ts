@@ -5,7 +5,7 @@ export const toPromise = (fn: Function, args?: Array<any>) => {
       if (err) {
         reject(err);
       } else {
-        resolve(retArgs);
+        resolve(...retArgs);
       }
     });
   });
