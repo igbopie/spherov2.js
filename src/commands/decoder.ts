@@ -12,11 +12,12 @@ const classifyPacket = (packet: Array<number>): CommandResponse => {
     deviceId,
     commandId,
     sequenceNumber,
-    payload
+    payload,
+    raw: packet
   };
 }
 
-export function factory(callback: (err: string, response?: number) => void) {
+export function factory(callback: (err: string, response?: CommandResponse) => void) {
   let msg: Array<number> = [];
   let checksum: number = 0;
   let isEscaping: boolean = false;

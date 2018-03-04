@@ -104,7 +104,8 @@ export interface CommandResponse {
   deviceId: number,
   commandId: number,
   sequenceNumber: number,
-  payload: Array<number>
+  payload: Array<number>,
+  raw: Array<number>
 }
 
 export type CommandGenerator = (deviceId: number) => (part: CommandPartial) => Uint8Array;

@@ -22,10 +22,11 @@ enum CharacteristicUUID {
 const commandsType = (false as true) && factory();
 const decodeType = (false as true) && decodeFactory((_) => null);
 
-interface CommandQeueItem {
+interface CommandQueueItem {
   promise: PromiseLike<any>,
   command: Uint8Array,
   characteristic: Characteristic,
+  timeout?: NodeJS.Timer,
   success: () => any,
   reject: () => any
 }
@@ -38,31 +39,42 @@ export class Toy {
   antiDoSCharacteristic?: Characteristic;
   commands: typeof commandsType;
   decoder: typeof decodeType;
-  commandQeue: Array<CommandQeueItem>;
-  executing: CommandQeueItem | null;
+  commandQueue: Array<CommandQueueItem>;
+  executing: CommandQueueItem | null;
+  started: boolean;
 
   constructor(p: Peripheral) {
     this.peripheral = p;
-    this.init();
   }
 
   async init() {
     const p = this.peripheral
 
-    this.commandQeue = [];
+    this.commandQueue = [];
     this.executing = null;
     this.commands = factory();
     this.decoder = decodeFactory((error, packet) => this.onPacketRead(error, packet));
+    this.started = false;
 
     await toPromise(p.connect.bind(p));
     await toPromise(p.discoverAllServicesAndCharacteristics.bind(p));
     this.bindServices();
     await this.bindListeners();
 
+
+  }
+
+  async start() {
     // start
+    await this.init();
+
     await this.write(this.antiDoSCharacteristic, "usetheforce...band");
     await toPromise(this.dfuControlCharacteristic.subscribe.bind(this.dfuControlCharacteristic))
     await toPromise(this.apiV2Characteristic.subscribe.bind(this.apiV2Characteristic))
+
+    this.started = true;
+
+    await this.wake();
   }
 
   bindServices() {
@@ -93,23 +105,31 @@ export class Toy {
       const { deviceId, commandId, sequenceNumber } = packet;
       const [s, flags, dId, cId, sNumber] = this.executing.command;
       if (deviceId === dId && commandId === cId && sequenceNumber === sNumber) {
-        console.log('RESPONSE COMMAND');
+        console.log('RESPONSE COMMAND', packet.raw);
         this.executing.success();
       } else {
-        console.log('RESPONSE COMMAND ERROR');
+        console.log('RESPONSE COMMAND ERROR', packet.raw);
         this.executing.reject();
       }
-
+      clearTimeout(this.executing.timeout);
       this.executing = null;
     } else {
-      console.log('PACKET RECEIVED BUT NOT EXECUTING', packet);
+      console.log('PACKET RECEIVED BUT NOT EXECUTING', packet.raw);
     }
 
     this.processCommand();
   }
 
+  onCommandTimedout() {
+    console.log('RESPONSE COMMAND TIMEDOUT');
+    clearTimeout(this.executing.timeout);
+    this.executing.reject();
+    this.executing = null;
+    this.processCommand();
+  }
+
   onApiRead(data: Buffer, isNotification: boolean) {
-    console.log('READAPI', data, isNotification)
+    // console.log('READAPI', data, isNotification)
     data.forEach(byte => this.decoder.add(byte));
   }
 
@@ -121,7 +141,9 @@ export class Toy {
     return this.write(this.dfuControlCharacteristic, new Uint8Array([0x30]));
   }
 
-  qeue(c: Characteristic, data: Uint8Array) {
+  queue(c: Characteristic, data: Uint8Array) {
+    if (!this.started) return;
+
     let success;
     let reject;
     let promise = new Promise((_success, _reject)=> {
@@ -130,7 +152,7 @@ export class Toy {
     });
 
     // todo add timeout;
-    this.commandQeue.push({
+    this.commandQueue.push({
       characteristic: c,
       command: data,
       promise,
@@ -148,23 +170,35 @@ export class Toy {
 
   processCommand() {
     if (!this.executing) {
-      this.executing = this.commandQeue.shift();
+      this.executing = this.commandQueue.shift();
       if (this.executing) {
-        console.log('WRITING COMMAND');
+        console.log('WRITING COMMAND', this.executing.command);
+        this.executing.timeout = setTimeout(() => this.onCommandTimedout(), 5000);
         this.write(this.executing.characteristic, this.executing.command);
       }
     }
   }
 
   wake() {
-    return this.qeue(this.apiV2Characteristic, this.commands.power.wake());
+    return this.queue(this.apiV2Characteristic, this.commands.power.wake());
   }
 
   sleep() {
-    return this.qeue(this.apiV2Characteristic, this.commands.power.sleep());
+    return this.queue(this.apiV2Characteristic, this.commands.power.sleep());
   }
 
   roll(speed, heading, flags) {
-    return this.qeue(this.apiV2Characteristic, this.commands.driving.drive(speed, heading, flags));
+    return this.queue(this.apiV2Characteristic, this.commands.driving.drive(speed, heading, flags));
+  }
+
+  async rollTime(speed, heading, time, flags) {
+    let drive: boolean = true;
+    console.log('DRIVE');
+    setTimeout(() => drive = false, time);
+    while(drive) {
+      await this.queue(this.apiV2Characteristic, this.commands.driving.drive(speed, heading, flags));
+    }
+    console.log('STOP');
+    await this.queue(this.apiV2Characteristic, this.commands.driving.drive(0, heading, flags));
   }
 }
