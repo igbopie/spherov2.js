@@ -42,7 +42,7 @@ const findToys = async () => {
   const toys: Array<ToyDiscovered> = [];
   noble.on('discover', discover.bind(this, toys));
   noble.startScanning(); // any service UUID, no duplicates
-  await wait(2000);
+  await wait(10000);
   noble.stopScanning();
   noble.removeListener('discover', discover.bind(this, toys));
   return toys;

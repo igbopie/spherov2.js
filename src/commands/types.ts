@@ -81,6 +81,8 @@ export enum DriveFlag {
   tankDriveRightMotorReverse = 2 << 3
 }
 
+
+export type CommandId = UserIOCommandIds | AnimatronicsCommandIds | DrivingCommandIds | PowerCommandIds | SystemInfoCommandIds | APIProcessCommandIds;
 export interface CommandOutput {
   bytes: Array<number>;
   checksum: number;
@@ -88,13 +90,21 @@ export interface CommandOutput {
 
 export interface CommandPartial {
   payload?: Array<number>;
-  commandId: UserIOCommandIds | AnimatronicsCommandIds | DrivingCommandIds | PowerCommandIds | SystemInfoCommandIds | APIProcessCommandIds;
+  commandId: CommandId;
 }
 
 export interface Command  extends CommandPartial {
   deviceId: DeviceId;
   commandFlags?: Array<Flags>;
   sequenceNumber: number;
+}
+
+export interface CommandResponse {
+  flags: number,
+  deviceId: number,
+  commandId: number,
+  sequenceNumber: number,
+  payload: Array<number>
 }
 
 export type CommandGenerator = (deviceId: number) => (part: CommandPartial) => Uint8Array;
