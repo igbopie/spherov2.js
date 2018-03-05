@@ -99,13 +99,8 @@ export interface Command  extends CommandPartial {
   sequenceNumber: number;
 }
 
-export interface CommandResponse {
-  flags: number,
-  deviceId: number,
-  commandId: number,
-  sequenceNumber: number,
-  payload: Array<number>,
-  raw: Array<number>
+export interface CommandWithRaw extends Command {
+  raw: Uint8Array
 }
 
-export type CommandGenerator = (deviceId: number) => (part: CommandPartial) => Uint8Array;
+export type CommandGenerator = (deviceId: number) => (part: CommandPartial) => CommandWithRaw;

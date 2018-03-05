@@ -1,7 +1,7 @@
 import { Toy } from "../toy";
 import { wait } from "../utils";
 
-const PATROL_TIME: number = 1000;
+const PATROL_TIME: number = 2000;
 const WAIT_TIME: number = 2000;
 const SPEED: number = 100;
 export default async (toy: Toy) => {

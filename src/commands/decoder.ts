@@ -1,14 +1,14 @@
-import { APIConstants, DeviceId, CommandId, CommandResponse } from "./types";
+import { APIConstants, DeviceId, CommandId, CommandWithRaw } from "./types";
 
 
 const MINIMUN_PACKET_LENGTH = 7;
 
-const classifyPacket = (packet: Array<number>): CommandResponse => {
+const classifyPacket = (packet: Uint8Array): CommandWithRaw => {
   const [startPacket, flags, deviceId, commandId, sequenceNumber, ...rest] = packet;
   const payload = rest.slice(0, rest.length - 3);
   const [checksum, endPacket] = rest.slice(rest.length - 2, rest.length - 1);
   return {
-    flags,
+    // flags, // TODO
     deviceId,
     commandId,
     sequenceNumber,
@@ -17,7 +17,7 @@ const classifyPacket = (packet: Array<number>): CommandResponse => {
   };
 }
 
-export function factory(callback: (err: string, response?: CommandResponse) => void) {
+export function factory(callback: (err: string, response?: CommandWithRaw) => void) {
   let msg: Array<number> = [];
   let checksum: number = 0;
   let isEscaping: boolean = false;
@@ -50,7 +50,7 @@ export function factory(callback: (err: string, response?: CommandResponse) => v
           }
 
           msg.push(byte);
-          callback(undefined, classifyPacket(msg));
+          callback(undefined, classifyPacket(new Uint8Array(msg)));
           return init();
 
         case APIConstants.escape:

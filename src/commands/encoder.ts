@@ -1,4 +1,4 @@
-import { APIConstants, CommandOutput, Flags, Command } from "./types";
+import { APIConstants, CommandOutput, Flags, Command, CommandWithRaw } from "./types";
 import { combineFlags } from "../utils";
 
 function encodeBytes(out: CommandOutput, byte: number, appendChecksum: boolean = false) {
@@ -23,13 +23,14 @@ function encodeBytes(out: CommandOutput, byte: number, appendChecksum: boolean =
 }
 
 
-export function encode ({
-  commandFlags = [Flags.requestsResponse, Flags.resetsInactivityTimeout],
-  deviceId,
-  commandId,
-  sequenceNumber,
-  payload = []
-}: Command) {
+export function encode (command: Command): CommandWithRaw {
+  const {
+    commandFlags = [Flags.requestsResponse, Flags.resetsInactivityTimeout],
+    deviceId,
+    commandId,
+    sequenceNumber,
+    payload = []
+  } = command;
   let out: CommandOutput = {
     bytes: [],
     checksum: 0x00
@@ -50,5 +51,8 @@ export function encode ({
   out.checksum = ~out.checksum
   encodeBytes(out, out.checksum);
   out.bytes.push(APIConstants.endOfPacket);
-  return new Uint8Array(out.bytes);
+  return {
+    ...command,
+    raw: new Uint8Array(out.bytes)
+  }
 }
