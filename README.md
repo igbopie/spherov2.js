@@ -2,6 +2,15 @@
 
 Work in progress. Some commands are functional but not ready for prime time.
 
+
+### TODO
+* Create Peripheral Mock Wrapper
+* Test Toy, Queue and Command
+* BUG: CHECKSUM = 141 error For example: [ 141, 10, 22, 7, 51, 100, 0, 180, 0, 141, 216 ]
+* Queue Modes
+* Read info
+
+
 ## What is working
 
 ```sh
@@ -11,7 +20,7 @@ yarn install
 yarn start
 ```
 
-### Keys
+### Keys when running cmd-play
 
 * `up arrow` - Move Up
 * `down arrow` - Move Down

@@ -2,8 +2,9 @@
 import { toPromise, wait } from './utils';
 import { factory } from './commands';
 import { factory as decodeFactory } from './commands/decoder';
-import { Peripheral, Characteristic } from 'noble';
 import { CommandWithRaw } from './commands/types';
+import { Queue } from './queue';
+import { Characteristic, Peripheral } from './ble';
 
 enum ServicesUUID {
   apiV2ControlService = '00010001574f4f2053706865726f2121',
@@ -22,21 +23,12 @@ enum CharacteristicUUID {
 const commandsType = (false as true) && factory();
 const decodeType = (false as true) && decodeFactory((_) => null);
 
-enum QUEUE_MODE {
-  NO_QUEUE, // NOT IMPLEMENTED
-  QUEUE,
-  QUEUE_TRYAGAIN, // NOT IMPLEMENTED
-  QUEUE_IGNORE_ERROR // NOT IMPLEMENTED
+
+interface QueuePayload {
+  command: CommandWithRaw,
+  characteristic?: Characteristic
 }
 
-interface CommandQueueItem {
-  promise: PromiseLike<any>,
-  command: CommandWithRaw,
-  characteristic: Characteristic,
-  timeout?: NodeJS.Timer,
-  success: () => any,
-  reject: () => any
-}
 
 export class Toy {
   peripheral: Peripheral;
@@ -46,10 +38,8 @@ export class Toy {
   antiDoSCharacteristic?: Characteristic;
   commands: typeof commandsType;
   decoder: typeof decodeType;
-  commandQueue: Array<CommandQueueItem>;
-  executing: CommandQueueItem | null;
   started: boolean;
-  qeueMode: QUEUE_MODE;
+  queue: Queue<QueuePayload>;
 
   constructor(p: Peripheral) {
     this.peripheral = p;
@@ -58,19 +48,15 @@ export class Toy {
   async init() {
     const p = this.peripheral
 
-    this.commandQueue = [];
-    this.executing = null;
+    this.queue = new Queue<QueuePayload>(this);
     this.commands = factory();
     this.decoder = decodeFactory((error, packet) => this.onPacketRead(error, packet));
     this.started = false;
-    this.qeueMode = QUEUE_MODE.QUEUE;
 
     await toPromise(p.connect.bind(p));
     await toPromise(p.discoverAllServicesAndCharacteristics.bind(p));
     this.bindServices();
     await this.bindListeners();
-
-
   }
 
   async start() {
@@ -107,6 +93,27 @@ export class Toy {
     this.dfuControlCharacteristic.on('notify', (data: Buffer, isNotification: boolean) => this.onDFUControlNotify(data, isNotification));
   }
 
+  async onExecute(item: QueuePayload) {
+    if (!this.started) return;
+
+    await this.write(item.characteristic, item.command.raw);
+  }
+
+  match(commandA: QueuePayload, commandB: QueuePayload) {
+    return commandA.command.deviceId === commandB.command.deviceId &&
+      commandA.command.commandId === commandB.command.commandId &&
+      commandA.command.sequenceNumber === commandB.command.sequenceNumber;
+  }
+
+  onPacketRead(error: string, command: CommandWithRaw) {
+    if (error) {
+      console.error('There was a parse error', error);
+    } else {
+      this.queue.onCommandProcessed({
+        command
+      });
+    }
+  }
 
   onApiRead(data: Buffer, isNotification: boolean) {
     // console.log('READAPI', data, isNotification)
@@ -121,70 +128,6 @@ export class Toy {
     return this.write(this.dfuControlCharacteristic, new Uint8Array([0x30]));
   }
 
-  handleQueueError() {
-    if (this.qeueMode === QUEUE_MODE.QUEUE) {
-      this.executing.reject();
-      clearTimeout(this.executing.timeout);
-      this.executing = null;
-      this.processCommand();
-    }
-  }
-
-  onPacketRead(error: string, packet: CommandWithRaw) {
-    if (error) {
-      console.error('There was a parse error', error);
-    } else if (this.executing){
-      const { deviceId, commandId, sequenceNumber } = packet;
-      const sentCommand = this.executing.command;
-      if (deviceId === sentCommand.deviceId && commandId === sentCommand.commandId && sequenceNumber === sentCommand.sequenceNumber) {
-        console.log('RESPONSE COMMAND', packet);
-        this.executing.success();
-        clearTimeout(this.executing.timeout);
-        this.executing = null;
-      } else {
-        console.log('RESPONSE COMMAND ERROR', packet);
-        this.handleQueueError();
-      }
-
-    } else {
-      console.log('PACKET RECEIVED BUT NOT EXECUTING', packet);
-    }
-
-    this.processCommand();
-  }
-
-  onCommandTimedout() {
-    console.log('RESPONSE COMMAND TIMEDOUT');
-    this.handleQueueError();
-
-  }
-
-  queue(c: Characteristic, data: CommandWithRaw) {
-    if (!this.started) return;
-
-    if (this.qeueMode === QUEUE_MODE.NO_QUEUE) {
-      // TODO
-    } else {
-      let success;
-      let reject;
-      let promise = new Promise((_success, _reject)=> {
-        success = _success;
-        reject = _reject;
-      });
-
-      // todo add timeout;
-      this.commandQueue.push({
-        characteristic: c,
-        command: data,
-        promise,
-        success,
-        reject
-      });
-      this.processCommand();
-      return promise;
-    }
-  }
-
   write(c: Characteristic, data: Uint8Array | string) {
     let buff;
     if (typeof data === 'string') {
@@ -195,27 +138,25 @@ export class Toy {
     return toPromise(c.write.bind(c, buff, true));;
   }
 
-  processCommand() {
-    if (!this.executing) {
-      this.executing = this.commandQueue.shift();
-      if (this.executing) {
-        console.log('WRITING COMMAND', this.executing.command);
-        this.executing.timeout = setTimeout(() => this.onCommandTimedout(), 5000);
-        this.write(this.executing.characteristic, this.executing.command.raw);
-      }
-    }
-  }
-
   wake() {
-    return this.queue(this.apiV2Characteristic, this.commands.power.wake());
+    return this.queue.queue({
+      characteristic: this.apiV2Characteristic,
+      command: this.commands.power.wake()
+    });
   }
 
   sleep() {
-    return this.queue(this.apiV2Characteristic, this.commands.power.sleep());
+    return this.queue.queue({
+      characteristic: this.apiV2Characteristic,
+      command: this.commands.power.sleep()
+    });
   }
 
   roll(speed: number, heading: number, flags: Array<number>) {
-    return this.queue(this.apiV2Characteristic, this.commands.driving.drive(speed, heading, flags));
+    return this.queue.queue({
+      characteristic: this.apiV2Characteristic,
+      command: this.commands.driving.drive(speed, heading, flags)
+    });
   }
 
   async rollTime(speed: number, heading: number, time: number, flags: Array<number>) {
@@ -223,9 +164,15 @@ export class Toy {
     console.log('DRIVE');
     setTimeout(() => drive = false, time);
     while(drive) {
-      await this.queue(this.apiV2Characteristic, this.commands.driving.drive(speed, heading, flags));
+      await this.queue.queue({
+        characteristic: this.apiV2Characteristic,
+        command: this.commands.driving.drive(speed, heading, flags)
+      });
     }
     console.log('STOP');
-    await this.queue(this.apiV2Characteristic, this.commands.driving.drive(0, heading, flags));
+    await this.queue.queue({
+      characteristic: this.apiV2Characteristic,
+      command: this.commands.driving.drive(0, heading, flags)
+    });
   }
 }
