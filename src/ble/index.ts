@@ -1,7 +1,7 @@
 
 export interface Peripheral {
-  connect(): void
-  discoverAllServicesAndCharacteristics(): void
+  connect(cb:(error?: string) => void): void
+  discoverAllServicesAndCharacteristics(cb:(error?: string) => void): void
   services: Array<Services>
 }
 
@@ -13,7 +13,7 @@ export interface Services {
 export interface Characteristic {
   uuid: string,
 
-  subscribe(): void
-  write(buf: Buffer, notify: boolean): void
+  subscribe(cb:(error?: string) => void): void
+  write(buf: Buffer, notify: boolean, cb:(error?: string) => void): void
   on(eventName: string, fn: (data: Buffer, isNotification: boolean) => void): void
 }

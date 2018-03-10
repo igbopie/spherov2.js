@@ -1,7 +1,7 @@
 import { APIConstants, DeviceId, CommandId, CommandWithRaw } from "./types";
 
 
-const MINIMUN_PACKET_LENGTH = 7;
+const MINIMUN_PACKET_LENGTH = 6;
 
 const classifyPacket = (packet: Uint8Array): CommandWithRaw => {
   const [startPacket, flags, deviceId, commandId, sequenceNumber, ...rest] = packet;
@@ -29,7 +29,7 @@ export function factory(callback: (err: string, response?: CommandWithRaw) => vo
   };
   const error = (msg: string) => {
     init();
-    callback('Invalid last byte');
+    callback(msg);
   }
   return {
     add(byte: number) {

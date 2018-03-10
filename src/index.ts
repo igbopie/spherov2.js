@@ -12,7 +12,7 @@ const main = async () => {
     console.log('Starting...');
     await toy.start();
     console.log('Started');
-    patrol(toy);
+    // patrol(toy);
   } else {
     console.log('Not found');
   }

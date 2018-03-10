@@ -21,9 +21,11 @@
     "ts-jest": "^22.4.1"
   },
   "jest": {
+    "verbose": true,
     "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts}",
+      "!src/examples/**",
       "!**/node_modules/**",
       "!**/vendor/**"
     ],

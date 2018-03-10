@@ -1,3 +1,9 @@
-test('adds 1 + 2 to equal 3', () => {
-  expect(1 + 2).toBe(3);
+import PeripheralMock from "./peripheral-mock";
+import { Toy } from "../src/toy";
+
+test('Toy', async () => {
+  const peripheral = new PeripheralMock();
+  const toy = new Toy(peripheral);
+  await toy.start();
+  expect(true).toBeTruthy();
 });

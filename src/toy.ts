@@ -5,24 +5,11 @@ import { factory as decodeFactory } from './commands/decoder';
 import { CommandWithRaw } from './commands/types';
 import { Queue } from './queue';
 import { Characteristic, Peripheral } from './ble';
-
-enum ServicesUUID {
-  apiV2ControlService = '00010001574f4f2053706865726f2121',
-  nordicDfuService =    '00020001574f4f2053706865726f2121'
-};
-
-enum CharacteristicUUID {
-  apiV2Characteristic =       '00010002574f4f2053706865726f2121',
-  dfuControlCharacteristic =  '00020002574f4f2053706865726f2121',
-  dfuInfoCharacteristic =     '00020004574f4f2053706865726f2121',
-  antiDoSCharacteristic =     '00020005574f4f2053706865726f2121'
-};
-
+import { CharacteristicUUID } from './types';
 
 // TS workaround until 2.8 (not released), then ReturnType<factory>
 const commandsType = (false as true) && factory();
 const decodeType = (false as true) && decodeFactory((_) => null);
-
 
 interface QueuePayload {
   command: CommandWithRaw,
