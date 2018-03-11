@@ -2,16 +2,22 @@
   "name": "sphero-v2",
   "version": "0.0.1",
   "description": "V2 api version for sphero toys (not official)",
-  "main": "index.js",
   "author": "igbopie",
   "license": "MIT",
+  "main": "./lib/main.js",
+  "types": "./lib/main.d.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "test": "jest"
+    "build": "rm -fR lib; tsc --declaration; exit 0",
+    "add-all": "git add -A",
+    "test": "jest",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
+  "pre-commit": [ "precommit-msg", "test", "build" , "add-all" ],
   "dependencies": {
     "@types/noble": "^0.0.34",
     "noble": "^1.9.0",
+    "pre-commit": "^1.2.2",
     "ts-node": "^5.0.0",
     "typescript": "^2.7.2"
   },

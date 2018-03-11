@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "outDir": "./lib",
+
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
@@ -14,5 +16,13 @@
     "sourceMap": false,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es6"
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "test",
+    "**/*.spec.ts",
+  ]
 }
