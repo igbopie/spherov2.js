@@ -162,4 +162,11 @@ export class Toy {
       command: this.commands.driving.drive(0, heading, flags)
     });
   }
+
+  async appVersion() {
+    await this.queue.queue({
+      characteristic: this.apiV2Characteristic,
+      command: this.commands.systemInfo.appVersion()
+    });
+  }
 }

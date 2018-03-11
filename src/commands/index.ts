@@ -2,6 +2,7 @@
 import power from './power';
 import api from './api';
 import driving from './driving';
+import systemInfo from './system-info';
 import { encode } from "./encoder";
 import { CommandPartial } from './types';
 
@@ -27,7 +28,8 @@ export const factory = () => {
   return {
     power: power(gen),
     api: api(gen),
-    driving: driving(gen)
+    driving: driving(gen),
+    systemInfo: systemInfo(gen)
   }
 }
 
