@@ -4,8 +4,8 @@
   "description": "V2 api version for sphero toys (not official)",
   "author": "igbopie",
   "license": "MIT",
-  "main": "./lib/main.js",
-  "types": "./lib/main.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "rm -fR lib; tsc --declaration; exit 0",
