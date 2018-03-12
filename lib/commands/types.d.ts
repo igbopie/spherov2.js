@@ -71,20 +71,20 @@ export declare enum DriveFlag {
     tankDriveRightMotorReverse = 16,
 }
 export declare type CommandId = UserIOCommandIds | AnimatronicsCommandIds | DrivingCommandIds | PowerCommandIds | SystemInfoCommandIds | APIProcessCommandIds;
-export interface CommandOutput {
-    bytes: Array<number>;
+export interface ICommandOutput {
+    bytes: number[];
     checksum: number;
 }
-export interface CommandPartial {
-    payload?: Array<number>;
+export interface ICommandPartial {
+    payload?: number[];
     commandId: CommandId;
 }
-export interface Command extends CommandPartial {
+export interface ICommand extends ICommandPartial {
     deviceId: DeviceId;
-    commandFlags?: Array<Flags>;
+    commandFlags?: Flags[];
     sequenceNumber: number;
 }
-export interface CommandWithRaw extends Command {
+export interface ICommandWithRaw extends ICommand {
     raw: Uint8Array;
 }
-export declare type CommandGenerator = (deviceId: number) => (part: CommandPartial) => CommandWithRaw;
+export declare type CommandGenerator = (deviceId: number) => (part: ICommandPartial) => ICommandWithRaw;

@@ -1,2 +1,2 @@
-import { Command, CommandWithRaw } from "./types";
-export declare function encode(command: Command): CommandWithRaw;
+import { ICommand, ICommandWithRaw } from './types';
+export declare function encode(command: ICommand): ICommandWithRaw;

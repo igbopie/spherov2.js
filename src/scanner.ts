@@ -1,49 +1,53 @@
-import { Peripheral } from "noble";
+import { Peripheral } from 'noble';
 import * as noble from 'noble';
 import { wait } from './utils';
 
-interface ToyAdvertisement {
-  prefix: string,
-  name: string
+export interface IToyAdvertisement {
+  name: string;
+  prefix: string;
 }
 
-interface ToyDiscovered extends ToyAdvertisement {
-  peripheral: Peripheral
+export interface IToyDiscovered extends IToyAdvertisement {
+  peripheral: Peripheral;
 }
 
-const ValidToys:Array<ToyAdvertisement> = [
+const validToys: IToyAdvertisement[] = [
   // {
   //   prefix: 'LM-',
   //   name: 'Lighting McQueen'
   // },
   {
+    name: 'Sphero Mini',
     prefix: 'SM-',
-    name: 'Sphero Mini'
-  }
+  },
 ];
 
-const discover = async (toys: Array<ToyDiscovered>, p: Peripheral) => {
+const discover = async (toys: IToyDiscovered[], p: Peripheral) => {
   const { advertisement, uuid } = p;
   const { localName = '' } = advertisement;
-  ValidToys.forEach( async ToyAdvertisement => {
-    if (localName.indexOf(ToyAdvertisement.prefix) === 0) {
-      console.log(`Detected ${ToyAdvertisement.name}: ${uuid}`, );
+  validToys.forEach( async (toyAdvertisement) => {
+    if (localName.indexOf(toyAdvertisement.prefix) === 0) {
+
+      // tslint:disable-next-line:no-console
+      console.log(`Detected ${toyAdvertisement.name}: ${uuid}`);
       toys.push({
-        ...ToyAdvertisement,
-        peripheral: p
+        ...toyAdvertisement,
+        peripheral: p,
       });
     }
-  })
+  });
 };
 
 export const findToys = async () => {
-  const toys: Array<ToyDiscovered> = [];
+  const toys: IToyDiscovered[] = [];
+  // tslint:disable-next-line:no-console
   console.log('Scanning devices...');
   noble.on('discover', discover.bind(this, toys));
   noble.startScanning(); // any service UUID, no duplicates
   await wait(5000);
   noble.stopScanning();
   noble.removeListener('discover', discover.bind(this, toys));
+  // tslint:disable-next-line:no-console
   console.log('Done scanning devices.');
   return toys;
-}
+};

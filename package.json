@@ -7,18 +7,28 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
+    "debug": "ts-node --inspect-brk src/index.ts",
     "start": "ts-node src/index.ts",
-    "build": "rm -fR lib; tsc --declaration; exit 0",
+    "build": "rm -fR lib; tsc --declaration",
     "add-all": "git add -A",
     "test": "jest",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
-  "pre-commit": [ "precommit-msg", "test", "build" , "add-all" ],
+  "pre-commit": [
+    "precommit-msg",
+    "lint",
+    "test",
+    "build",
+    "add-all"
+  ],
   "dependencies": {
     "@types/noble": "^0.0.34",
     "noble": "^1.9.0",
+    "node-inspect": "^1.11.3",
     "pre-commit": "^1.2.2",
     "ts-node": "^5.0.0",
+    "tslint": "^5.9.1",
     "typescript": "^2.7.2"
   },
   "devDependencies": {

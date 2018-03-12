@@ -1,19 +1,20 @@
 
-export interface Peripheral {
-  connect(cb:(error?: string) => void): void
-  discoverAllServicesAndCharacteristics(cb:(error?: string) => void): void
-  services: Array<Services>
+export interface IPeripheral {
+  services: IServices[];
+
+  connect(cb: (error?: string) => void): void;
+  discoverAllServicesAndCharacteristics(cb: (error?: string) => void): void;
 }
 
-export interface Services {
-  uuid: string,
-  characteristics: Array<Characteristic>
+export interface IServices {
+  uuid: string;
+  characteristics: ICharacteristic[];
 }
 
-export interface Characteristic {
-  uuid: string,
+export interface ICharacteristic {
+  uuid: string;
 
-  subscribe(cb:(error?: string) => void): void
-  write(buf: Buffer, notify: boolean, cb:(error?: string) => void): void
-  on(eventName: string, fn: (data: Buffer, isNotification: boolean) => void): void
+  subscribe(cb: (error?: string) => void): void;
+  write(buf: Buffer, notify: boolean, cb: (error?: string) => void): void;
+  on(eventName: string, fn: (data: Buffer, isNotification: boolean) => void): void;
 }

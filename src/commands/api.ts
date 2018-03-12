@@ -1,10 +1,10 @@
-import { CommandGenerator, DeviceId, APIProcessCommandIds } from "./types";
+import { APIProcessCommandIds, CommandGenerator, DeviceId, ICommandWithRaw } from './types';
 
 export default (generator: CommandGenerator) => {
   const encode = generator(DeviceId.apiProcessor);
   return {
     echo: () => encode({
       commandId: APIProcessCommandIds.echo,
-    })
-  }
+    }),
+  };
 };

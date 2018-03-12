@@ -1,14 +1,14 @@
 /// <reference types="node" />
-export interface Peripheral {
+export interface IPeripheral {
+    services: IServices[];
     connect(cb: (error?: string) => void): void;
     discoverAllServicesAndCharacteristics(cb: (error?: string) => void): void;
-    services: Array<Services>;
 }
-export interface Services {
+export interface IServices {
     uuid: string;
-    characteristics: Array<Characteristic>;
+    characteristics: ICharacteristic[];
 }
-export interface Characteristic {
+export interface ICharacteristic {
     uuid: string;
     subscribe(cb: (error?: string) => void): void;
     write(buf: Buffer, notify: boolean, cb: (error?: string) => void): void;

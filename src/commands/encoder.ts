@@ -1,7 +1,7 @@
-import { APIConstants, CommandOutput, Flags, Command, CommandWithRaw } from "./types";
-import { combineFlags } from "../utils";
+import { combineFlags } from '../utils';
+import { APIConstants, Flags, ICommand, ICommandOutput, ICommandWithRaw } from './types';
 
-function encodeBytes(out: CommandOutput, byte: number, appendChecksum: boolean = false) {
+function encodeBytes(out: ICommandOutput, byte: number, appendChecksum: boolean = false) {
   switch (byte) {
     case APIConstants.startOfPacket:
       out.bytes.push(...[APIConstants.escape, APIConstants.escapedStartOfPacket]);
@@ -19,21 +19,21 @@ function encodeBytes(out: CommandOutput, byte: number, appendChecksum: boolean =
       out.bytes.push(...[byte]);
   }
 
+  // tslint:disable-next-line:no-bitwise
   out.checksum = ( out.checksum + byte ) & 0xff;
 }
 
-
-export function encode (command: Command): CommandWithRaw {
+export function encode(command: ICommand): ICommandWithRaw {
   const {
     commandFlags = [Flags.requestsResponse, Flags.resetsInactivityTimeout],
     deviceId,
     commandId,
     sequenceNumber,
-    payload = []
+    payload = [],
   } = command;
-  let out: CommandOutput = {
+  const out: ICommandOutput = {
     bytes: [],
-    checksum: 0x00
+    checksum: 0x00,
   };
 
   out.bytes.push(APIConstants.startOfPacket);
@@ -43,16 +43,17 @@ export function encode (command: Command): CommandWithRaw {
   encodeBytes(out, sequenceNumber, true);
 
   if (payload) {
-    payload.forEach(byte => {
+    payload.forEach((byte) => {
       encodeBytes(out, byte, true);
     });
   }
 
-  out.checksum = ~out.checksum
+  // tslint:disable-next-line:no-bitwise
+  out.checksum = ~out.checksum;
   encodeBytes(out, out.checksum);
   out.bytes.push(APIConstants.endOfPacket);
   return {
     ...command,
-    raw: new Uint8Array(out.bytes)
-  }
+    raw: new Uint8Array(out.bytes),
+  };
 }

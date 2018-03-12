@@ -1,9 +1,8 @@
-
+/* tslint:disable */
 import { Toy } from './toy';
 import { findToys } from './scanner';
-import cmdPlay from './examples/cmd-play';
-import patrol from './examples/patrol';
-
+// import cmdPlay from './examples/cmd-play';
+// import patrol from './examples/patrol';
 
 const main = async () => {
   const discovered = await findToys();
@@ -12,9 +11,10 @@ const main = async () => {
     console.log('Starting...');
     await toy.start();
     console.log('Started');
-    await toy.appVersion();
-    console.log('Version');
-    // patrol(toy);
+    let version = await toy.appVersion();
+    console.log('Version', version);
+    //patrol(toy);
+    process.exit(0);
   } else {
     console.log('Not found');
   }

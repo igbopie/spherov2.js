@@ -5,30 +5,30 @@ export enum DeviceId {
   driving = 0x16,
   animatronics = 0x17,
   sensor = 0x18,
-  userIO = 0x1A
+  userIO = 0x1A,
 }
 
 export enum APIProcessCommandIds {
-  echo = 0x00
+  echo = 0x00,
 }
 
 export enum SystemInfoCommandIds {
   mainApplicationVersion = 0x00,
-  bootloaderVersion = 0x01
+  bootloaderVersion = 0x01,
 }
 
 export enum PowerCommandIds {
   deepSleep = 0x00,
   sleep = 0x01,
   batteryVoltage = 0x03,
-  wake = 0x0D
+  wake = 0x0D,
 }
 
 export enum DrivingCommandIds {
   rawMotor = 0x01,
   resetYaw = 0x06,
   driveWithHeading = 0x07,
-  stabilization = 0x0C
+  stabilization = 0x0C,
 }
 
 export enum AnimatronicsCommandIds {
@@ -36,7 +36,7 @@ export enum AnimatronicsCommandIds {
   shoulderAction = 0x0D,
   domePosition = 0x0F,
   shoulderActionComplete = 0x26,
-  enableShoulderActionCompleteAsync = 0x2A
+  enableShoulderActionCompleteAsync = 0x2A,
 }
 
 export enum SensorCommandIds {
@@ -53,14 +53,16 @@ export enum UserIOCommandIds {
   playAudioFile = 0x07,
   audioVolume = 0x08,
   stopAudio = 0xA,
-  testSound = 0x18
+  testSound = 0x18,
 }
 
 export enum Flags {
   isResponse = 1,
   requestsResponse = 2,
+  // tslint:disable-next-line:no-bitwise
   requestsOnlyErrorResponse = 2 << 1,
-  resetsInactivityTimeout = 2 << 2
+  // tslint:disable-next-line:no-bitwise
+  resetsInactivityTimeout = 2 << 2,
 }
 
 export enum APIConstants {
@@ -68,39 +70,51 @@ export enum APIConstants {
   startOfPacket = 0x8D,
   endOfPacket = 0xD8,
   escapeMask = 0x88,
+  // tslint:disable-next-line:no-bitwise
   escapedEscape = APIConstants.escape & ~APIConstants.escapeMask,
+  // tslint:disable-next-line:no-bitwise
   escapedStartOfPacket = APIConstants.startOfPacket & ~APIConstants.escapeMask,
-  escapedEndOfPacket = APIConstants.endOfPacket & ~APIConstants.escapeMask
+  // tslint:disable-next-line:no-bitwise
+  escapedEndOfPacket = APIConstants.endOfPacket & ~APIConstants.escapeMask,
 }
 
 export enum DriveFlag {
   reverse = 0x01,
   boost = 0x02,
+  // tslint:disable-next-line:no-bitwise
   fastTurnMode = 2 << 1,
+  // tslint:disable-next-line:no-bitwise
   tankDriveLeftMotorReverse = 2 << 2,
-  tankDriveRightMotorReverse = 2 << 3
+  // tslint:disable-next-line:no-bitwise
+  tankDriveRightMotorReverse = 2 << 3,
 }
 
+export type CommandId =
+  UserIOCommandIds |
+  AnimatronicsCommandIds |
+  DrivingCommandIds |
+  PowerCommandIds |
+  SystemInfoCommandIds |
+  APIProcessCommandIds;
 
-export type CommandId = UserIOCommandIds | AnimatronicsCommandIds | DrivingCommandIds | PowerCommandIds | SystemInfoCommandIds | APIProcessCommandIds;
-export interface CommandOutput {
-  bytes: Array<number>;
+export interface ICommandOutput {
+  bytes: number[];
   checksum: number;
 }
 
-export interface CommandPartial {
-  payload?: Array<number>;
+export interface ICommandPartial {
+  payload?: number[];
   commandId: CommandId;
 }
 
-export interface Command  extends CommandPartial {
+export interface ICommand extends ICommandPartial {
   deviceId: DeviceId;
-  commandFlags?: Array<Flags>;
+  commandFlags?: Flags[];
   sequenceNumber: number;
 }
 
-export interface CommandWithRaw extends Command {
-  raw: Uint8Array
+export interface ICommandWithRaw extends ICommand {
+  raw: Uint8Array;
 }
 
-export type CommandGenerator = (deviceId: number) => (part: CommandPartial) => CommandWithRaw;
+export type CommandGenerator = (deviceId: number) => (part: ICommandPartial) => ICommandWithRaw;

@@ -1,24 +1,28 @@
-import { APIConstants, DeviceId, CommandId, CommandWithRaw } from "./types";
-
+import { APIConstants, ICommandWithRaw } from './types';
 
 const MINIMUN_PACKET_LENGTH = 6;
 
-const classifyPacket = (packet: Uint8Array): CommandWithRaw => {
-  const [startPacket, flags, deviceId, commandId, sequenceNumber, ...rest] = packet;
-  const payload = rest.slice(0, rest.length - 3);
-  const [checksum, endPacket] = rest.slice(rest.length - 2, rest.length - 1);
-  return {
-    // flags, // TODO
-    deviceId,
-    commandId,
-    sequenceNumber,
-    payload,
-    raw: packet
-  };
+export function number(buffer: number[], offset: number) {
+  return Buffer.from(buffer).readInt16BE(offset);
 }
 
-export function factory(callback: (err: string, response?: CommandWithRaw) => void) {
-  let msg: Array<number> = [];
+const classifyPacket = (packet: Uint8Array): ICommandWithRaw => {
+  const [startPacket, flags, deviceId, commandId, sequenceNumber, ...rest] = packet;
+  const payload = rest.slice(0, rest.length - 2);
+  const [checksum, endPacket] = rest.slice(rest.length - 2, rest.length - 1);
+
+  return {
+    // flags, // TODO
+    commandId,
+    deviceId,
+    payload,
+    raw: packet,
+    sequenceNumber,
+  };
+};
+
+export function factory(callback: (err: string, response?: ICommandWithRaw) => void) {
+  let msg: number[] = [];
   let checksum: number = 0;
   let isEscaping: boolean = false;
 
@@ -27,10 +31,10 @@ export function factory(callback: (err: string, response?: CommandWithRaw) => vo
     checksum = 0;
     isEscaping = false;
   };
-  const error = (msg: string) => {
+  const error = (errorMessage: string) => {
     init();
-    callback(msg);
-  }
+    callback(errorMessage);
+  };
   return {
     add(byte: number) {
       switch (byte) {
@@ -42,7 +46,7 @@ export function factory(callback: (err: string, response?: CommandWithRaw) => vo
           return msg.push(byte);
         case APIConstants.endOfPacket:
           if (msg.length === 0 || msg.length < MINIMUN_PACKET_LENGTH) {
-            return error('Invalid last byte ' + msg.length)
+            return error('Invalid last byte ' + msg.length);
           }
 
           if (checksum !== 0xFF) {
@@ -63,8 +67,9 @@ export function factory(callback: (err: string, response?: CommandWithRaw) => vo
         case APIConstants.escapedEndOfPacket:
         case APIConstants.escapedEscape:
           if (isEscaping) {
-              byte = byte | APIConstants.escapeMask
-              isEscaping = false
+            // tslint:disable-next-line:no-bitwise
+            byte = byte | APIConstants.escapeMask;
+            isEscaping = false;
           }
       }
 
@@ -73,7 +78,8 @@ export function factory(callback: (err: string, response?: CommandWithRaw) => vo
       }
 
       msg.push(byte);
-      checksum =  checksum & byte | 0xFF
-    }
-  }
+      // tslint:disable-next-line:no-bitwise
+      checksum = checksum & byte | 0xFF;
+    },
+  };
 }

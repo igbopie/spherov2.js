@@ -1,36 +1,32 @@
-
-import power from './power';
 import api from './api';
 import driving from './driving';
+import { encode } from './encoder';
+import power from './power';
 import systemInfo from './system-info';
-import { encode } from "./encoder";
-import { CommandPartial } from './types';
+import { DriveFlag, ICommandPartial, ICommandWithRaw } from './types';
 
 const sequencer = () => {
   let s = 0;
   return () => {
-    let temp = s;
+    const temp = s;
     s += 1;
     return temp;
-  }
-}
-
+  };
+};
 
 export const factory = () => {
   const getSequence = sequencer();
 
-  const gen = (deviceId: number) => (part: CommandPartial) => encode({
+  const gen = (deviceId: number) => (part: ICommandPartial) => encode({
     ...part,
     deviceId,
-    sequenceNumber: getSequence()
+    sequenceNumber: getSequence(),
   });
 
   return {
-    power: power(gen),
     api: api(gen),
     driving: driving(gen),
-    systemInfo: systemInfo(gen)
-  }
-}
-
-
+    power: power(gen),
+    systemInfo: systemInfo(gen),
+  };
+};

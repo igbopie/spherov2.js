@@ -1,7 +1,7 @@
-export const toPromise = (fn: Function, args?: Array<any>) => {
-  return new Promise((resolve, reject)=> {
+export const toPromise = (fn: (...args: any[]) => void, args?: any[]) => {
+  return new Promise((resolve, reject) => {
     const safeArgs = args || [];
-    fn( ...safeArgs, (err: Error, ...retArgs: Array<any>) => {
+    fn( ...safeArgs, (err: Error, ...retArgs: any[]) => {
       if (err) {
         reject(err);
       } else {
@@ -11,6 +11,7 @@ export const toPromise = (fn: Function, args?: Array<any>) => {
   });
 };
 
-export const wait = (time: number) => new Promise(callback => setTimeout(callback, time));
+export const wait = (time: number) => new Promise((callback) => setTimeout(callback, time));
 
-export const combineFlags = (flags: Array<number>) => flags.reduce((memo, flag) => memo | flag, 0);
+// tslint:disable-next-line:no-bitwise
+export const combineFlags = (flags: number[]) => flags.reduce((memo, flag) => memo | flag, 0);
