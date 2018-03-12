@@ -1,20 +1,22 @@
 /* tslint:disable */
-import { Toy } from './toy';
+import { SpheroMini } from './toys/sphero-mini';
 import { findToys } from './scanner';
 // import cmdPlay from './examples/cmd-play';
-// import patrol from './examples/patrol';
+import patrol from './examples/patrol';
 
 const main = async () => {
   const discovered = await findToys();
   if (discovered.length > 0) {
-    const toy: Toy = new Toy(discovered[0].peripheral);
+    const toy: SpheroMini = new SpheroMini(discovered[0].peripheral);
     console.log('Starting...');
     await toy.start();
     console.log('Started');
     let version = await toy.appVersion();
     console.log('Version', version);
-    //patrol(toy);
-    process.exit(0);
+    let battery = await toy.batteryVoltage();
+    console.log(battery);
+    patrol(toy);
+    // process.exit(0);
   } else {
     console.log('Not found');
   }

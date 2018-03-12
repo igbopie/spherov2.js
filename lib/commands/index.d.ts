@@ -1,5 +1,5 @@
 import { DriveFlag, ICommandWithRaw } from './types';
-export declare const factory: () => {
+export declare const factory: (seq?: () => number) => {
     api: {
         echo: () => ICommandWithRaw;
     };
@@ -7,6 +7,7 @@ export declare const factory: () => {
         drive: (speed: number, heading: number, flags: DriveFlag[]) => ICommandWithRaw;
     };
     power: {
+        batteryVoltage: () => ICommandWithRaw;
         sleep: () => ICommandWithRaw;
         wake: () => ICommandWithRaw;
     };

@@ -1,28 +1,28 @@
 
-import { ICharacteristic, IPeripheral } from './ble';
-import { factory } from './commands';
-import { factory as decodeFactory, number } from './commands/decoder';
-import { ICommandWithRaw } from './commands/types';
+import { ICharacteristic, IPeripheral } from '../ble';
+import { factory } from '../commands';
+import { factory as decodeFactory, number } from '../commands/decoder';
+import { DriveFlag, ICommandWithRaw } from '../commands/types';
+import { toPromise } from '../utils';
 import { Queue } from './queue';
 import { CharacteristicUUID } from './types';
-import { toPromise } from './utils';
 
 // TS workaround until 2.8 (not released), then ReturnType<factory>
-const commandsType = (false as true) && factory();
-const decodeType = (false as true) && decodeFactory((_) => null);
+export const commandsType = (false as true) && factory();
+export const decodeType = (false as true) && decodeFactory((_) => null);
 
 export interface IQueuePayload {
   command: ICommandWithRaw;
   characteristic?: ICharacteristic;
 }
 
-export class Toy {
+export class Core {
+  protected commands: typeof commandsType;
   private peripheral: IPeripheral;
   private apiV2Characteristic?: ICharacteristic;
   private dfuControlCharacteristic?: ICharacteristic;
   // private dfuInfoCharacteristic?: ICharacteristic;
   private antiDoSCharacteristic?: ICharacteristic;
-  private commands: typeof commandsType;
   private decoder: typeof decodeType;
   private started: boolean;
   private queue: Queue<IQueuePayload>;
@@ -33,51 +33,17 @@ export class Toy {
     this.peripheral = p;
   }
 
+  public async batteryVoltage() {
+    const response = await this.queueCommand(this.commands.power.batteryVoltage());
+    return number(response.command.payload, 1) / 100;
+  }
+
   public wake() {
-    return this.queue.queue({
-      characteristic: this.apiV2Characteristic,
-      command: this.commands.power.wake(),
-    });
+    return this.queueCommand( this.commands.power.wake());
   }
 
   public sleep() {
-    return this.queue.queue({
-      characteristic: this.apiV2Characteristic,
-      command: this.commands.power.sleep(),
-    });
-  }
-
-  public roll(speed: number, heading: number, flags: number[]) {
-    return this.queue.queue({
-      characteristic: this.apiV2Characteristic,
-      command: this.commands.driving.drive(speed, heading, flags),
-    });
-  }
-
-  public async rollTime(speed: number, heading: number, time: number, flags: number[]) {
-    let drive: boolean = true;
-    setTimeout(() => drive = false, time);
-    while (drive) {
-      await this.queue.queue({
-        characteristic: this.apiV2Characteristic,
-        command: this.commands.driving.drive(speed, heading, flags),
-      });
-    }
-    await this.queue.queue({
-      characteristic: this.apiV2Characteristic,
-      command: this.commands.driving.drive(0, heading, flags),
-    });
-  }
-
-  public async appVersion() {
-    const response = await this.queue.queue({
-      characteristic: this.apiV2Characteristic,
-      command: this.commands.systemInfo.appVersion(),
-    });
-    return {
-      major: number(response.command.payload, 1),
-      minor: number(response.command.payload, 3),
-    };
+    return this.queueCommand(this.commands.power.sleep());
   }
 
   public async start() {
@@ -96,6 +62,13 @@ export class Toy {
       // tslint:disable-next-line:no-console
       console.error('error', e);
     }
+  }
+
+  protected queueCommand(command: ICommandWithRaw) {
+    return this.queue.queue({
+      characteristic: this.apiV2Characteristic,
+      command,
+    });
   }
 
   private async init() {

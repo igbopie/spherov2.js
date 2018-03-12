@@ -1,6 +1,6 @@
-import { Toy } from '../toy';
+import { SpheroMini } from '../toys/sphero-mini';
 
-export default (toy: Toy) => {
+export default (toy: SpheroMini) => {
 
   let pressTimeout: NodeJS.Timer;
   const cancelPress = () => {

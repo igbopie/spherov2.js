@@ -14,8 +14,8 @@ const sequencer = () => {
   };
 };
 
-export const factory = () => {
-  const getSequence = sequencer();
+export const factory = (seq?: () => number) => {
+  const getSequence = seq || sequencer();
 
   const gen = (deviceId: number) => (part: ICommandPartial) => encode({
     ...part,

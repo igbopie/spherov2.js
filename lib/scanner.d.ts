@@ -1,8 +1,5 @@
 import { Peripheral } from 'noble';
-export interface IToyAdvertisement {
-    name: string;
-    prefix: string;
-}
+import { IToyAdvertisement } from './toys/types';
 export interface IToyDiscovered extends IToyAdvertisement {
     peripheral: Peripheral;
 }

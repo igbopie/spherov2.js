@@ -9,3 +9,8 @@ export enum CharacteristicUUID {
   dfuInfoCharacteristic =     '00020004574f4f2053706865726f2121',
   antiDoSCharacteristic =     '00020005574f4f2053706865726f2121',
 }
+
+export interface IToyAdvertisement {
+  name: string;
+  prefix: string;
+}

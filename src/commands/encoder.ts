@@ -2,21 +2,22 @@ import { combineFlags } from '../utils';
 import { APIConstants, Flags, ICommand, ICommandOutput, ICommandWithRaw } from './types';
 
 function encodeBytes(out: ICommandOutput, byte: number, appendChecksum: boolean = false) {
-  switch (byte) {
+  const unsignedInt = new Uint8Array([byte])[0];
+  switch (unsignedInt) {
     case APIConstants.startOfPacket:
-      out.bytes.push(...[APIConstants.escape, APIConstants.escapedStartOfPacket]);
+      out.bytes.push(APIConstants.escape, APIConstants.escapedStartOfPacket);
       break;
 
     case APIConstants.endOfPacket:
-      out.bytes.push(...[APIConstants.escape, APIConstants.escapedEndOfPacket]);
+      out.bytes.push(APIConstants.escape, APIConstants.escapedEndOfPacket);
       break;
 
     case APIConstants.escape:
-      out.bytes.push(...[APIConstants.escape, APIConstants.escapedEscape]);
+      out.bytes.push(APIConstants.escape, APIConstants.escapedEscape);
       break;
 
     default:
-      out.bytes.push(...[byte]);
+      out.bytes.push(byte);
   }
 
   // tslint:disable-next-line:no-bitwise

@@ -1,25 +1,19 @@
 import { Peripheral } from 'noble';
 import * as noble from 'noble';
+import { SpheroMini } from './toys/sphero-mini';
+import { IToyAdvertisement } from './toys/types';
 import { wait } from './utils';
-
-export interface IToyAdvertisement {
-  name: string;
-  prefix: string;
-}
 
 export interface IToyDiscovered extends IToyAdvertisement {
   peripheral: Peripheral;
 }
 
 const validToys: IToyAdvertisement[] = [
+  SpheroMini.advertisement,
   // {
   //   prefix: 'LM-',
   //   name: 'Lighting McQueen'
   // },
-  {
-    name: 'Sphero Mini',
-    prefix: 'SM-',
-  },
 ];
 
 const discover = async (toys: IToyDiscovered[], p: Peripheral) => {

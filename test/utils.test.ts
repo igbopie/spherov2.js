@@ -1,4 +1,4 @@
-import { combineFlags, toPromise } from "../src/utils";
+import { combineFlags, toPromise } from '../src/utils';
 
 test('Combine flags', () => {
   expect(combineFlags([1, 2])).toBe(3);
@@ -8,12 +8,13 @@ test('toPromise', async () => {
   expect.assertions(2);
 
   let returnError = false;
-  let mockFn = (callback: (err?: string, n?: number) => void) => {
+  const mockFn = (callback: (err?: string, n?: number) => void) => {
     if (returnError) {
       callback('Some error');
     }
     return callback(undefined, 4);
-  }
+  };
+
   expect(await toPromise(mockFn)).toBe(4);
 
   returnError = true;

@@ -1,3 +1,3 @@
-import { Toy } from '../toy';
-declare const _default: (toy: Toy) => void;
+import { SpheroMini } from '../toys/sphero-mini';
+declare const _default: (toy: SpheroMini) => void;
 export default _default;

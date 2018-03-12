@@ -1,10 +1,10 @@
-import { Toy } from '../toy';
+import { SpheroMini } from '../toys/sphero-mini';
 import { wait } from '../utils';
 
 const PATROL_TIME: number = 2000;
 const WAIT_TIME: number = 2000;
 const SPEED: number = 100;
-export default async (toy: Toy) => {
+export default async (toy: SpheroMini) => {
   while (true) {
     await toy.rollTime(SPEED, 270, PATROL_TIME, []);
     await wait(WAIT_TIME);
