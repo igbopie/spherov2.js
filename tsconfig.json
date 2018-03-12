@@ -13,7 +13,7 @@
     "noUnusedLocals": false,
     "pretty": true,
     "removeComments": false,
-    "sourceMap": true,
+    "sourceMap": false,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es2017"
   },

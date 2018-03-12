@@ -1,3 +1,4 @@
+// tslint:disable-next-line:no-unused-variable
 import { CommandGenerator, DeviceId, ICommandWithRaw, PowerCommandIds } from './types';
 
 export default (generator: CommandGenerator) => {

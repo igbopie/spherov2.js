@@ -1,1 +1,0 @@
-{"version":3,"file":"system-info.js","sourceRoot":"","sources":["../../src/commands/system-info.ts"],"names":[],"mappings":";;AAAA,mCAA4F;AAE5F,kBAAe,CAAC,SAA2B,EAAE,EAAE;IAC7C,MAAM,MAAM,GAAG,SAAS,CAAC,gBAAQ,CAAC,UAAU,CAAC,CAAC;IAC9C,MAAM,CAAC;QACL,UAAU,EAAE,GAAG,EAAE,CAAC,MAAM,CAAC;YACvB,SAAS,EAAE,4BAAoB,CAAC,sBAAsB;SACvD,CAAC;KACH,CAAC;AACJ,CAAC,CAAC"}

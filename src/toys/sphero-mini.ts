@@ -1,5 +1,6 @@
 
 import { number } from '../commands/decoder';
+// tslint:disable-next-line:no-unused-variable
 import { Core, IQueuePayload } from './core';
 import { IToyAdvertisement } from './types';
 

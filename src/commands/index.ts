@@ -3,6 +3,7 @@ import driving from './driving';
 import { encode } from './encoder';
 import power from './power';
 import systemInfo from './system-info';
+// tslint:disable-next-line:no-unused-variable
 import { DriveFlag, ICommandPartial, ICommandWithRaw } from './types';
 
 const sequencer = () => {

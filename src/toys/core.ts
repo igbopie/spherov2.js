@@ -2,6 +2,7 @@
 import { ICharacteristic, IPeripheral } from '../ble';
 import { factory } from '../commands';
 import { factory as decodeFactory, number } from '../commands/decoder';
+// tslint:disable-next-line:no-unused-variable
 import { DriveFlag, ICommandWithRaw } from '../commands/types';
 import { toPromise } from '../utils';
 import { Queue } from './queue';

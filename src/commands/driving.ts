@@ -1,4 +1,5 @@
 import { combineFlags } from '../utils';
+// tslint:disable-next-line:no-unused-variable
 import { CommandGenerator, DeviceId, DriveFlag, DrivingCommandIds, ICommandWithRaw } from './types';
 
 export default (generator: CommandGenerator) => {

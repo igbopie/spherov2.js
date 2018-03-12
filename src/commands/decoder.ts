@@ -7,9 +7,9 @@ export function number(buffer: number[], offset: number) {
 }
 
 const classifyPacket = (packet: Uint8Array): ICommandWithRaw => {
-  const [startPacket, flags, deviceId, commandId, sequenceNumber, ...rest] = packet;
+  const [_startPacket, _flags, deviceId, commandId, sequenceNumber, ...rest] = packet;
   const payload = rest.slice(0, rest.length - 2);
-  const [checksum, endPacket] = rest.slice(rest.length - 2, rest.length - 1);
+  const [_checksum, _endPacket] = rest.slice(rest.length - 2, rest.length - 1);
 
   return {
     // flags, // TODO

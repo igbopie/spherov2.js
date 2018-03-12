@@ -12,7 +12,7 @@
     "build": "rm -fR lib; tsc --declaration",
     "add-all": "git add -A",
     "test": "jest",
-    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
   "pre-commit": [
