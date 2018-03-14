@@ -31,4 +31,55 @@ export class SpheroMini extends Core {
     };
   }
 
+  public allLEDsRaw(payload: number[]) {
+    return this.queueCommand(this.commands.userIo.allLEDsRaw(payload));
+  }
+
+  public setBackLedIntensity(i: number) {
+    return this.queueCommand(this.commands.userIo.setBackLedIntensity(i));
+  }
+
+  public setMainLedBlueIntensity(i: number) {
+    return this.queueCommand(this.commands.userIo.setMainLedBlueIntensity(i));
+  }
+
+  public setMainLedColor(r: number, g: number, b: number) {
+    return this.queueCommand(this.commands.userIo.setMainLedColor(r, g, b));
+  }
+
+  public setMainLedGreenIntensity(i: number) {
+    return this.queueCommand(this.commands.userIo.setMainLedGreenIntensity(i));
+  }
+
+  public setMainLedRedIntensity(i: number) {
+    return this.queueCommand(this.commands.userIo.setMainLedRedIntensity(i));
+  }
+
+  public something1() {
+    return this.queueCommand(this.commands.systemInfo.something());
+  }
+
+  public something2() {
+    return this.queueCommand(this.commands.power.something2());
+  }
+
+  public something3() {
+    return this.queueCommand(this.commands.power.something3());
+  }
+
+  public something4() {
+    return this.queueCommand(this.commands.power.something4());
+  }
+
+  public something5() {
+    return this.queueCommand(this.commands.somethingApi.something5());
+  }
+
+  public something6() {
+    return this.queueCommand(this.commands.systemInfo.something6());
+  }
+
+  public something7() {
+    return this.queueCommand(this.commands.systemInfo.something7());
+  }
 }

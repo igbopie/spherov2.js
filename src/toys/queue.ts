@@ -1,10 +1,3 @@
-enum QUEUE_MODE {
-  NO_QUEUE, // NOT IMPLEMENTED
-  QUEUE,
-  QUEUE_TRYAGAIN, // NOT IMPLEMENTED
-  QUEUE_IGNORE_ERROR, // NOT IMPLEMENTED
-}
-
 export interface ICommandQueueItem<P> {
   // promise: Promise<any>,
   payload: P;
@@ -20,71 +13,64 @@ export interface IQueueListener<P> {
 
 export class Queue<P> {
 
+  private waitingForResponseQueue: Array<ICommandQueueItem<P>>;
   private commandQueue: Array<ICommandQueueItem<P>>;
-  private qeueMode: QUEUE_MODE;
-  private executing: ICommandQueueItem<P> | null;
   private queueListener: IQueueListener<P>;
 
   constructor(queueListener: IQueueListener<P>) {
     this.commandQueue = [];
-    this.executing = null;
-    this.qeueMode = QUEUE_MODE.QUEUE;
+    this.waitingForResponseQueue = [];
     this.queueListener = queueListener;
   }
 
   public onCommandProcessed(payloadReceived: P) {
-    if (this.executing) {
-      const payloadSent = this.executing.payload;
-      if (this.queueListener.match(payloadSent, payloadReceived)) {
-        this.executing.success(payloadReceived);
-        clearTimeout(this.executing.timeout);
-        this.executing = null;
-      } else {
-        this.handleQueueError('Payload does not match');
-      }
+    const lastCommand: ICommandQueueItem<P> = this.waitingForResponseQueue.find(
+      (command) => this.queueListener.match(command.payload, payloadReceived),
+    );
+    if (lastCommand) {
+      this.removeFromWaiting(lastCommand);
+      lastCommand.success(payloadReceived);
     } else {
       // tslint:disable-next-line:no-console
       console.log('PACKET RECEIVED BUT NOT EXECUTING', payloadReceived);
     }
-
-    this.processCommand();
   }
 
   public queue(payload: P): Promise<P> {
-    if (this.qeueMode === QUEUE_MODE.NO_QUEUE) {
-      // TODO
-    } else {
-      return new Promise<P>((success, reject) => {
-        this.commandQueue.push({
-          payload,
-          reject,
-          success,
-        });
-        this.processCommand();
+    return new Promise<P>((success, reject) => {
+      this.commandQueue.push({
+        payload,
+        reject,
+        success,
       });
-    }
-  }
-
-  private processCommand() {
-    if (!this.executing) {
-      this.executing = this.commandQueue.shift();
-      if (this.executing) {
-        this.executing.timeout = setTimeout(() => this.onCommandTimedout(), 5000);
-        this.queueListener.onExecute(this.executing.payload);
-      }
-    }
-  }
-
-  private onCommandTimedout() {
-    this.handleQueueError('Command Timedout');
-  }
-
-  private handleQueueError(error: string) {
-    if (this.qeueMode === QUEUE_MODE.QUEUE) {
-      this.executing.reject(error);
-      clearTimeout(this.executing.timeout);
-      this.executing = null;
       this.processCommand();
+    });
+  }
+
+  // Becareful not to exceed 255 as seq will return to 0 and it can collide.
+  private processCommand() {
+    const command = this.commandQueue.shift();
+    if (command) {
+      this.queueListener.onExecute(command.payload);
+      this.waitingForResponseQueue.push(command);
+      command.timeout = setTimeout(() => this.onCommandTimedout(command), 5000);
     }
+  }
+
+  private removeFromWaiting(command: ICommandQueueItem<P>) {
+    const index = this.waitingForResponseQueue.indexOf(command);
+    if (index >= 0) {
+      this.waitingForResponseQueue.splice(index, 1);
+      clearTimeout(command.timeout);
+    }
+  }
+
+  private onCommandTimedout(command: ICommandQueueItem<P>) {
+    this.handleQueueError('Command Timedout', command);
+    this.removeFromWaiting(command);
+  }
+
+  private handleQueueError(error: string, command: ICommandQueueItem<P>) {
+    command.reject(error);
   }
 }

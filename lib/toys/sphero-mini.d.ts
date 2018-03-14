@@ -8,4 +8,17 @@ export declare class SpheroMini extends Core {
         major: number;
         minor: number;
     }>;
+    allLEDsRaw(payload: number[]): Promise<IQueuePayload>;
+    setBackLedIntensity(i: number): Promise<IQueuePayload>;
+    setMainLedBlueIntensity(i: number): Promise<IQueuePayload>;
+    setMainLedColor(r: number, g: number, b: number): Promise<IQueuePayload>;
+    setMainLedGreenIntensity(i: number): Promise<IQueuePayload>;
+    setMainLedRedIntensity(i: number): Promise<IQueuePayload>;
+    something1(): Promise<IQueuePayload>;
+    something2(): Promise<IQueuePayload>;
+    something3(): Promise<IQueuePayload>;
+    something4(): Promise<IQueuePayload>;
+    something5(): Promise<IQueuePayload>;
+    something6(): Promise<IQueuePayload>;
+    something7(): Promise<IQueuePayload>;
 }

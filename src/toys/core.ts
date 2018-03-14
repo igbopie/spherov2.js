@@ -66,6 +66,7 @@ export class Core {
   }
 
   protected queueCommand(command: ICommandWithRaw) {
+    // console.log(command);
     return this.queue.queue({
       characteristic: this.apiV2Characteristic,
       command,

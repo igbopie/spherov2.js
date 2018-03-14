@@ -6,6 +6,11 @@ export enum DeviceId {
   animatronics = 0x17,
   sensor = 0x18,
   userIO = 0x1A,
+  somethingAPI = 0x1F,
+}
+
+export enum SomethingApi {
+  something5 = 0x27,
 }
 
 export enum APIProcessCommandIds {
@@ -15,6 +20,9 @@ export enum APIProcessCommandIds {
 export enum SystemInfoCommandIds {
   mainApplicationVersion = 0x00,
   bootloaderVersion = 0x01,
+  something = 0x06,
+  something6 = 0x12,
+  something7 = 0x28,
 }
 
 export enum PowerCommandIds {
@@ -22,6 +30,9 @@ export enum PowerCommandIds {
   sleep = 0x01,
   batteryVoltage = 0x03,
   wake = 0x0D,
+  something2 = 0x10, // every x time
+  something3 = 0x04, // every x time
+  something4 = 0x1e,
 }
 
 export enum DrivingCommandIds {
@@ -59,10 +70,8 @@ export enum UserIOCommandIds {
 export enum Flags {
   isResponse = 1,
   requestsResponse = 2,
-  // tslint:disable-next-line:no-bitwise
-  requestsOnlyErrorResponse = 2 << 1,
-  // tslint:disable-next-line:no-bitwise
-  resetsInactivityTimeout = 2 << 2,
+  requestsOnlyErrorResponse = 4,
+  resetsInactivityTimeout = 8,
 }
 
 export enum APIConstants {
@@ -95,7 +104,8 @@ export type CommandId =
   DrivingCommandIds |
   PowerCommandIds |
   SystemInfoCommandIds |
-  APIProcessCommandIds;
+  APIProcessCommandIds |
+  SomethingApi;
 
 export interface ICommandOutput {
   bytes: number[];

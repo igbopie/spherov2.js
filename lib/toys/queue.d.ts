@@ -10,14 +10,14 @@ export interface IQueueListener<P> {
     match: (commandA: P, commandB: P) => boolean;
 }
 export declare class Queue<P> {
+    private waitingForResponseQueue;
     private commandQueue;
-    private qeueMode;
-    private executing;
     private queueListener;
     constructor(queueListener: IQueueListener<P>);
     onCommandProcessed(payloadReceived: P): void;
     queue(payload: P): Promise<P>;
     private processCommand();
-    private onCommandTimedout();
-    private handleQueueError(error);
+    private removeFromWaiting(command);
+    private onCommandTimedout(command);
+    private handleQueueError(error, command);
 }

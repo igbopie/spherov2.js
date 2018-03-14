@@ -6,6 +6,10 @@ export declare enum DeviceId {
     animatronics = 23,
     sensor = 24,
     userIO = 26,
+    somethingAPI = 31,
+}
+export declare enum SomethingApi {
+    something5 = 39,
 }
 export declare enum APIProcessCommandIds {
     echo = 0,
@@ -13,12 +17,18 @@ export declare enum APIProcessCommandIds {
 export declare enum SystemInfoCommandIds {
     mainApplicationVersion = 0,
     bootloaderVersion = 1,
+    something = 6,
+    something6 = 18,
+    something7 = 40,
 }
 export declare enum PowerCommandIds {
     deepSleep = 0,
     sleep = 1,
     batteryVoltage = 3,
     wake = 13,
+    something2 = 16,
+    something3 = 4,
+    something4 = 30,
 }
 export declare enum DrivingCommandIds {
     rawMotor = 1,
@@ -70,7 +80,7 @@ export declare enum DriveFlag {
     tankDriveLeftMotorReverse = 8,
     tankDriveRightMotorReverse = 16,
 }
-export declare type CommandId = UserIOCommandIds | AnimatronicsCommandIds | DrivingCommandIds | PowerCommandIds | SystemInfoCommandIds | APIProcessCommandIds;
+export declare type CommandId = UserIOCommandIds | AnimatronicsCommandIds | DrivingCommandIds | PowerCommandIds | SystemInfoCommandIds | APIProcessCommandIds | SomethingApi;
 export interface ICommandOutput {
     bytes: number[];
     checksum: number;

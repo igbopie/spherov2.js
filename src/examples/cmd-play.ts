@@ -1,38 +1,69 @@
 import { SpheroMini } from '../toys/sphero-mini';
+import { wait } from '../utils';
 
+// SORRY FOR THIS CODE, It is my playground for now
 export default (toy: SpheroMini) => {
 
   let pressTimeout: NodeJS.Timer;
+  let heading = 0;
+  let currentSpeed = 0;
+  let speed = 150;
+  let executing = true;
+  let calibrating = false;
+  let offset = 0;
+
   const cancelPress = () => {
     clearTimeout(pressTimeout);
     pressTimeout = null;
   };
 
-  // const addTimeout = () => {
-  //   pressTimeout = setTimeout(() => handle(), 50);
-  // };
+  const addTimeout = () => {
+    pressTimeout = setTimeout(() => {
+      currentSpeed = 0;
+    }, 500);
+  };
 
-  const handle = (key: string = '', symbol: any = {}) => {
+  const loop = async () => {
+    while (true) {
+      if (executing) {
+        toy.roll(currentSpeed, calibrating ? heading : (heading + offset) % 360, []);
+      }
+      if (currentSpeed === 0 && !calibrating) {
+        executing = false;
+      }
+      if (calibrating) {
+        heading += 5;
+
+        if (heading > 360) {
+          heading = 0;
+        }
+      }
+      await wait(100);
+    }
+  };
+
+  const handle = async (key: string = '', symbol: any = {}) => {
     cancelPress();
     if (symbol.name === 'up') {
       heading = 0;
-      toy.roll(speed, heading, []);
-      // addTimeout();
+      currentSpeed = speed;
+      executing = true;
+      addTimeout();
     } else if (symbol.name === 'left') {
       heading = 270;
-      toy.roll(speed, heading, []);
-      // addTimeout();
+      currentSpeed = speed;
+      executing = true;
+      addTimeout();
     } else if (symbol.name === 'right') {
       heading = 90;
-      toy.roll(speed, heading, []);
-      // addTimeout();
+      currentSpeed = speed;
+      executing = true;
+      addTimeout();
     } else if (symbol.name === 'down') {
       heading = 180;
-      toy.roll(speed, heading, []);
-      // addTimeout();
-    } else {
-      // console.log('STOP');
-      toy.roll(0, heading, []);
+      currentSpeed = speed;
+      executing = true;
+      addTimeout();
     }
 
     if (key === 'q') {
@@ -47,17 +78,26 @@ export default (toy: SpheroMini) => {
       toy.sleep();
     } else if (key === 'a') {
       toy.wake();
+    } else if (key === 'c') {
+      if (calibrating) {
+        calibrating = false;
+        await toy.setBackLedIntensity(0);
+        offset = heading;
+        heading = 0;
+      } else {
+        await toy.setBackLedIntensity(255);
+        currentSpeed = 0;
+        executing = true;
+        heading = 0;
+        calibrating = true;
+      }
     }
-
-    // console.log(symbol.name, speed, heading);
   };
 
   const readline = require('readline');
-  let heading = 0;
-  let speed = 150;
-
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
-
   process.stdin.on('keypress', handle);
+
+  loop();
 };

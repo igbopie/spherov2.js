@@ -23,18 +23,18 @@
     "add-all"
   ],
   "dependencies": {
-    "@types/noble": "^0.0.34",
-    "noble": "^1.9.0",
-    "node-inspect": "^1.11.3",
-    "pre-commit": "^1.2.2",
-    "ts-node": "^5.0.0",
-    "tslint": "^5.9.1",
-    "typescript": "^2.7.2"
+    "noble": "^1.9.0"
   },
   "devDependencies": {
     "@types/jest": "^22.1.4",
+    "@types/noble": "^0.0.34",
     "jest": "^22.4.2",
-    "ts-jest": "^22.4.1"
+    "node-inspect": "^1.11.3",
+    "pre-commit": "^1.2.2",
+    "ts-jest": "^22.4.1",
+    "ts-node": "^5.0.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2"
   },
   "jest": {
     "verbose": true,

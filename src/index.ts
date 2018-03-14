@@ -1,8 +1,9 @@
 /* tslint:disable */
 import { SpheroMini } from './toys/sphero-mini';
 import { findToys } from './scanner';
-// import cmdPlay from './examples/cmd-play';
+import cmdPlay from './examples/cmd-play';
 import patrol from './examples/patrol';
+import { wait } from './utils';
 
 const main = async () => {
   const discovered = await findToys();
@@ -15,8 +16,7 @@ const main = async () => {
     console.log('Version', version);
     let battery = await toy.batteryVoltage();
     console.log(battery);
-    patrol(toy);
-    // process.exit(0);
+    cmdPlay(toy);
   } else {
     console.log('Not found');
   }

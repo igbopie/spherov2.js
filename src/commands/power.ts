@@ -10,6 +10,15 @@ export default (generator: CommandGenerator) => {
     sleep: () => encode({
       commandId: PowerCommandIds.sleep,
     }),
+    something2: () => encode({
+      commandId: PowerCommandIds.something2,
+    }),
+    something3: () => encode({
+      commandId: PowerCommandIds.something3,
+    }),
+    something4: () => encode({
+      commandId: PowerCommandIds.something4,
+    }),
     wake: () => encode({
       commandId: PowerCommandIds.wake,
     }),
