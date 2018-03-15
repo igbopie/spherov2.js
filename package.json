@@ -23,7 +23,9 @@
     "add-all"
   ],
   "dependencies": {
-    "noble": "^1.9.0"
+    "@types/node-hid": "^0.5.2",
+    "noble": "^1.9.0",
+    "node-hid": "^0.7.2"
   },
   "devDependencies": {
     "@types/jest": "^22.1.4",

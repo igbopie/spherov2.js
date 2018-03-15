@@ -3,6 +3,7 @@ import { SpheroMini } from './toys/sphero-mini';
 import { findToys } from './scanner';
 import cmdPlay from './examples/cmd-play';
 import patrol from './examples/patrol';
+import hid from './examples/hid';
 import { wait } from './utils';
 
 const main = async () => {
@@ -16,7 +17,7 @@ const main = async () => {
     console.log('Version', version);
     let battery = await toy.batteryVoltage();
     console.log(battery);
-    cmdPlay(toy);
+    hid(toy);
   } else {
     console.log('Not found');
   }
