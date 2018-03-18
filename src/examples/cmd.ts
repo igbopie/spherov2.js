@@ -1,8 +1,9 @@
 import { SpheroMini } from '../toys/sphero-mini';
 import { wait } from '../utils';
+import { findSpheroMini } from './lib/scanner';
 
 // SORRY FOR THIS CODE, It is my playground for now
-export default (toy: SpheroMini) => {
+const cmdPlay = (toy: SpheroMini) => {
 
   let pressTimeout: NodeJS.Timer;
   let heading = 0;
@@ -101,3 +102,12 @@ export default (toy: SpheroMini) => {
 
   loop();
 };
+
+const main = async () => {
+  const sphero = await findSpheroMini();
+  if (sphero) {
+    cmdPlay(sphero);
+  }
+};
+
+main();

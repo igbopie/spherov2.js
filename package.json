@@ -13,7 +13,10 @@
     "add-all": "git add -A",
     "test": "jest",
     "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
+    "hid": "ts-node src/examples/hid",
+    "patrol": "ts-node src/examples/patrol",
+    "cmd": "ts-node src/examples/cmd"
   },
   "pre-commit": [
     "precommit-msg",
