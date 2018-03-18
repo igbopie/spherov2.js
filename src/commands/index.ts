@@ -4,6 +4,7 @@ import { encode } from './encoder';
 import power from './power';
 import somethingApi from './something-api';
 import systemInfo from './system-info';
+import sensor from './sensor';
 // tslint:disable-next-line:no-unused-variable
 import { DriveFlag, Flags, ICommandPartial, ICommandWithRaw} from './types';
 import userIo from './user-io';
@@ -37,5 +38,6 @@ export const factory = (seq?: () => number) => {
     somethingApi: somethingApi(gen),
     systemInfo: systemInfo(gen),
     userIo: userIo(gen),
+    sensor: sensor(gen),
   };
 };

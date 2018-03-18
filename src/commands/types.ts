@@ -105,6 +105,7 @@ export type CommandId =
   PowerCommandIds |
   SystemInfoCommandIds |
   APIProcessCommandIds |
+  SensorCommandIds |
   SomethingApi;
 
 export interface ICommandOutput {

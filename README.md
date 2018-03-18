@@ -21,3 +21,5 @@ then:
 * `yarn hid`: Steelseries Nimbus + Sphero Mini
 * `yarn cmd`: CMD interaction with Sphero Mini
 * `yarn patrol`: Will move in a square (for now).
+* `yarn police`: Will turn on LED as police do.
+* `yarn collision`: Will turn red when collision detected

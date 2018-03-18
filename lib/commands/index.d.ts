@@ -31,4 +31,8 @@ export declare const factory: (seq?: () => number) => {
         setMainLedGreenIntensity: (g: number) => ICommandWithRaw;
         setMainLedRedIntensity: (r: number) => ICommandWithRaw;
     };
+    sensor: {
+        enableCollisionAsync: () => ICommandWithRaw;
+        configureCollision: (xThreshold: number, yThreshold: number, xSpeed: number, ySpeed: number, deadTime: number, method?: number) => ICommandWithRaw;
+    };
 };

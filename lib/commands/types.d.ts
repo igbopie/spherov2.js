@@ -80,7 +80,7 @@ export declare enum DriveFlag {
     tankDriveLeftMotorReverse = 8,
     tankDriveRightMotorReverse = 16,
 }
-export declare type CommandId = UserIOCommandIds | AnimatronicsCommandIds | DrivingCommandIds | PowerCommandIds | SystemInfoCommandIds | APIProcessCommandIds | SomethingApi;
+export declare type CommandId = UserIOCommandIds | AnimatronicsCommandIds | DrivingCommandIds | PowerCommandIds | SystemInfoCommandIds | APIProcessCommandIds | SensorCommandIds | SomethingApi;
 export interface ICommandOutput {
     bytes: number[];
     checksum: number;

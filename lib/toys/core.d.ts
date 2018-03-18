@@ -32,6 +32,10 @@ export declare const commandsType: {
         setMainLedGreenIntensity: (g: number) => ICommandWithRaw;
         setMainLedRedIntensity: (r: number) => ICommandWithRaw;
     };
+    sensor: {
+        enableCollisionAsync: () => ICommandWithRaw;
+        configureCollision: (xThreshold: number, yThreshold: number, xSpeed: number, ySpeed: number, deadTime: number, method?: number) => ICommandWithRaw;
+    };
 };
 export declare const decodeType: {
     add(byte: number): number | void;
@@ -39,6 +43,9 @@ export declare const decodeType: {
 export interface IQueuePayload {
     command: ICommandWithRaw;
     characteristic?: ICharacteristic;
+}
+export declare enum Event {
+    onCollision = "onCollision",
 }
 export declare class Core {
     protected commands: typeof commandsType;
@@ -51,11 +58,14 @@ export declare class Core {
     private queue;
     private initPromise;
     private initPromiseResolve;
+    private eventsListeners;
     constructor(p: IPeripheral);
     batteryVoltage(): Promise<number>;
     wake(): Promise<IQueuePayload>;
     sleep(): Promise<IQueuePayload>;
     start(): Promise<void>;
+    on(eventName: Event, handler: () => void): void;
+    destroy(): void;
     protected queueCommand(command: ICommandWithRaw): Promise<IQueuePayload>;
     private init();
     private onExecute(item);
@@ -63,6 +73,8 @@ export declare class Core {
     private bindServices();
     private bindListeners();
     private onPacketRead(error, command);
+    private eventHandler(command);
+    private handleCollision(command);
     private onApiRead(data, isNotification);
     private onApiNotify(data, isNotification);
     private onDFUControlNotify(data, isNotification);

@@ -31,6 +31,22 @@ export class SpheroMini extends Core {
     };
   }
 
+  public enableCollisionDetection() {
+    return this.queueCommand(this.commands.sensor.enableCollisionAsync());
+  }
+
+  public configureCollisionDetection(
+    xThreshold: number = 100,
+    yThreshold: number  = 100,
+    xSpeed: number = 100,
+    ySpeed: number = 100,
+    deadTime: number = 10,
+    method: number = 0x01) {
+    return this.queueCommand(
+      this.commands.sensor.configureCollision(xThreshold, yThreshold, xSpeed, ySpeed, deadTime, method),
+    );
+  }
+
   public allLEDsRaw(payload: number[]) {
     return this.queueCommand(this.commands.userIo.allLEDsRaw(payload));
   }

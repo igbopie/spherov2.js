@@ -8,6 +8,8 @@ export declare class SpheroMini extends Core {
         major: number;
         minor: number;
     }>;
+    enableCollisionDetection(): Promise<IQueuePayload>;
+    configureCollisionDetection(xThreshold?: number, yThreshold?: number, xSpeed?: number, ySpeed?: number, deadTime?: number, method?: number): Promise<IQueuePayload>;
     allLEDsRaw(payload: number[]): Promise<IQueuePayload>;
     setBackLedIntensity(i: number): Promise<IQueuePayload>;
     setMainLedBlueIntensity(i: number): Promise<IQueuePayload>;

@@ -3,7 +3,7 @@ import { ICharacteristic, IPeripheral } from '../ble';
 import { factory } from '../commands';
 import { factory as decodeFactory, number } from '../commands/decoder';
 // tslint:disable-next-line:no-unused-variable
-import { DriveFlag, ICommandWithRaw } from '../commands/types';
+import { DriveFlag, ICommandWithRaw, DeviceId, SensorCommandIds } from '../commands/types';
 import { toPromise } from '../utils';
 import { Queue } from './queue';
 import { CharacteristicUUID } from './types';
@@ -17,6 +17,12 @@ export interface IQueuePayload {
   characteristic?: ICharacteristic;
 }
 
+export enum Event {
+  onCollision = 'onCollision',
+}
+
+type EventMap = { [key in Event]?: () => void };
+
 export class Core {
   protected commands: typeof commandsType;
   private peripheral: IPeripheral;
@@ -29,6 +35,7 @@ export class Core {
   private queue: Queue<IQueuePayload>;
   private initPromise: Promise<void>;
   private initPromiseResolve: () => any;
+  private eventsListeners: EventMap;
 
   constructor(p: IPeripheral) {
     this.peripheral = p;
@@ -65,6 +72,15 @@ export class Core {
     }
   }
 
+  public on(eventName: Event, handler: () => void) {
+    this.eventsListeners[eventName] = handler;
+  }
+
+  public destroy() {
+    // TODO handle all unbind, disconnect, etc
+    this.eventsListeners = {}; // remove references
+  }
+
   protected queueCommand(command: ICommandWithRaw) {
     // console.log(command);
     return this.queue.queue({
@@ -84,6 +100,7 @@ export class Core {
       match: (cA, cB) => this.match(cA, cB),
       onExecute: (item) => this.onExecute(item),
     });
+    this.eventsListeners = {};
     this.commands = factory();
     this.decoder = decodeFactory((error, packet) => this.onPacketRead(error, packet));
     this.started = false;
@@ -136,8 +153,35 @@ export class Core {
     if (error) {
       // tslint:disable-next-line:no-console
       console.error('There was a parse error', error);
+    } else if (command.sequenceNumber === 255) {
+      this.eventHandler(command);
     } else {
       this.queue.onCommandProcessed({ command });
+    }
+  }
+
+  private eventHandler(command: ICommandWithRaw) {
+    if (command.deviceId === DeviceId.sensor &&
+      command.commandId === SensorCommandIds.collisionDetectedAsync) {
+
+      // tslint:disable-next-line:no-console
+      this.handleCollision(command);
+    } else  {
+
+      // tslint:disable-next-line:no-console
+      console.log('UNKOWN EVENT', command.raw);
+    }
+  }
+
+  private handleCollision(command: ICommandWithRaw) {
+    // TODO parse collision
+    const handler = this.eventsListeners.onCollision;
+    if (handler) {
+      handler();
+    } else {
+
+      // tslint:disable-next-line:no-console
+      console.log('No handler for collision but collision was detected');
     }
   }
 
@@ -146,9 +190,11 @@ export class Core {
   }
 
   private onApiNotify(data: any, isNotification: any) {
-    // nothing
     if (this.initPromiseResolve) {
       this.initPromiseResolve();
+      this.initPromiseResolve = null;
+      this.initPromise = null;
+      return;
     }
   }
 
