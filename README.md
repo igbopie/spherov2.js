@@ -23,3 +23,4 @@ then:
 * `yarn patrol`: Will move in a square (for now).
 * `yarn police`: Will turn on LED as police do.
 * `yarn collision`: Will turn red when collision detected
+* `yarn sensor`: Will turn on stream sensor data. TODO: Parse sensor data

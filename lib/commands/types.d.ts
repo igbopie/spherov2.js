@@ -50,6 +50,9 @@ export declare enum SensorCommandIds {
     collisionDetectedAsync = 18,
     resetLocator = 19,
     enableCollisionAsync = 20,
+    sensor1 = 15,
+    sensor2 = 23,
+    configureSensorStream = 12,
 }
 export declare enum UserIOCommandIds {
     allLEDs = 14,

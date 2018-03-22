@@ -57,6 +57,9 @@ export enum SensorCommandIds {
   collisionDetectedAsync = 0x12,
   resetLocator = 0x13,
   enableCollisionAsync = 0x14,
+  sensor1 = 0x0f,
+  sensor2 = 0x17,
+  configureSensorStream = 0x0c,
 }
 
 export enum UserIOCommandIds {

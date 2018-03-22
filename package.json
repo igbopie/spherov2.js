@@ -18,7 +18,8 @@
     "patrol": "ts-node src/examples/patrol",
     "cmd": "ts-node src/examples/cmd",
     "collision": "ts-node src/examples/collisionDetection",
-    "police": "ts-node src/examples/police"
+    "police": "ts-node src/examples/police",
+    "sensor": "ts-node src/examples/sensor"
   },
   "pre-commit": [
     "precommit-msg",

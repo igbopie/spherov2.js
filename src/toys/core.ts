@@ -19,9 +19,10 @@ export interface IQueuePayload {
 
 export enum Event {
   onCollision = 'onCollision',
+  onSensor = 'onSensor',
 }
 
-type EventMap = { [key in Event]?: () => void };
+type EventMap = { [key in Event]?: (command: ICommandWithRaw) => void };
 
 export class Core {
   protected commands: typeof commandsType;
@@ -72,7 +73,7 @@ export class Core {
     }
   }
 
-  public on(eventName: Event, handler: () => void) {
+  public on(eventName: Event, handler: (command: ICommandWithRaw) => void) {
     this.eventsListeners[eventName] = handler;
   }
 
@@ -163,10 +164,12 @@ export class Core {
   private eventHandler(command: ICommandWithRaw) {
     if (command.deviceId === DeviceId.sensor &&
       command.commandId === SensorCommandIds.collisionDetectedAsync) {
-
-      // tslint:disable-next-line:no-console
       this.handleCollision(command);
-    } else  {
+    } else  if (command.deviceId === DeviceId.sensor &&
+      command.commandId === SensorCommandIds.sensorResponse
+    ) {
+      this.handleSensorUpdate(command);
+    } else {
 
       // tslint:disable-next-line:no-console
       console.log('UNKOWN EVENT', command.raw);
@@ -177,7 +180,19 @@ export class Core {
     // TODO parse collision
     const handler = this.eventsListeners.onCollision;
     if (handler) {
-      handler();
+      handler(command);
+    } else {
+
+      // tslint:disable-next-line:no-console
+      console.log('No handler for collision but collision was detected');
+    }
+  }
+
+  private handleSensorUpdate(command: ICommandWithRaw) {
+    // TODO parse sensor
+    const handler = this.eventsListeners.onSensor;
+    if (handler) {
+      handler(command);
     } else {
 
       // tslint:disable-next-line:no-console

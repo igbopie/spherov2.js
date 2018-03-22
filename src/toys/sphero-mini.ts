@@ -47,6 +47,20 @@ export class SpheroMini extends Core {
     );
   }
 
+  public async configureSensorStream() {
+    // 8d:0a:18:0f:0b:01:c2:d8 - response:  8d:09:18:0f:0b:00:c4:d8
+    // 8d:0a:18:17:0c:00:ba:d8 - response:  8d:09:18:17:0c:00:bb:d8
+    // 8d:0a:18:0c:0f:00:00:00:00:c2:d8
+    // 8d:0a:18:00:4c:00:32:00:00:07:e0:78:00:d8
+    // 8d:0a:18:00:0e:00:32:00:00:00:00:00:9d:d8  - payload: 00:32:00:00:00:00:00
+    // await this.queueCommand(this.commands.sensor.sensor1());
+    // await this.queueCommand(this.commands.sensor.sensor2());
+    // await this.queueCommand(this.commands.sensor.sensorMask(
+    //   [0x00, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00],
+    // ));
+    return await this.queueCommand(this.commands.sensor.configureSensorStream());
+  }
+
   public allLEDsRaw(payload: number[]) {
     return this.queueCommand(this.commands.userIo.allLEDsRaw(payload));
   }

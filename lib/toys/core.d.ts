@@ -35,6 +35,10 @@ export declare const commandsType: {
     sensor: {
         enableCollisionAsync: () => ICommandWithRaw;
         configureCollision: (xThreshold: number, yThreshold: number, xSpeed: number, ySpeed: number, deadTime: number, method?: number) => ICommandWithRaw;
+        sensorMask: (payload: number[]) => ICommandWithRaw;
+        sensor1: () => ICommandWithRaw;
+        sensor2: () => ICommandWithRaw;
+        configureSensorStream: () => ICommandWithRaw;
     };
 };
 export declare const decodeType: {
@@ -46,6 +50,7 @@ export interface IQueuePayload {
 }
 export declare enum Event {
     onCollision = "onCollision",
+    onSensor = "onSensor",
 }
 export declare class Core {
     protected commands: typeof commandsType;
@@ -64,7 +69,7 @@ export declare class Core {
     wake(): Promise<IQueuePayload>;
     sleep(): Promise<IQueuePayload>;
     start(): Promise<void>;
-    on(eventName: Event, handler: () => void): void;
+    on(eventName: Event, handler: (command: ICommandWithRaw) => void): void;
     destroy(): void;
     protected queueCommand(command: ICommandWithRaw): Promise<IQueuePayload>;
     private init();
@@ -75,6 +80,7 @@ export declare class Core {
     private onPacketRead(error, command);
     private eventHandler(command);
     private handleCollision(command);
+    private handleSensorUpdate(command);
     private onApiRead(data, isNotification);
     private onApiNotify(data, isNotification);
     private onDFUControlNotify(data, isNotification);

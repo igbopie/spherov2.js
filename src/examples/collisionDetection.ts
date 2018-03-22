@@ -27,7 +27,7 @@ const main = async () => {
     });
 
     while (true) {
-      await wait(100);
+      await wait(1000);
     }
   }
 };
