@@ -1,6 +1,6 @@
 
 import { findSpheroMini } from './lib/scanner';
-import { hid } from './lib/hid';
+import { hid } from './lib/hid-sphero';
 
 const main = async () => {
   const sphero = await findSpheroMini();

@@ -3,20 +3,25 @@ import * as noble from 'noble';
 import { SpheroMini } from '../../toys/sphero-mini';
 import { IToyAdvertisement } from '../../toys/types';
 import { wait } from '../../utils';
+import { LightingMcQueen } from '../../toys/lighting-mcqueen';
+import { Core } from '../../toys/core';
 
 export interface IToyDiscovered extends IToyAdvertisement {
   peripheral: Peripheral;
 }
 
-const validToys: IToyAdvertisement[] = [
-  SpheroMini.advertisement,
-  // {
-  //   prefix: 'LM-',
-  //   name: 'Lighting McQueen'
-  // },
-];
+// const validToys: IToyAdvertisement[] = [
+//   SpheroMini.advertisement,
+//   // {
+//   //   prefix: 'LM-',
+//   //   name: 'Lighting McQueen'
+//   // },
+// ];
 
-const discover = async (toys: IToyDiscovered[], p: Peripheral) => {
+const discover = async (
+    validToys: IToyAdvertisement[],
+    toys: IToyDiscovered[],
+    p: Peripheral) => {
   const { advertisement, uuid } = p;
   const { localName = '' } = advertisement;
   validToys.forEach( async (toyAdvertisement) => {
@@ -32,26 +37,27 @@ const discover = async (toys: IToyDiscovered[], p: Peripheral) => {
   });
 };
 
-export const findToys = async () => {
+export const findToys = async (toysType: IToyAdvertisement[]) => {
   const toys: IToyDiscovered[] = [];
   // tslint:disable-next-line:no-console
   console.log('Scanning devices...');
+  const discoverBinded = discover.bind(this, toysType, toys);
 
-  noble.on('discover', discover.bind(this, toys));
+  noble.on('discover', discoverBinded);
   noble.startScanning(); // any service UUID, no duplicates
   await wait(5000);
   noble.stopScanning();
-  noble.removeListener('discover', discover.bind(this, toys));
+  noble.removeListener('discover', discoverBinded);
 
   // tslint:disable-next-line:no-console
   console.log('Done scanning devices.');
   return toys;
 };
 
-export const findSpheroMini = async () => {
-  const discovered = await findToys();
+export const find = async (toyType: IToyAdvertisement) => {
+  const discovered = await findToys([toyType]);
   if (discovered.length > 0) {
-    const toy: SpheroMini = new SpheroMini(discovered[0].peripheral);
+    const toy: Core = new toyType.class(discovered[0].peripheral);
 
     // tslint:disable-next-line:no-console
     console.log('Starting...');
@@ -74,4 +80,12 @@ export const findSpheroMini = async () => {
     // tslint:disable-next-line:no-console
     console.log('Not found');
   }
+};
+
+export const findSpheroMini = async () => {
+  return await find(SpheroMini.advertisement) as SpheroMini;
+};
+
+export const findLightintMcQueen = async () => {
+  return await find(LightingMcQueen.advertisement) as LightingMcQueen;
 };

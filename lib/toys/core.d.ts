@@ -6,6 +6,7 @@ export declare const commandsType: {
     };
     driving: {
         drive: (speed: number, heading: number, flags: DriveFlag[]) => ICommandWithRaw;
+        driveAsRc: (heading: number, speed: number) => ICommandWithRaw;
     };
     power: {
         batteryVoltage: () => ICommandWithRaw;
@@ -69,6 +70,10 @@ export declare class Core {
     wake(): Promise<IQueuePayload>;
     sleep(): Promise<IQueuePayload>;
     start(): Promise<void>;
+    appVersion(): Promise<{
+        major: number;
+        minor: number;
+    }>;
     on(eventName: Event, handler: (command: ICommandWithRaw) => void): void;
     destroy(): void;
     protected queueCommand(command: ICommandWithRaw): Promise<IQueuePayload>;

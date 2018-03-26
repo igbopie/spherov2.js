@@ -5,6 +5,7 @@ export declare const factory: (seq?: () => number) => {
     };
     driving: {
         drive: (speed: number, heading: number, flags: DriveFlag[]) => ICommandWithRaw;
+        driveAsRc: (heading: number, speed: number) => ICommandWithRaw;
     };
     power: {
         batteryVoltage: () => ICommandWithRaw;

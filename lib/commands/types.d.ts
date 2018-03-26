@@ -33,6 +33,8 @@ export declare enum PowerCommandIds {
 export declare enum DrivingCommandIds {
     rawMotor = 1,
     resetYaw = 6,
+    driveAsSphero = 4,
+    driveAsRc = 2,
     driveWithHeading = 7,
     stabilization = 12,
 }

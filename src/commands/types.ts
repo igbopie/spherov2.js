@@ -38,6 +38,8 @@ export enum PowerCommandIds {
 export enum DrivingCommandIds {
   rawMotor = 0x01,
   resetYaw = 0x06,
+  driveAsSphero = 0x04,
+  driveAsRc = 0x02,
   driveWithHeading = 0x07,
   stabilization = 0x0C,
 }

@@ -18,7 +18,8 @@ yarn install
 
 then:
 
-* `yarn hid`: Steelseries Nimbus + Sphero Mini
+* `yarn hid-sm`: Steelseries Nimbus + Sphero Mini
+* `yarn hid-lm`: Steelseries Nimbus + Lighting McQueen
 * `yarn cmd`: CMD interaction with Sphero Mini
 * `yarn patrol`: Will move in a square (for now).
 * `yarn police`: Will turn on LED as police do.

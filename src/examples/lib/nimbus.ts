@@ -16,6 +16,8 @@ export interface IControllerState {
   y: number;
   leftStick: IDPad;
   rightStick: IDPad;
+  r2: number;
+  l2: number;
 }
 
 enum Buttons {
@@ -27,6 +29,8 @@ enum Buttons {
   LeftStickX = 13,
   RightStickY = 16,
   RightStickX = 15,
+  R2 = 11,
+  L2 = 10,
 }
 
 const MAX_D_PAD = 127;
@@ -85,6 +89,8 @@ device.on('data', (data: Buffer) => {
       module: 0,
       angle: 0,
     },
+    r2: data.readUInt8(Buttons.R2),
+    l2: data.readUInt8(Buttons.L2),
   };
   state.leftStick = calculate(state.leftStick);
   state.rightStick = calculate(state.rightStick);

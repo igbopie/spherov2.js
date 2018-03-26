@@ -1,3 +1,4 @@
+import { Core } from './core';
 export declare enum ServicesUUID {
     apiV2ControlService = "00010001574f4f2053706865726f2121",
     nordicDfuService = "00020001574f4f2053706865726f2121",
@@ -11,4 +12,5 @@ export declare enum CharacteristicUUID {
 export interface IToyAdvertisement {
     name: string;
     prefix: string;
+    class: typeof Core;
 }

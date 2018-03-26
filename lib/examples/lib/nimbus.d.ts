@@ -13,6 +13,8 @@ export interface IControllerState {
     y: number;
     leftStick: IDPad;
     rightStick: IDPad;
+    r2: number;
+    l2: number;
 }
 declare const _default: {
     close(): void;

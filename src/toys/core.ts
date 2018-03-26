@@ -73,6 +73,14 @@ export class Core {
     }
   }
 
+  public async appVersion() {
+    const response = await this.queueCommand(this.commands.systemInfo.appVersion());
+    return {
+      major: number(response.command.payload, 1),
+      minor: number(response.command.payload, 3),
+    };
+  }
+
   public on(eventName: Event, handler: (command: ICommandWithRaw) => void) {
     this.eventsListeners[eventName] = handler;
   }

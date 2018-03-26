@@ -4,10 +4,6 @@ export declare class SpheroMini extends Core {
     static advertisement: IToyAdvertisement;
     roll(speed: number, heading: number, flags: number[]): Promise<IQueuePayload>;
     rollTime(speed: number, heading: number, time: number, flags: number[]): Promise<void>;
-    appVersion(): Promise<{
-        major: number;
-        minor: number;
-    }>;
     enableCollisionDetection(): Promise<IQueuePayload>;
     configureCollisionDetection(xThreshold?: number, yThreshold?: number, xSpeed?: number, ySpeed?: number, deadTime?: number, method?: number): Promise<IQueuePayload>;
     configureSensorStream(): Promise<IQueuePayload>;
