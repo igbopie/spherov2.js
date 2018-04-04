@@ -1,10 +1,11 @@
 import { Peripheral } from 'noble';
 import * as noble from 'noble';
-import { SpheroMini } from '../../toys/sphero-mini';
 import { IToyAdvertisement } from '../../toys/types';
 import { wait } from '../../utils';
-import { LightingMcQueen } from '../../toys/lighting-mcqueen';
 import { Core } from '../../toys/core';
+import { BB9E } from '../../toys/bb9e';
+import { LightingMcQueen } from '../../toys/lighting-mcqueen';
+import { SpheroMini } from '../../toys/sphero-mini';
 
 export interface IToyDiscovered extends IToyAdvertisement {
   peripheral: Peripheral;
@@ -80,6 +81,10 @@ export const find = async (toyType: IToyAdvertisement) => {
     // tslint:disable-next-line:no-console
     console.log('Not found');
   }
+};
+
+export const findBB9E = async () => {
+  return await find(BB9E.advertisement) as BB9E;
 };
 
 export const findSpheroMini = async () => {

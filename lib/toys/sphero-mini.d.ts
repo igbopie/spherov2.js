@@ -1,18 +1,11 @@
-import { Core, IQueuePayload } from './core';
+import { IQueuePayload } from './core';
 import { IToyAdvertisement } from './types';
-export declare class SpheroMini extends Core {
+import { RollableToy } from './rollable-toy';
+export declare class SpheroMini extends RollableToy {
     static advertisement: IToyAdvertisement;
-    roll(speed: number, heading: number, flags: number[]): Promise<IQueuePayload>;
-    rollTime(speed: number, heading: number, time: number, flags: number[]): Promise<void>;
     enableCollisionDetection(): Promise<IQueuePayload>;
     configureCollisionDetection(xThreshold?: number, yThreshold?: number, xSpeed?: number, ySpeed?: number, deadTime?: number, method?: number): Promise<IQueuePayload>;
     configureSensorStream(): Promise<IQueuePayload>;
-    allLEDsRaw(payload: number[]): Promise<IQueuePayload>;
-    setBackLedIntensity(i: number): Promise<IQueuePayload>;
-    setMainLedBlueIntensity(i: number): Promise<IQueuePayload>;
-    setMainLedColor(r: number, g: number, b: number): Promise<IQueuePayload>;
-    setMainLedGreenIntensity(i: number): Promise<IQueuePayload>;
-    setMainLedRedIntensity(i: number): Promise<IQueuePayload>;
     something1(): Promise<IQueuePayload>;
     something2(): Promise<IQueuePayload>;
     something3(): Promise<IQueuePayload>;

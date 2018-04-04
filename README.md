@@ -18,10 +18,19 @@ yarn install
 
 then:
 
-* `yarn hid-sm`: Steelseries Nimbus + Sphero Mini
-* `yarn hid-lm`: Steelseries Nimbus + Lighting McQueen
+#### Sphero Mini
+
+* `yarn patrol-sm`: Will move in a square (for now).
+* `yarn nimbus-sm`: Steelseries Nimbus + Sphero Mini
 * `yarn cmd`: CMD interaction with Sphero Mini
-* `yarn patrol`: Will move in a square (for now).
 * `yarn police`: Will turn on LED as police do.
 * `yarn collision`: Will turn red when collision detected
 * `yarn sensor`: Will turn on stream sensor data. TODO: Parse sensor data
+
+#### Lighting McQueen
+
+* `yarn nimbus-lm`: Steelseries Nimbus + Lighting McQueen
+
+#### BB9E
+
+* `yarn patrol-gb`: Will move in a square (for now).

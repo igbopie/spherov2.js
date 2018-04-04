@@ -1,12 +1,14 @@
 import { Peripheral } from 'noble';
-import { SpheroMini } from '../../toys/sphero-mini';
 import { IToyAdvertisement } from '../../toys/types';
-import { LightingMcQueen } from '../../toys/lighting-mcqueen';
 import { Core } from '../../toys/core';
+import { BB9E } from '../../toys/bb9e';
+import { LightingMcQueen } from '../../toys/lighting-mcqueen';
+import { SpheroMini } from '../../toys/sphero-mini';
 export interface IToyDiscovered extends IToyAdvertisement {
     peripheral: Peripheral;
 }
 export declare const findToys: (toysType: IToyAdvertisement[]) => Promise<IToyDiscovered[]>;
 export declare const find: (toyType: IToyAdvertisement) => Promise<Core>;
+export declare const findBB9E: () => Promise<BB9E>;
 export declare const findSpheroMini: () => Promise<SpheroMini>;
 export declare const findLightintMcQueen: () => Promise<LightingMcQueen>;
