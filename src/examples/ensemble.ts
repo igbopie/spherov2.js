@@ -7,24 +7,24 @@ import { Core } from '../toys/core';
 
 const WAIT_TIME: number = 100;
 
+export const setEachMiniColor = async (minis: SpheroMini[], r: number, g: number, b: number) => {
+  for (const mini of minis) {
+    await mini.setMainLedColor(r, g, b);
+    await wait(WAIT_TIME);
+  }
+};
+
 export const ensemble = async (minis: SpheroMini[]) => {
   // Cycle 10 times. On each cycle set each bot to white, green, then red.
   for (let i = 0; i < 10; i++) {
     // set each mini's color to white
-    for (const mini of minis) {
-      await mini.setMainLedColor(0xFF, 0xFF, 0xFF);
-      await wait(WAIT_TIME);
-    }
+    await setEachMiniColor(minis, 0xFF, 0xFF, 0xFF);
+
     // set each mini's color to green
-    for (const mini of minis) {
-      await mini.setMainLedColor(0, 0xFF, 0);
-      await wait(WAIT_TIME);
-    }
+    await setEachMiniColor(minis, 0, 0xFF, 0);
+
     // set each mini's color to red
-    for (const mini of minis) {
-      await mini.setMainLedColor(0xFF, 0, 0);
-      await wait(WAIT_TIME);
-    }
+    await setEachMiniColor(minis, 0xFF, 0, 0);
   }
 
   // Put each mini to sleep
