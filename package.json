@@ -21,6 +21,7 @@
     "cmd": "ts-node src/examples/cmd",
     "collision": "ts-node src/examples/collisionDetection",
     "police": "ts-node src/examples/police",
+    "ensemble": "ts-node src/examples/ensemble",
     "sensor": "ts-node src/examples/sensor"
   },
   "pre-commit": [
