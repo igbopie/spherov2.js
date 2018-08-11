@@ -27,9 +27,9 @@ then:
 * `yarn collision`: Will turn red when collision detected
 * `yarn sensor`: Will turn on stream sensor data. TODO: Parse sensor data
 
-#### Lighting McQueen
+#### Lightning McQueen
 
-* `yarn nimbus-lm`: Steelseries Nimbus + Lighting McQueen
+* `yarn nimbus-lm`: Steelseries Nimbus + Lightning McQueen
 
 #### BB9E
 

@@ -1,4 +1,4 @@
 import nimbus from './nimbus';
-import { LightingMcQueen } from '../../toys/lighting-mcqueen';
+import { LightningMcQueen } from '../../toys/lightning-mcqueen';
 export default nimbus;
-export declare const hid: (toy: LightingMcQueen) => Promise<void>;
+export declare const hid: (toy: LightningMcQueen) => Promise<void>;
