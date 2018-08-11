@@ -2,11 +2,11 @@
 import { Core, IQueuePayload } from './core';
 import { IToyAdvertisement } from './types';
 
-export class LightingMcQueen extends Core {
+export class LightningMcQueen extends Core {
   public static advertisement: IToyAdvertisement = {
-    name: 'Lighting McQueen',
+    name: 'Lightning McQueen',
     prefix: 'LM-',
-    class: LightingMcQueen,
+    class: LightningMcQueen,
   };
 
   public driveAsRc(heading: number, speed: number) {

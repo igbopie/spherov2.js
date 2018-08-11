@@ -1,6 +1,6 @@
 import nimbus, { IControllerState } from './nimbus';
 import { wait } from '../../utils';
-import { LightingMcQueen } from '../../toys/lighting-mcqueen';
+import { LightningMcQueen } from '../../toys/lightning-mcqueen';
 
 let state: IControllerState;
 nimbus.onChanged((_state) => {
@@ -10,7 +10,7 @@ nimbus.onChanged((_state) => {
 export default nimbus;
 
 // SORRY FOR THIS CODE, It is my playground for now
-export const hid = async (toy: LightingMcQueen) => {
+export const hid = async (toy: LightningMcQueen) => {
   // let stopped = false;
   let heading: number;
 

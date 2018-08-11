@@ -4,7 +4,7 @@ import { IToyAdvertisement } from '../../toys/types';
 import { wait } from '../../utils';
 import { Core } from '../../toys/core';
 import { BB9E } from '../../toys/bb9e';
-import { LightingMcQueen } from '../../toys/lighting-mcqueen';
+import { LightningMcQueen } from '../../toys/lightning-mcqueen';
 import { SpheroMini } from '../../toys/sphero-mini';
 
 export interface IToyDiscovered extends IToyAdvertisement {
@@ -15,7 +15,7 @@ export interface IToyDiscovered extends IToyAdvertisement {
 //   SpheroMini.advertisement,
 //   // {
 //   //   prefix: 'LM-',
-//   //   name: 'Lighting McQueen'
+//   //   name: 'Lightning McQueen'
 //   // },
 // ];
 
@@ -91,6 +91,6 @@ export const findSpheroMini = async () => {
   return await find(SpheroMini.advertisement) as SpheroMini;
 };
 
-export const findLightintMcQueen = async () => {
-  return await find(LightingMcQueen.advertisement) as LightingMcQueen;
+export const findLightningMcQueen = async () => {
+  return await find(LightningMcQueen.advertisement) as LightningMcQueen;
 };
