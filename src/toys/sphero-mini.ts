@@ -38,6 +38,9 @@ export class SpheroMini extends RollableToy {
     // await this.queueCommand(this.commands.sensor.sensorMask(
     //   [0x00, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00],
     // ));
+
+    // I could not really figure out what this does, but according to another project, this enables certain sensors!
+    // This worked to get accelorator data and pitch, yaw, roll data
     await this.queueCommand(this.commands.sensor.sensorMask(
        [0x00, 0x25, 0x00, 0x00, 0b111, 0b0, 0x00],
      ));
