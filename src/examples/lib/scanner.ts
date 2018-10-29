@@ -29,15 +29,12 @@ const discover = async (
   const { localName = '' } = advertisement;
   validToys.forEach( async (toyAdvertisement) => {
     if (localName.indexOf(toyAdvertisement.prefix) === 0) {
-
-      // tslint:disable-next-line:no-console
-      console.log(`Detected ${toyAdvertisement.name} (${toyAdvertisement.prefix}): ${uuid}`);
       toys.push({
         ...toyAdvertisement,
         peripheral: p,
       });
       // tslint:disable-next-line:no-console
-      console.log(`name: ${toyAdvertisement.name}, address: ${p.address}`);
+      console.log(`name: ${toyAdvertisement.name}, uuid: ${uuid}, mac-address: ${p.address}`);
     }
   });
 };
@@ -59,30 +56,28 @@ export const findToys = async (toysType: IToyAdvertisement[]) => {
   return toys;
 };
 
-function dec2bin(dec: number) {
-  return (dec >>> 0).toString(2);
-}
+const startToy = async (toy: Core) => {
 
-function dec2FullBin(dec: number) {
-  const str: string = (dec >>> 0).toString(2);
-  return '00000000'.substr(str.length) + str;
-}
+  // tslint:disable-next-line:no-console
+  console.log('Starting...');
+  await toy.start();
 
-function byteArray(nums: number[]) {
-  let returnVal = '';
-  for (const item of nums) {
-    returnVal += dec2FullBin(item);
-  }
-}
+  // tslint:disable-next-line:no-console
+  console.log('Started');
+  const version = await toy.appVersion();
 
+  // tslint:disable-next-line:no-console
+  console.log('Version', version);
+  const battery = await toy.batteryVoltage();
+
+  // tslint:disable-next-line:no-console
+  console.log('Battery', battery);
+}
 
 export const find = async (toyType: IToyAdvertisement, name: string) => {
 
   const pattern: number = 0b01;
-  
-  // tslint:disable-next-line:no-console
-  console.log(dec2FullBin(pattern));
-  
+
   const discovered = await findToys([toyType]);
   if (discovered.length > 0) {
 
@@ -109,20 +104,7 @@ export const find = async (toyType: IToyAdvertisement, name: string) => {
 
     const toy: Core = new toyType.class(discoveredItem.peripheral);
 
-    // tslint:disable-next-line:no-console
-    console.log('Starting...');
-    await toy.start();
-
-    // tslint:disable-next-line:no-console
-    console.log('Started');
-    const version = await toy.appVersion();
-
-    // tslint:disable-next-line:no-console
-    console.log('Version', version);
-    const battery = await toy.batteryVoltage();
-
-    // tslint:disable-next-line:no-console
-    console.log('Battery', battery);
+    await this.startToy(toy);
 
     return toy;
   } else {
@@ -141,20 +123,8 @@ export const findAll = async (toyType: IToyAdvertisement) => {
       console.log(item); // 0,1,2
 
       const toy: Core = new toyType.class(item.peripheral);
-      // tslint:disable-next-line:no-console
-      console.log('Starting...');
-      await toy.start();
-
-      // tslint:disable-next-line:no-console
-      console.log('Started');
-      const version = await toy.appVersion();
-
-      // tslint:disable-next-line:no-console
-      console.log('Version', version);
-      const battery = await toy.batteryVoltage();
-
-      // tslint:disable-next-line:no-console
-      console.log(battery);
+      await this.startToy(toy);
+     
     }
     return toyArray;
   } else {
