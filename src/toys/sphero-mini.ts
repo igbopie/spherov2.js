@@ -38,6 +38,10 @@ export class SpheroMini extends RollableToy {
     // await this.queueCommand(this.commands.sensor.sensorMask(
     //   [0x00, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00],
     // ));
+    await this.queueCommand(this.commands.sensor.sensorMask(
+       [0x00, 0x25, 0x00, 0x00, 0b111, 0b0, 0x00],
+     ));
+     //  [0x00, 0x25, 0x00, 0x00, 0b111, 0b1111110, 0x00],
     return await this.queueCommand(this.commands.sensor.configureSensorStream());
   }
 
