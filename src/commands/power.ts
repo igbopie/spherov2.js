@@ -1,26 +1,36 @@
-// tslint:disable-next-line:no-unused-variable
-import { CommandGenerator, DeviceId, ICommandWithRaw, PowerCommandIds } from './types';
+import {
+  CommandGenerator,
+  DeviceId,
+  PowerCommandIds,
+  ICommandWithRaw
+} from './types';
 
 export default (generator: CommandGenerator) => {
   const encode = generator(DeviceId.powerInfo);
   return {
-    batteryVoltage: () => encode({
-      commandId: PowerCommandIds.batteryVoltage,
-    }),
-    sleep: () => encode({
-      commandId: PowerCommandIds.sleep,
-    }),
-    something2: () => encode({
-      commandId: PowerCommandIds.something2,
-    }),
-    something3: () => encode({
-      commandId: PowerCommandIds.something3,
-    }),
-    something4: () => encode({
-      commandId: PowerCommandIds.something4,
-    }),
-    wake: () => encode({
-      commandId: PowerCommandIds.wake,
-    }),
+    batteryVoltage: (): ICommandWithRaw =>
+      encode({
+        commandId: PowerCommandIds.batteryVoltage
+      }),
+    sleep: (): ICommandWithRaw =>
+      encode({
+        commandId: PowerCommandIds.sleep
+      }),
+    something2: (): ICommandWithRaw =>
+      encode({
+        commandId: PowerCommandIds.something2
+      }),
+    something3: (): ICommandWithRaw =>
+      encode({
+        commandId: PowerCommandIds.something3
+      }),
+    something4: (): ICommandWithRaw =>
+      encode({
+        commandId: PowerCommandIds.something4
+      }),
+    wake: (): ICommandWithRaw =>
+      encode({
+        commandId: PowerCommandIds.wake
+      })
   };
 };

@@ -5,9 +5,15 @@ import power from './power';
 import somethingApi from './something-api';
 import systemInfo from './system-info';
 import sensor from './sensor';
-// tslint:disable-next-line:no-unused-variable
-import { DriveFlag, Flags, ICommandPartial, ICommandWithRaw} from './types';
+import { Flags, ICommandPartial, ICommandWithRaw, DriveFlag } from './types';
 import userIo from './user-io';
+import { Stance } from '../toys/types';
+
+// WORKAROUND for https://github.com/Microsoft/TypeScript/issues/5711
+export interface IReExport {
+  a: DriveFlag;
+  b: Stance;
+}
 
 const sequencer = () => {
   let s = 0;
@@ -24,12 +30,13 @@ const sequencer = () => {
 export const factory = (seq?: () => number) => {
   const getSequence = seq || sequencer();
 
-  const gen = (deviceId: number) => (part: ICommandPartial) => encode({
-    ...part,
-    commandFlags: [Flags.requestsResponse, Flags.resetsInactivityTimeout],
-    deviceId,
-    sequenceNumber: getSequence(),
-  });
+  const gen = (deviceId: number) => (part: ICommandPartial): ICommandWithRaw =>
+    encode({
+      ...part,
+      commandFlags: [Flags.requestsResponse, Flags.resetsInactivityTimeout],
+      deviceId,
+      sequenceNumber: getSequence()
+    });
 
   return {
     api: api(gen),
@@ -38,6 +45,6 @@ export const factory = (seq?: () => number) => {
     somethingApi: somethingApi(gen),
     systemInfo: systemInfo(gen),
     userIo: userIo(gen),
-    sensor: sensor(gen),
+    sensor: sensor(gen)
   };
 };

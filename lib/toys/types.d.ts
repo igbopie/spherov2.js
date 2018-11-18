@@ -14,3 +14,7 @@ export interface IToyAdvertisement {
     prefix: string;
     class: typeof Core;
 }
+export declare enum Stance {
+    tripod = 1,
+    bipod = 2,
+}

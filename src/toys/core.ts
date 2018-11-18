@@ -1,16 +1,25 @@
-
 import { ICharacteristic, IPeripheral } from '../ble';
 import { factory } from '../commands';
 import { factory as decodeFactory, number } from '../commands/decoder';
-// tslint:disable-next-line:no-unused-variable
-import { DriveFlag, ICommandWithRaw, DeviceId, SensorCommandIds } from '../commands/types';
+import {
+  ICommandWithRaw,
+  DeviceId,
+  SensorCommandIds,
+  DriveFlag
+} from '../commands/types';
 import { toPromise } from '../utils';
 import { Queue } from './queue';
-import { CharacteristicUUID } from './types';
+import { CharacteristicUUID, Stance } from './types';
+
+// WORKAROUND for https://github.com/Microsoft/TypeScript/issues/5711
+export interface IReExport {
+  a: Stance;
+  b: DriveFlag;
+}
 
 // TS workaround until 2.8 (not released), then ReturnType<factory>
 export const commandsType = (false as true) && factory();
-export const decodeType = (false as true) && decodeFactory((_) => null);
+export const decodeType = (false as true) && decodeFactory(_ => null);
 
 export interface IQueuePayload {
   command: ICommandWithRaw;
@@ -19,7 +28,7 @@ export interface IQueuePayload {
 
 export enum Event {
   onCollision = 'onCollision',
-  onSensor = 'onSensor',
+  onSensor = 'onSensor'
 }
 
 type EventMap = { [key in Event]?: (command: ICommandWithRaw) => void };
@@ -43,12 +52,14 @@ export class Core {
   }
 
   public async batteryVoltage() {
-    const response = await this.queueCommand(this.commands.power.batteryVoltage());
+    const response = await this.queueCommand(
+      this.commands.power.batteryVoltage()
+    );
     return number(response.command.payload, 1) / 100;
   }
 
   public wake() {
-    return this.queueCommand( this.commands.power.wake());
+    return this.queueCommand(this.commands.power.wake());
   }
 
   public sleep() {
@@ -59,8 +70,14 @@ export class Core {
     // start
     await this.init();
     await this.write(this.antiDoSCharacteristic, 'usetheforce...band');
-    await toPromise(this.dfuControlCharacteristic.subscribe.bind(this.dfuControlCharacteristic));
-    await toPromise(this.apiV2Characteristic.subscribe.bind(this.apiV2Characteristic));
+    await toPromise(
+      this.dfuControlCharacteristic.subscribe.bind(
+        this.dfuControlCharacteristic
+      )
+    );
+    await toPromise(
+      this.apiV2Characteristic.subscribe.bind(this.apiV2Characteristic)
+    );
     await this.initPromise;
     this.initPromiseResolve = null;
     this.started = true;
@@ -74,10 +91,12 @@ export class Core {
   }
 
   public async appVersion() {
-    const response = await this.queueCommand(this.commands.systemInfo.appVersion());
+    const response = await this.queueCommand(
+      this.commands.systemInfo.appVersion()
+    );
     return {
       major: number(response.command.payload, 1),
-      minor: number(response.command.payload, 3),
+      minor: number(response.command.payload, 3)
     };
   }
 
@@ -91,27 +110,28 @@ export class Core {
   }
 
   protected queueCommand(command: ICommandWithRaw) {
-    // console.log(command);
     return this.queue.queue({
       characteristic: this.apiV2Characteristic,
-      command,
+      command
     });
   }
 
   private async init() {
     const p = this.peripheral;
 
-    this.initPromise = new Promise(async (resolve) => {
+    this.initPromise = new Promise(async resolve => {
       this.initPromiseResolve = resolve;
     });
 
     this.queue = new Queue<IQueuePayload>({
       match: (cA, cB) => this.match(cA, cB),
-      onExecute: (item) => this.onExecute(item),
+      onExecute: item => this.onExecute(item)
     });
     this.eventsListeners = {};
     this.commands = factory();
-    this.decoder = decodeFactory((error, packet) => this.onPacketRead(error, packet));
+    this.decoder = decodeFactory((error, packet) =>
+      this.onPacketRead(error, packet)
+    );
     this.started = false;
 
     await toPromise(p.connect.bind(p));
@@ -129,33 +149,46 @@ export class Core {
   }
 
   private match(commandA: IQueuePayload, commandB: IQueuePayload) {
-    return commandA.command.deviceId === commandB.command.deviceId &&
+    return (
+      commandA.command.deviceId === commandB.command.deviceId &&
       commandA.command.commandId === commandB.command.commandId &&
-      commandA.command.sequenceNumber === commandB.command.sequenceNumber;
+      commandA.command.sequenceNumber === commandB.command.sequenceNumber
+    );
   }
 
   private bindServices() {
-    this.peripheral.services.forEach((s) => s.characteristics.forEach((c) => {
-      if (c.uuid === CharacteristicUUID.antiDoSCharacteristic) {
-        this.antiDoSCharacteristic = c;
-      } else if (c.uuid === CharacteristicUUID.apiV2Characteristic) {
-        this.apiV2Characteristic = c;
-      } else if (c.uuid === CharacteristicUUID.dfuControlCharacteristic) {
-        this.dfuControlCharacteristic = c;
-      }
-      // else if (c.uuid === CharacteristicUUID.dfuInfoCharacteristic) {
-      //   this.dfuInfoCharacteristic = c;
-      // }
-    }));
+    this.peripheral.services.forEach(s =>
+      s.characteristics.forEach(c => {
+        if (c.uuid === CharacteristicUUID.antiDoSCharacteristic) {
+          this.antiDoSCharacteristic = c;
+        } else if (c.uuid === CharacteristicUUID.apiV2Characteristic) {
+          this.apiV2Characteristic = c;
+        } else if (c.uuid === CharacteristicUUID.dfuControlCharacteristic) {
+          this.dfuControlCharacteristic = c;
+        }
+        // else if (c.uuid === CharacteristicUUID.dfuInfoCharacteristic) {
+        //   this.dfuInfoCharacteristic = c;
+        // }
+      })
+    );
   }
 
   private bindListeners() {
-    this.apiV2Characteristic.on('read',
-      (data: Buffer, isNotification: boolean) => this.onApiRead(data, isNotification));
-    this.apiV2Characteristic.on('notify',
-      (data: Buffer, isNotification: boolean) => this.onApiNotify(data, isNotification));
-    this.dfuControlCharacteristic.on('notify',
-      (data: Buffer, isNotification: boolean) => this.onDFUControlNotify(data, isNotification));
+    this.apiV2Characteristic.on(
+      'read',
+      (data: Buffer, isNotification: boolean) =>
+        this.onApiRead(data, isNotification)
+    );
+    this.apiV2Characteristic.on(
+      'notify',
+      (data: Buffer, isNotification: boolean) =>
+        this.onApiNotify(data, isNotification)
+    );
+    this.dfuControlCharacteristic.on(
+      'notify',
+      (data: Buffer, isNotification: boolean) =>
+        this.onDFUControlNotify(data, isNotification)
+    );
   }
 
   private onPacketRead(error: string, command: ICommandWithRaw) {
@@ -170,15 +203,17 @@ export class Core {
   }
 
   private eventHandler(command: ICommandWithRaw) {
-    if (command.deviceId === DeviceId.sensor &&
-      command.commandId === SensorCommandIds.collisionDetectedAsync) {
+    if (
+      command.deviceId === DeviceId.sensor &&
+      command.commandId === SensorCommandIds.collisionDetectedAsync
+    ) {
       this.handleCollision(command);
-    } else  if (command.deviceId === DeviceId.sensor &&
+    } else if (
+      command.deviceId === DeviceId.sensor &&
       command.commandId === SensorCommandIds.sensorResponse
     ) {
       this.handleSensorUpdate(command);
     } else {
-
       // tslint:disable-next-line:no-console
       console.log('UNKOWN EVENT', command.raw);
     }
@@ -190,7 +225,6 @@ export class Core {
     if (handler) {
       handler(command);
     } else {
-
       // tslint:disable-next-line:no-console
       console.log('No handler for collision but collision was detected');
     }
@@ -202,14 +236,13 @@ export class Core {
     if (handler) {
       handler(command);
     } else {
-
       // tslint:disable-next-line:no-console
       console.log('No handler for collision but collision was detected');
     }
   }
 
   private onApiRead(data: Buffer, isNotification: boolean) {
-    data.forEach((byte) => this.decoder.add(byte));
+    data.forEach(byte => this.decoder.add(byte));
   }
 
   private onApiNotify(data: any, isNotification: any) {
