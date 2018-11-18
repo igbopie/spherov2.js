@@ -1,5 +1,4 @@
 export interface ICommandQueueItem<P> {
-  // promise: Promise<any>,
   payload: P;
   timeout?: NodeJS.Timer;
   success: (payload: P) => any;
@@ -12,7 +11,6 @@ export interface IQueueListener<P> {
 }
 
 export class Queue<P> {
-
   private waitingForResponseQueue: Array<ICommandQueueItem<P>>;
   private commandQueue: Array<ICommandQueueItem<P>>;
   private queueListener: IQueueListener<P>;
@@ -25,7 +23,7 @@ export class Queue<P> {
 
   public onCommandProcessed(payloadReceived: P) {
     const lastCommand: ICommandQueueItem<P> = this.waitingForResponseQueue.find(
-      (command) => this.queueListener.match(command.payload, payloadReceived),
+      command => this.queueListener.match(command.payload, payloadReceived)
     );
     if (lastCommand) {
       this.removeFromWaiting(lastCommand);
@@ -41,7 +39,7 @@ export class Queue<P> {
       this.commandQueue.push({
         payload,
         reject,
-        success,
+        success
       });
       this.processCommand();
     });

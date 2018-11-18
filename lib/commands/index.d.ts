@@ -1,4 +1,9 @@
-import { DriveFlag, ICommandWithRaw } from './types';
+import { ICommandWithRaw, DriveFlag } from './types';
+import { Stance } from '../toys/types';
+export interface IReExport {
+    a: DriveFlag;
+    b: Stance;
+}
 export declare const factory: (seq?: () => number) => {
     api: {
         echo: () => ICommandWithRaw;
@@ -31,6 +36,10 @@ export declare const factory: (seq?: () => number) => {
         setMainLedColor: (r: number, g: number, b: number) => ICommandWithRaw;
         setMainLedGreenIntensity: (g: number) => ICommandWithRaw;
         setMainLedRedIntensity: (r: number) => ICommandWithRaw;
+        playAudioFile: (idx: number) => ICommandWithRaw;
+        turnDome: (angle: Uint8Array) => ICommandWithRaw;
+        setStance: (stance: Stance) => ICommandWithRaw;
+        playAnimation: (animation: number) => ICommandWithRaw;
     };
     sensor: {
         enableCollisionAsync: () => ICommandWithRaw;

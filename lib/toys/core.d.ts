@@ -1,5 +1,10 @@
 import { ICharacteristic, IPeripheral } from '../ble';
-import { DriveFlag, ICommandWithRaw } from '../commands/types';
+import { ICommandWithRaw, DriveFlag } from '../commands/types';
+import { Stance } from './types';
+export interface IReExport {
+    a: Stance;
+    b: DriveFlag;
+}
 export declare const commandsType: {
     api: {
         echo: () => ICommandWithRaw;
@@ -32,6 +37,10 @@ export declare const commandsType: {
         setMainLedColor: (r: number, g: number, b: number) => ICommandWithRaw;
         setMainLedGreenIntensity: (g: number) => ICommandWithRaw;
         setMainLedRedIntensity: (r: number) => ICommandWithRaw;
+        playAudioFile: (idx: number) => ICommandWithRaw;
+        turnDome: (angle: Uint8Array) => ICommandWithRaw;
+        setStance: (stance: Stance) => ICommandWithRaw;
+        playAnimation: (animation: number) => ICommandWithRaw;
     };
     sensor: {
         enableCollisionAsync: () => ICommandWithRaw;

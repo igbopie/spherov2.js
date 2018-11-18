@@ -1,33 +1,39 @@
-
-// tslint:disable-next-line:no-unused-variable
-import { Core, IQueuePayload } from './core';
 import { IToyAdvertisement } from './types';
 import { RollableToy } from './rollable-toy';
+import { IQueuePayload } from './core';
 
 export class SpheroMini extends RollableToy {
   public static advertisement: IToyAdvertisement = {
     name: 'Sphero Mini',
     prefix: 'SM-',
-    class: SpheroMini,
+    class: SpheroMini
   };
 
-  public enableCollisionDetection() {
+  public enableCollisionDetection(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.sensor.enableCollisionAsync());
   }
 
   public configureCollisionDetection(
     xThreshold: number = 100,
-    yThreshold: number  = 100,
+    yThreshold: number = 100,
     xSpeed: number = 100,
     ySpeed: number = 100,
     deadTime: number = 10,
-    method: number = 0x01) {
+    method: number = 0x01
+  ): Promise<IQueuePayload> {
     return this.queueCommand(
-      this.commands.sensor.configureCollision(xThreshold, yThreshold, xSpeed, ySpeed, deadTime, method),
+      this.commands.sensor.configureCollision(
+        xThreshold,
+        yThreshold,
+        xSpeed,
+        ySpeed,
+        deadTime,
+        method
+      )
     );
   }
 
-  public async configureSensorStream() {
+  public async configureSensorStream(): Promise<IQueuePayload> {
     // 8d:0a:18:0f:0b:01:c2:d8 - response:  8d:09:18:0f:0b:00:c4:d8
     // 8d:0a:18:17:0c:00:ba:d8 - response:  8d:09:18:17:0c:00:bb:d8
     // 8d:0a:18:0c:0f:00:00:00:00:c2:d8
@@ -48,31 +54,31 @@ export class SpheroMini extends RollableToy {
     return await this.queueCommand(this.commands.sensor.configureSensorStream());
   }
 
-  public something1() {
+  public something1(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.systemInfo.something());
   }
 
-  public something2() {
+  public something2(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.power.something2());
   }
 
-  public something3() {
+  public something3(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.power.something3());
   }
 
-  public something4() {
+  public something4(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.power.something4());
   }
 
-  public something5() {
+  public something5(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.somethingApi.something5());
   }
 
-  public something6() {
+  public something6(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.systemInfo.something6());
   }
 
-  public something7() {
+  public something7(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.systemInfo.something7());
   }
 }

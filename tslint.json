@@ -1,15 +1,13 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "no-unused-variable": [true, {"ignore-pattern": "^_"}],
-        "quotemark": [true, "single"],
-        "variable-name": [true, "allow-leading-underscore"],
-        "ordered-imports": [false],
-        "object-literal-sort-keys": [false]
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "jsRules": {},
+  "rules": {
+    "no-unused-variable": [true, { "ignore-pattern": "^_" }],
+    "quotemark": [true, "single"],
+    "variable-name": [true, "allow-leading-underscore"],
+    "ordered-imports": [false],
+    "object-literal-sort-keys": [false]
+  },
+  "rulesDirectory": []
 }

@@ -1,6 +1,6 @@
-import { IQueuePayload } from './core';
 import { IToyAdvertisement } from './types';
 import { RollableToy } from './rollable-toy';
+import { IQueuePayload } from './core';
 export declare class SpheroMini extends RollableToy {
     static advertisement: IToyAdvertisement;
     enableCollisionDetection(): Promise<IQueuePayload>;
