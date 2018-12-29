@@ -44,7 +44,8 @@
     ]
   },
   "dependencies": {
-    "noble": "^1.9.0"
+    "noble": "^1.9.0",
+    "noble-mac": "git+https://github.com/Timeular/noble-mac.git"
   },
   "devDependencies": {
     "@types/jest": "^22.1.4",

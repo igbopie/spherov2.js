@@ -7,7 +7,7 @@ import { BB9E } from '../../toys/bb9e';
 import { R2D2 } from '../../toys/r2d2';
 import { LightningMcQueen } from '../../toys/lightning-mcqueen';
 import { SpheroMini } from '../../toys/sphero-mini';
-import * as noble from 'noble';
+import noble from './noble-wrapper';
 
 export interface IToyDiscovered extends IToyAdvertisement {
   peripheral: Peripheral;
@@ -86,7 +86,7 @@ export const find = async (toyType: IToyAdvertisement, name?: string) => {
 
   if (!discoveredItem) {
     // tslint:disable-next-line:no-console
-    console.log('Not found');
+    return console.log('Not found');
   }
 
   const toy: Core = new toyType.class(discoveredItem.peripheral);

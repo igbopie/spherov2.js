@@ -3,7 +3,7 @@ import { wait } from '../utils';
 import { findToys } from './lib/scanner';
 
 import { Core } from '../toys/core';
-// import * as noble from 'noble';
+// import noble from './lib/noble-wrapper';
 
 const WAIT_TIME: number = 100;
 
