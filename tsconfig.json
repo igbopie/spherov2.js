@@ -14,8 +14,8 @@
     "sourceMap": false,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es2017",
-    "typeRoots": ["./types", "./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "types", "test", "**/*.spec.ts"]
+  "exclude": ["node_modules", "test", "**/*.spec.ts"]
 }

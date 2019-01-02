@@ -60,7 +60,7 @@ export interface IQueuePayload {
 }
 export declare enum Event {
     onCollision = "onCollision",
-    onSensor = "onSensor",
+    onSensor = "onSensor"
 }
 export declare class Core {
     protected commands: typeof commandsType;
@@ -86,17 +86,17 @@ export declare class Core {
     on(eventName: Event, handler: (command: ICommandWithRaw) => void): void;
     destroy(): void;
     protected queueCommand(command: ICommandWithRaw): Promise<IQueuePayload>;
-    private init();
-    private onExecute(item);
-    private match(commandA, commandB);
-    private bindServices();
-    private bindListeners();
-    private onPacketRead(error, command);
-    private eventHandler(command);
-    private handleCollision(command);
-    private handleSensorUpdate(command);
-    private onApiRead(data, isNotification);
-    private onApiNotify(data, isNotification);
-    private onDFUControlNotify(data, isNotification);
-    private write(c, data);
+    private init;
+    private onExecute;
+    private match;
+    private bindServices;
+    private bindListeners;
+    private onPacketRead;
+    private eventHandler;
+    private handleCollision;
+    private handleSensorUpdate;
+    private onApiRead;
+    private onApiNotify;
+    private onDFUControlNotify;
+    private write;
 }
