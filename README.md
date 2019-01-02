@@ -12,7 +12,7 @@ First run this:
 
 ```sh
 git clone git@github.com:igbopie/spherov2.js.git
-cd sphero2.js
+cd spherov2.js
 yarn install
 ```
 
