@@ -16,8 +16,8 @@ export declare class Queue<P> {
     constructor(queueListener: IQueueListener<P>);
     onCommandProcessed(payloadReceived: P): void;
     queue(payload: P): Promise<P>;
-    private processCommand();
-    private removeFromWaiting(command);
-    private onCommandTimedout(command);
-    private handleQueueError(error, command);
+    private processCommand;
+    private removeFromWaiting;
+    private onCommandTimedout;
+    private handleQueueError;
 }
