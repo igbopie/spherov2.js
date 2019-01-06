@@ -5,5 +5,8 @@
   "workspaces": [
     "./spherov2.js-lib",
     "./spherov2.js-examples"
-  ]
+  ],
+  "scripts": {
+    "test": "cd spherov2.js-lib && npm test"
+  }
 }
