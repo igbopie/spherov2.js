@@ -15,18 +15,20 @@
     "test": "jest",
     "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "prettier": "lint-staged"
+    "prettier": "lint-staged",
+    "docs": "./node_modules/.bin/typedoc --excludeExternals --excludeProtected --excludePrivate --exclude './{lib,test}/**/*.ts' --theme minimal --readme none --out docs --mode modules ."
   },
   "pre-commit": [
     "precommit-msg",
     "lint",
     "test",
     "build",
+    "docs",
     "add-all"
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "yarn precommit-msg && yarn prettier && yarn lint && yarn test && yarn build && yarn add-all"
+      "pre-commit": "yarn precommit-msg && yarn prettier && yarn lint && yarn test && yarn build && yarn docs && yarn add-all"
     }
   },
   "lint-staged": {
@@ -52,6 +54,7 @@
     "ts-node": "^5.0.0",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.16.0",
+    "typedoc": "0.14.0",
     "typescript": "^2.7.2"
   },
   "jest": {
