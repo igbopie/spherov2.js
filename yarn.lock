@@ -39,6 +39,12 @@
   version "22.1.4"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.1.4.tgz#5c0c06a9bb495c67e0a78002a952f151e2ae58a1"
 
+"@types/noble-mac@0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@types/noble-mac/-/noble-mac-0.0.0.tgz#add9a5f6b98356f2d413dadd7dd7a64d61264a3e"
+  dependencies:
+    "@types/node" "*"
+
 "@types/noble@^0.0.34":
   version "0.0.34"
   resolved "https://registry.yarnpkg.com/@types/noble/-/noble-0.0.34.tgz#667b705c012f898c907562b0744c96c79fef15a2"
@@ -2878,8 +2884,8 @@ npm-bundled@^1.0.1:
   resolved "https://registry.yarnpkg.com/npm-bundled/-/npm-bundled-1.0.5.tgz#3c1732b7ba936b3a10325aef616467c0ccbcc979"
 
 npm-packlist@^1.1.6:
-  version "1.1.12"
-  resolved "https://registry.yarnpkg.com/npm-packlist/-/npm-packlist-1.1.12.tgz#22bde2ebc12e72ca482abd67afc51eb49377243a"
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/npm-packlist/-/npm-packlist-1.2.0.tgz#55a60e793e272f00862c7089274439a4cc31fc7f"
   dependencies:
     ignore-walk "^3.0.1"
     npm-bundled "^1.0.1"

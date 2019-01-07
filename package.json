@@ -1,90 +1,12 @@
 {
+  "private": true,
   "name": "spherov2",
-  "version": "0.0.1",
-  "description": "V2 api version for sphero toys (not official)",
   "author": "igbopie",
-  "license": "MIT",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
-  "scripts": {
-    "debug": "ts-node --inspect-brk src/index.ts",
-    "start": "ts-node src/index.ts",
-    "build": "rm -fR lib; tsc --declaration",
-    "add-all": "git add -A",
-    "test": "jest",
-    "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "nimbus-sm": "ts-node src/examples/nimbus-sm",
-    "nimbus-lm": "ts-node src/examples/nimbus-lm",
-    "patrol-sm": "ts-node src/examples/patrol-sm",
-    "patrol-gb": "ts-node src/examples/patrol-gb",
-    "cmd": "ts-node src/examples/cmd",
-    "collision": "ts-node src/examples/collisionDetection",
-    "police": "ts-node src/examples/police",
-    "ensemble": "ts-node src/examples/ensemble",
-    "sensor": "ts-node src/examples/sensor",
-    "prettier": "lint-staged"
-  },
-  "pre-commit": [
-    "precommit-msg",
-    "lint",
-    "test",
-    "build",
-    "add-all"
+  "workspaces": [
+    "./lib",
+    "./examples"
   ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn precommit-msg && yarn prettier && yarn lint && yarn test && yarn build && yarn add-all"
-    }
-  },
-  "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  "dependencies": {
-    "@types/noble-mac": "0.0.0",
-    "noble": "^1.9.0",
-    "noble-mac": "git+https://github.com/Timeular/noble-mac.git"
-  },
-  "devDependencies": {
-    "@types/jest": "^22.1.4",
-    "@types/noble": "^0.0.34",
-    "@types/node-hid": "^0.5.2",
-    "husky": "^1.1.4",
-    "jest": "^22.4.2",
-    "lint-staged": "^8.0.5",
-    "node-hid": "^0.7.2",
-    "node-inspect": "^1.11.3",
-    "prettier": "^1.15.2",
-    "ts-jest": "^22.4.1",
-    "ts-node": "^5.0.0",
-    "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.16.0",
-    "typescript": "^2.7.2"
-  },
-  "jest": {
-    "verbose": true,
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts}",
-      "!src/examples/**",
-      "!**/node_modules/**",
-      "!**/vendor/**"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testURL": "http://localhost",
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+  "scripts": {
+    "test": "cd lib && npm test"
   }
 }
