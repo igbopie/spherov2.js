@@ -1,6 +1,11 @@
 language: node_js
 node_js:
   - "10"
+addons:
+  apt:
+    packages:
+      libusb-1.0-0-dev
+      libusb-1.0-0
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
   - export PATH="$HOME/.yarn/bin:$PATH"
@@ -8,6 +13,7 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+
 script:
   - yarn test
 after_script:
