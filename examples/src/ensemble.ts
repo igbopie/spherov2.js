@@ -1,5 +1,4 @@
 import { Scanner, Core, SpheroMini, Utils } from 'spherov2.js';
-// import * as noble from 'noble';
 
 const WAIT_TIME: number = 100;
 
