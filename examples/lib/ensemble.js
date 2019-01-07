@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const spherov2_js_1 = require("spherov2.js");
-// import * as noble from 'noble';
 const WAIT_TIME = 100;
 exports.setEachMiniColor = async (minis, r, g, b) => {
     for (const mini of minis) {
