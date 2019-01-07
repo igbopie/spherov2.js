@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib",
+
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noUnusedLocals": false,
+    "pretty": true,
+    "removeComments": false,
+    "sourceMap": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es2017"
+  },
+  "include": ["index.ts", "src/**/*"],
+  "exclude": ["node_modules", "test", "**/*.spec.ts"]
+}
