@@ -51,6 +51,9 @@ export class Core {
     this.peripheral = p;
   }
 
+  /**
+   * Determines and returns the current battery charging state
+   */
   public async batteryVoltage() {
     const response = await this.queueCommand(
       this.commands.power.batteryVoltage()
@@ -58,14 +61,23 @@ export class Core {
     return number(response.command.payload, 1) / 100;
   }
 
+  /**
+   * Wakes up the toy from sleep mode
+   */
   public wake() {
     return this.queueCommand(this.commands.power.wake());
   }
 
+  /**
+   * Sets the to into sleep mode
+   */
   public sleep() {
     return this.queueCommand(this.commands.power.sleep());
   }
 
+  /**
+   * Starts the toy
+   */
   public async start() {
     // start
     await this.init();
@@ -90,6 +102,9 @@ export class Core {
     }
   }
 
+  /**
+   * Determines and returns the system app version of the toy
+   */
   public async appVersion() {
     const response = await this.queueCommand(
       this.commands.systemInfo.appVersion()

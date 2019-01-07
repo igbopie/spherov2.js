@@ -45,6 +45,9 @@ const discover = async (
   });
 };
 
+/**
+ * Searches (but does not start) toys that matcht the passed criteria
+ */
 export const findToys = async (toysType: IToyAdvertisement[]) => {
   const toys: IToyDiscovered[] = [];
   // tslint:disable-next-line:no-console
@@ -79,6 +82,9 @@ const startToy = async (toy: Core) => {
   console.log('Battery', battery);
 };
 
+/**
+ * Searches toys that match the passed criteria, starts the first found toy and returns it
+ */
 export const find = async (toyType: IToyAdvertisement, name?: string) => {
   const discovered = await findToys([toyType]);
   const discoveredItem: IToyDiscovered =
@@ -97,6 +103,9 @@ export const find = async (toyType: IToyAdvertisement, name?: string) => {
   return toy;
 };
 
+/**
+ * Searches toys that match the passed criteria, starts and returns them
+ */
 export const findAll = async (toyType: IToyAdvertisement) => {
   const discovered = await findToys([toyType]);
   if (discovered.length > 0) {
@@ -113,30 +122,51 @@ export const findAll = async (toyType: IToyAdvertisement) => {
   }
 };
 
+/**
+ * Searches BB9E toys, starts the first one that was found and returns it
+ */
 export const findBB9E = async () => {
   return (await find(BB9E.advertisement)) as BB9E;
 };
 
+/**
+ * Searches R2D2 toys, starts the first one that was found and returns it
+ */
 export const findR2D2 = async () => {
   return (await find(R2D2.advertisement)) as R2D2;
 };
 
+/**
+ * Searches R2Q5 toys, starts the first one that was found and returns it
+ */
 export const findR2Q5 = async () => {
   return (await find(R2Q5.advertisement)) as R2Q5;
 };
 
+/**
+ * Searches Sphero Mini toys, starts the first one that was found and returns it
+ */
 export const findSpheroMini = async () => {
   return (await find(SpheroMini.advertisement)) as SpheroMini;
 };
 
+/**
+ * Searches a Sphero Mini toy with the passed name, starts and returns it
+ */
 export const findSpheroMiniByName = async (name: string) => {
   return (await find(SpheroMini.advertisement, name)) as SpheroMini;
 };
 
+/**
+ * Searches for all available Sphero Mini toys, starts and returns them
+ */
 export const findAllSpheroMini = async () => {
   return (await findAll(SpheroMini.advertisement)) as SpheroMini[];
 };
 
+/**
+ * Searches Lightning McQueen toys, starts the first one that was found and returns it
+ */
 export const findLightningMcQueen = async () => {
   return (await find(LightningMcQueen.advertisement)) as LightningMcQueen;
 };
