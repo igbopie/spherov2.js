@@ -3,8 +3,8 @@
   "name": "spherov2",
   "author": "igbopie",
   "workspaces": [
-    "./lib",
-    "./examples"
+    "lib",
+    "examples"
   ],
   "scripts": {
     "test": "cd lib && npm test"

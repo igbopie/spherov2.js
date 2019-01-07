@@ -39,9 +39,9 @@
     "noble-mac": "git+https://github.com/Timeular/noble-mac.git"
   },
   "devDependencies": {
-    "@types/noble-mac": "0.0.0",
     "@types/jest": "^22.1.4",
     "@types/noble": "^0.0.34",
+    "@types/noble-mac": "0.0.0",
     "husky": "^1.1.4",
     "jest": "^22.4.2",
     "lint-staged": "^8.0.5",
