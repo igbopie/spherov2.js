@@ -10,7 +10,7 @@ export interface IToyDiscovered extends IToyAdvertisement {
     peripheral: Peripheral;
 }
 export declare const findToys: (toysType: IToyAdvertisement[]) => Promise<IToyDiscovered[]>;
-export declare const find: (toyType: IToyAdvertisement, name?: string) => Promise<Core>;
+export declare const find: (toyType: IToyAdvertisement, name?: string) => Promise<void | Core>;
 export declare const findAll: (toyType: IToyAdvertisement) => Promise<any[]>;
 export declare const findBB9E: () => Promise<BB9E>;
 export declare const findR2D2: () => Promise<R2D2>;
