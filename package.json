@@ -3,10 +3,10 @@
   "name": "spherov2",
   "author": "igbopie",
   "workspaces": [
-    "./spherov2.js-lib",
-    "./spherov2.js-examples"
+    "./lib",
+    "./examples"
   ],
   "scripts": {
-    "test": "cd spherov2.js-lib && npm test"
+    "test": "cd lib && npm test"
   }
 }
