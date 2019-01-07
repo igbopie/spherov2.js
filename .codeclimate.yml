@@ -1,5 +1,4 @@
 exclude_patterns:
-- "src/"
-- "spherov2.js-lib/tests/"
-- "spherov2.js-lib/lib/"
-- "spherov2.js-examples/lib/"
+- "lib/tests/"
+- "lib/lib/"
+- "examples/lib/"
