@@ -1,3 +1,6 @@
+/**
+ * Wraps the passed function into a promise
+ */
 export const toPromise = (fn: (...args: any[]) => void, args?: any[]) => {
   return new Promise((resolve, reject) => {
     const safeArgs = args || [];
@@ -11,6 +14,10 @@ export const toPromise = (fn: (...args: any[]) => void, args?: any[]) => {
   });
 };
 
+/**
+ * Waits the given amount of milliseconds
+ * @return promise
+ */
 export const wait = (time: number) => new Promise((callback) => setTimeout(callback, time));
 
 // tslint:disable-next-line:no-bitwise

@@ -12,5 +12,11 @@ export { ICommandWithRaw } from './src/commands/types';
 import * as scanner from './src/scanner';
 import * as utils from './src/utils';
 
+/**
+ * Use Scanner to find toys
+ */
 export const Scanner = scanner;
+/**
+ * Utility functions
+ */
 export const Utils = utils;
