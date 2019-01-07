@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "engines" : { "node" : ">=10.0.0" },
   "scripts": {
     "debug": "ts-node --inspect-brk src/index.ts",
     "start": "ts-node src/index.ts",
