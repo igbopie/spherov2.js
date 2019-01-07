@@ -43,7 +43,7 @@
     ]
   },
   "dependencies": {
-    "spherov2.js": "^0.0.1"
+    "spherov2.js": "^0.0.2"
   },
   "devDependencies": {
     "@types/node-hid": "^0.5.2",
