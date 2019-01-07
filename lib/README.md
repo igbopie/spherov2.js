@@ -6,32 +6,53 @@
 
 Work in progress. Some commands are functional but not ready for prime time.
 
+## Examples
 
-### Examples
+### Sphero Mini - Let the main LED blink in different colors
 
-First run this:
+```javascript
+const { Scanner, Utils } = require('spherov2.js');
 
-```sh
-git clone git@github.com:igbopie/spherov2.js.git
-cd spherov2.js
-yarn install
+const makeItBlink = async () => {
+  const sphero = await Scanner.findSpheroMini();
+  
+  if (!sphero) return console.log('sphero mini not available!');
+  
+  while (true) {
+    await sphero.setMainLedColor(255, 0, 0);
+    await Utils.wait(200);
+    await sphero.setMainLedColor(255, 255, 0);
+    await Utils.wait(200);
+    await sphero.setMainLedColor(0, 255, 0);
+    await Utils.wait(200);
+    await sphero.setMainLedColor(0, 255, 255);
+    await Utils.wait(200);
+    await sphero.setMainLedColor(0, 0, 255);
+    await Utils.wait(200);
+    await sphero.setMainLedColor(255, 0, 255);
+    await Utils.wait(200);
+  }
+};
+
+makeItBlink();
 ```
 
-then:
+### Sphero Mini - Roll ahead for 2 seconds
+```javascript
+const { Scanner, Utils } = require('spherov2.js');
 
-#### Sphero Mini
+const makeItRoll = async () => {
+  const sphero = await Scanner.findSpheroMini();
+  
+  if (!sphero) return console.log('sphero mini not available!');
+  
+  const speed = 100;
+  const headingInDegrees = 0;
+  const timeToRollInMilliseconds = 2000;
+  const flags = [];
+  
+  await sphero.rollTime(speed, headingInDegrees, timeToRollInMilliseconds, flags);
+};
 
-* `yarn patrol-sm`: Will move in a square (for now).
-* `yarn nimbus-sm`: Steelseries Nimbus + Sphero Mini
-* `yarn cmd`: CMD interaction with Sphero Mini
-* `yarn police`: Will turn on LED as police do.
-* `yarn collision`: Will turn red when collision detected
-* `yarn sensor`: Will turn on stream sensor data. TODO: Parse sensor data
-
-#### Lightning McQueen
-
-* `yarn nimbus-lm`: Steelseries Nimbus + Lightning McQueen
-
-#### BB9E
-
-* `yarn patrol-gb`: Will move in a square (for now).
+makeItRoll();
+```
