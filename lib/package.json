@@ -16,7 +16,7 @@
     "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "prettier": "lint-staged",
-    "docs": "./node_modules/.bin/typedoc --excludeExternals --excludeProtected --excludePrivate --exclude './{lib,test}/**/*.ts' --theme minimal --readme none --out docs --mode modules ."
+    "docs": "./node_modules/.bin/typedoc --excludeExternals --excludeProtected --excludePrivate --exclude './{lib,test}/**/*.ts' --theme minimal --readme none --out ../docs --mode modules ."
   },
   "pre-commit": [
     "precommit-msg",
