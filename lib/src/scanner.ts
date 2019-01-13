@@ -5,6 +5,7 @@ import { wait } from './utils';
 import { Core } from './toys/core';
 import { BB9E } from './toys/bb9e';
 import { R2D2 } from './toys/r2d2';
+import { R2Q5 } from './toys/r2q5';
 import { LightningMcQueen } from './toys/lightning-mcqueen';
 import { SpheroMini } from './toys/sphero-mini';
 import noble from './noble-wrapper';
@@ -118,6 +119,10 @@ export const findBB9E = async () => {
 
 export const findR2D2 = async () => {
   return (await find(R2D2.advertisement)) as R2D2;
+};
+
+export const findR2Q5 = async () => {
+  return (await find(R2Q5.advertisement)) as R2Q5;
 };
 
 export const findSpheroMini = async () => {
