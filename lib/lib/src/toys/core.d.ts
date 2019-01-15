@@ -60,7 +60,7 @@ export interface IQueuePayload {
 }
 export declare enum Event {
     onCollision = "onCollision",
-    onSensor = "onSensor",
+    onSensor = "onSensor"
 }
 export declare class Core {
     protected commands: typeof commandsType;
@@ -75,10 +75,25 @@ export declare class Core {
     private initPromiseResolve;
     private eventsListeners;
     constructor(p: IPeripheral);
+    /**
+     * Determines and returns the current battery charging state
+     */
     batteryVoltage(): Promise<number>;
+    /**
+     * Wakes up the toy from sleep mode
+     */
     wake(): Promise<IQueuePayload>;
+    /**
+     * Sets the to into sleep mode
+     */
     sleep(): Promise<IQueuePayload>;
+    /**
+     * Starts the toy
+     */
     start(): Promise<void>;
+    /**
+     * Determines and returns the system app version of the toy
+     */
     appVersion(): Promise<{
         major: number;
         minor: number;
@@ -86,17 +101,17 @@ export declare class Core {
     on(eventName: Event, handler: (command: ICommandWithRaw) => void): void;
     destroy(): void;
     protected queueCommand(command: ICommandWithRaw): Promise<IQueuePayload>;
-    private init();
-    private onExecute(item);
-    private match(commandA, commandB);
-    private bindServices();
-    private bindListeners();
-    private onPacketRead(error, command);
-    private eventHandler(command);
-    private handleCollision(command);
-    private handleSensorUpdate(command);
-    private onApiRead(data, isNotification);
-    private onApiNotify(data, isNotification);
-    private onDFUControlNotify(data, isNotification);
-    private write(c, data);
+    private init;
+    private onExecute;
+    private match;
+    private bindServices;
+    private bindListeners;
+    private onPacketRead;
+    private eventHandler;
+    private handleCollision;
+    private handleSensorUpdate;
+    private onApiRead;
+    private onApiNotify;
+    private onDFUControlNotify;
+    private write;
 }

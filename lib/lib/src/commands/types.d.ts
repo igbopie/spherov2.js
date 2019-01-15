@@ -6,20 +6,20 @@ export declare enum DeviceId {
     animatronics = 23,
     sensor = 24,
     userIO = 26,
-    somethingAPI = 31,
+    somethingAPI = 31
 }
 export declare enum SomethingApi {
-    something5 = 39,
+    something5 = 39
 }
 export declare enum APIProcessCommandIds {
-    echo = 0,
+    echo = 0
 }
 export declare enum SystemInfoCommandIds {
     mainApplicationVersion = 0,
     bootloaderVersion = 1,
     something = 6,
     something6 = 18,
-    something7 = 40,
+    something7 = 40
 }
 export declare enum PowerCommandIds {
     deepSleep = 0,
@@ -28,7 +28,7 @@ export declare enum PowerCommandIds {
     wake = 13,
     something2 = 16,
     something3 = 4,
-    something4 = 30,
+    something4 = 30
 }
 export declare enum DrivingCommandIds {
     rawMotor = 1,
@@ -36,14 +36,14 @@ export declare enum DrivingCommandIds {
     driveAsSphero = 4,
     driveAsRc = 2,
     driveWithHeading = 7,
-    stabilization = 12,
+    stabilization = 12
 }
 export declare enum AnimatronicsCommandIds {
     animationBundle = 5,
     shoulderAction = 13,
     domePosition = 15,
     shoulderActionComplete = 38,
-    enableShoulderActionCompleteAsync = 42,
+    enableShoulderActionCompleteAsync = 42
 }
 export declare enum SensorCommandIds {
     sensorMask = 0,
@@ -54,20 +54,20 @@ export declare enum SensorCommandIds {
     enableCollisionAsync = 20,
     sensor1 = 15,
     sensor2 = 23,
-    configureSensorStream = 12,
+    configureSensorStream = 12
 }
 export declare enum UserIOCommandIds {
     allLEDs = 14,
     playAudioFile = 7,
     audioVolume = 8,
     stopAudio = 10,
-    testSound = 24,
+    testSound = 24
 }
 export declare enum Flags {
     isResponse = 1,
     requestsResponse = 2,
     requestsOnlyErrorResponse = 4,
-    resetsInactivityTimeout = 8,
+    resetsInactivityTimeout = 8
 }
 export declare enum APIConstants {
     escape = 171,
@@ -76,14 +76,14 @@ export declare enum APIConstants {
     escapeMask = 136,
     escapedEscape = 35,
     escapedStartOfPacket = 5,
-    escapedEndOfPacket = 80,
+    escapedEndOfPacket = 80
 }
 export declare enum DriveFlag {
     reverse = 1,
     boost = 2,
     fastTurnMode = 4,
     tankDriveLeftMotorReverse = 8,
-    tankDriveRightMotorReverse = 16,
+    tankDriveRightMotorReverse = 16
 }
 export declare type CommandId = UserIOCommandIds | AnimatronicsCommandIds | DrivingCommandIds | PowerCommandIds | SystemInfoCommandIds | APIProcessCommandIds | SensorCommandIds | SomethingApi;
 export interface ICommandOutput {
