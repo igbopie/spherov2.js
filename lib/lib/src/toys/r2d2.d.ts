@@ -9,6 +9,6 @@ export declare class R2D2 extends RollableToy {
     turnDome(angle: number): Promise<IQueuePayload>;
     setStance(stance: Stance): Promise<IQueuePayload>;
     playAnimation(animation: number): Promise<IQueuePayload>;
-    private calculateDomeAngle(angle);
-    private static hobIndex(val);
+    private calculateDomeAngle;
+    private static hobIndex;
 }
