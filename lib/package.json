@@ -61,7 +61,7 @@
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.16.0",
     "typedoc": "0.14.2",
-    "typescript": "^2.7.2"
+    "typescript": "^3.0.0"
   },
   "jest": {
     "verbose": true,
