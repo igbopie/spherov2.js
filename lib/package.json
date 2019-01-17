@@ -14,7 +14,7 @@
     "url": "https://github.com/igbopie/spherov2.js.git"
   },
   "scripts": {
-    "prepublishOnly": "rm -fR dist; tsc --declaration  --outDir dist/",
+    "prepublishOnly": "rm -fR dist; tsc --declaration",
     "debug": "ts-node --inspect-brk src/index.ts",
     "start": "ts-node src/index.ts",
     "add-all": "git add -A",
