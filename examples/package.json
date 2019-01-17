@@ -9,7 +9,6 @@
   "scripts": {
     "debug": "ts-node --inspect-brk src/index.ts",
     "start": "ts-node src/index.ts",
-    "build": "rm -fR lib; tsc --declaration",
     "add-all": "git add -A",
     "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",

@@ -3624,6 +3624,14 @@ spdx-license-ids@^3.0.0:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.3.tgz#81c0ce8f21474756148bbb5f3bfc0f36bf15d76e"
 
+spherov2.js@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/spherov2.js/-/spherov2.js-0.0.2.tgz#696ac14e6f46fc4e4ca98aeaa77c1e6cf25e55a5"
+  integrity sha512-y36nixBcurgPPaxgbnNc/KgKjOf/Yp2KVLQgZ84TjueCIJ0nnnFHsJBaFImAxMEogI16bzDrX0u+4GL3UCh1IA==
+  dependencies:
+    noble "^1.9.0"
+    noble-mac "git+https://github.com/Timeular/noble-mac.git"
+
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/split-string/-/split-string-3.1.0.tgz#7cb09dda3a86585705c64b39a6466038682e8fe2"
