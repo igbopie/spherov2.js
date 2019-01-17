@@ -6,6 +6,14 @@
 
 Work in progress. Some commands are functional but not ready for prime time.
 
+## Supported Robots
+
+TODO
+
+## Contributors - Special Thanks!
+
+TODO
+
 ## Examples
 
 ### Sphero Mini - Let the main LED blink in different colors
