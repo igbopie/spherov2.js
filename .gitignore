@@ -3,3 +3,5 @@ coverage
 yarn-error.log
 .git
 dist
+lib/lib
+examples/lib
