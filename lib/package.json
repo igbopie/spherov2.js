@@ -1,12 +1,14 @@
 {
   "name": "spherov2.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "V2 api version for sphero toys (not official)",
   "author": "igbopie",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "engines" : { "node" : ">=10.0.0" },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/igbopie/spherov2.js.git"
