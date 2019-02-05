@@ -52,7 +52,7 @@
     "@types/noble": "^0.0.38",
     "@types/noble-mac": "0.0.0",
     "husky": "^1.1.4",
-    "jest": "^23.0.0",
+    "jest": "^24.0.0",
     "lint-staged": "^8.0.5",
     "node-inspect": "^1.11.3",
     "prettier": "^1.15.2",
