@@ -210,10 +210,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/noble@^0.0.38":
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/@types/noble/-/noble-0.0.38.tgz#bc9c72bea981e8a46a33e6ff3422ed5608e736f0"
-  integrity sha512-d5wuIsv9BkoUZF1c8i94R5i3Wg6qO2l3CK6vEmRyv2kvBLolEJf5DgNoKizQyEpmAy3ch9V35VA/KECJcxr2Vw==
+"@types/noble@^0.0.39":
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/@types/noble/-/noble-0.0.39.tgz#e2bbdfd42445255450b0c5c6a0c6a17b454513d0"
+  integrity sha512-LcyiqFW4KGHXV2WhImece6FgJc8HWNUL/DdDWXTGzWNwhgqq3pTd36U5Wgy74TRGsTvNevvhG8D2ZxHXPDc82g==
   dependencies:
     "@types/node" "*"
 
