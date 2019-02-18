@@ -56,7 +56,7 @@
     "lint-staged": "^8.0.5",
     "node-inspect": "^1.11.3",
     "prettier": "^1.15.2",
-    "ts-jest": "^23.0.0",
+    "ts-jest": "^24.0.0",
     "ts-node": "^8.0.0",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.16.0",
