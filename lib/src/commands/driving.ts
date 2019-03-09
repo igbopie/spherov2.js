@@ -38,6 +38,7 @@ export default (generator: CommandGenerator) => {
     ): ICommandWithRaw =>
       encode({
         commandId: DrivingCommandIds.driveWithHeading,
+        targetId: 0x12,
         payload: [
           speed,
           // tslint:disable-next-line:no-bitwise

@@ -1,8 +1,8 @@
 import { Scanner, SpheroMini, Utils } from 'spherov2.js';
+import { Toys } from 'spherov2.js';
 
 // SORRY FOR THIS CODE, It is my playground for now
 const cmdPlay = (toy: SpheroMini) => {
-
   let pressTimeout: NodeJS.Timer;
   let heading = 0;
   let currentSpeed = 0;
@@ -25,7 +25,11 @@ const cmdPlay = (toy: SpheroMini) => {
   const loop = async () => {
     while (true) {
       if (executing) {
-        toy.roll(currentSpeed, calibrating ? heading : (heading + offset) % 360, []);
+        toy.roll(
+          currentSpeed,
+          calibrating ? heading : (heading + offset) % 360,
+          []
+        );
       }
       if (currentSpeed === 0 && !calibrating) {
         executing = false;
@@ -101,8 +105,10 @@ const cmdPlay = (toy: SpheroMini) => {
   loop();
 };
 
+const robot: string = `${process.argv[2]}-`;
 const main = async () => {
-  const sphero = await Scanner.findSpheroMini();
+  const adv = Toys.find(toy => toy.prefix === robot);
+  const sphero = await Scanner.find(adv);
   if (sphero) {
     cmdPlay(sphero);
   }

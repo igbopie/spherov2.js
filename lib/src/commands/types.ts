@@ -76,7 +76,9 @@ export enum Flags {
   isResponse = 1,
   requestsResponse = 2,
   requestsOnlyErrorResponse = 4,
-  resetsInactivityTimeout = 8
+  resetsInactivityTimeout = 8,
+  commandHasTargetId = 16,
+  commandHasSourceId = 32
 }
 
 export enum APIConstants {
@@ -121,6 +123,8 @@ export interface ICommandOutput {
 export interface ICommandPartial {
   payload?: number[];
   commandId: CommandId;
+  targetId?: number;
+  sourceId?: number;
 }
 
 export interface ICommand extends ICommandPartial {

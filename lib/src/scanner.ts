@@ -14,14 +14,6 @@ export interface IToyDiscovered extends IToyAdvertisement {
   peripheral: Peripheral;
 }
 
-// const validToys: IToyAdvertisement[] = [
-//   SpheroMini.advertisement,
-//   // {
-//   //   prefix: 'LM-',
-//   //   name: 'Lightning McQueen'
-//   // },
-// ];
-
 const discover = async (
   validToys: IToyAdvertisement[],
   toys: IToyDiscovered[],
@@ -70,22 +62,25 @@ const startToy = async (toy: Core) => {
   console.log('Starting...');
   await toy.start();
 
-  // tslint:disable-next-line:no-console
+  // // tslint:disable-next-line:no-console
   console.log('Started');
-  const version = await toy.appVersion();
+  // const version = await toy.appVersion();
 
-  // tslint:disable-next-line:no-console
-  console.log('Version', version);
-  const battery = await toy.batteryVoltage();
+  // // tslint:disable-next-line:no-console
+  // console.log('Version', version);
+  // const battery = await toy.batteryVoltage();
 
-  // tslint:disable-next-line:no-console
-  console.log('Battery', battery);
+  // // tslint:disable-next-line:no-console
+  // console.log('Battery', battery);
 };
 
 /**
  * Searches toys that match the passed criteria, starts the first found toy and returns it
  */
-export const find = async (toyType: IToyAdvertisement, name?: string) => {
+export const find = async <T extends Core>(
+  toyType: IToyAdvertisement,
+  name?: string
+) => {
   const discovered = await findToys([toyType]);
   const discoveredItem: IToyDiscovered =
     discovered.find(item => item.peripheral.advertisement.localName === name) ||
@@ -100,7 +95,7 @@ export const find = async (toyType: IToyAdvertisement, name?: string) => {
 
   await startToy(toy);
 
-  return toy;
+  return toy as T;
 };
 
 /**

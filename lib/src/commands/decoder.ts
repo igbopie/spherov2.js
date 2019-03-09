@@ -1,4 +1,4 @@
-import { APIConstants, ICommandWithRaw } from './types';
+import { APIConstants, ICommandWithRaw, Flags } from './types';
 
 const MINIMUN_PACKET_LENGTH = 6;
 
@@ -7,21 +7,52 @@ export function number(buffer: number[], offset: number) {
 }
 
 const classifyPacket = (packet: Uint8Array): ICommandWithRaw => {
-  const [_startPacket, _flags, deviceId, commandId, sequenceNumber, ...rest] = packet;
+  const [_startPacket, flags, ...rest] = packet;
+
+  // tslint:disable:no-bitwise
+  const isResponse: boolean = !!(flags & Flags.isResponse);
+  const requestsResponse: boolean = !!(flags & Flags.requestsResponse);
+  const requestsOnlyErrorResponse: boolean = !!(
+    flags & Flags.requestsOnlyErrorResponse
+  );
+  const resetsInactivityTimeout: boolean = !!(
+    flags & Flags.resetsInactivityTimeout
+  );
+  const commandHasTargetId: boolean = !!(flags & Flags.commandHasTargetId);
+  const commandHasSourceId: boolean = !!(flags & Flags.commandHasSourceId);
+  // tslint:enable:no-bitwise
+  let sourceId;
+  let targetId;
+
+  if (commandHasTargetId) {
+    targetId = rest.shift();
+  }
+
+  if (commandHasSourceId) {
+    sourceId = rest.shift();
+  }
+
+  const deviceId = rest.shift();
+  const commandId = rest.shift();
+  const sequenceNumber = rest.shift();
   const payload = rest.slice(0, rest.length - 2);
   const [_checksum, _endPacket] = rest.slice(rest.length - 2, rest.length - 1);
 
   return {
     // flags, // TODO
+    sourceId,
+    targetId,
     commandId,
     deviceId,
     payload,
     raw: packet,
-    sequenceNumber,
+    sequenceNumber
   };
 };
 
-export function factory(callback: (err: string, response?: ICommandWithRaw) => void) {
+export function factory(
+  callback: (err: string, response?: ICommandWithRaw) => void
+) {
   let msg: number[] = [];
   let checksum: number = 0;
   let isEscaping: boolean = false;
@@ -49,7 +80,7 @@ export function factory(callback: (err: string, response?: ICommandWithRaw) => v
             return error('Invalid last byte ' + msg.length);
           }
 
-          if (checksum !== 0xFF) {
+          if (checksum !== 0xff) {
             return error('Invalid checksum');
           }
 
@@ -79,7 +110,7 @@ export function factory(callback: (err: string, response?: ICommandWithRaw) => v
 
       msg.push(byte);
       // tslint:disable-next-line:no-bitwise
-      checksum = checksum & byte | 0xFF;
-    },
+      checksum = (checksum & byte) | 0xff;
+    }
   };
 }
