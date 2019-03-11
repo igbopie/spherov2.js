@@ -10,10 +10,12 @@ export default (generator: CommandGenerator) => {
   return {
     batteryVoltage: (): ICommandWithRaw =>
       encode({
+        targetId: 0x11,
         commandId: PowerCommandIds.batteryVoltage
       }),
     sleep: (): ICommandWithRaw =>
       encode({
+        targetId: 0x11,
         commandId: PowerCommandIds.sleep
       }),
     something2: (): ICommandWithRaw =>
@@ -30,6 +32,7 @@ export default (generator: CommandGenerator) => {
       }),
     wake: (): ICommandWithRaw =>
       encode({
+        targetId: 0x11,
         commandId: PowerCommandIds.wake
       })
   };

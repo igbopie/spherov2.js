@@ -278,7 +278,7 @@ export class Core {
     if (typeof data === 'string') {
       buff = Buffer.from(data);
     } else {
-      buff = new Buffer(data);
+      buff = Buffer.from(data);
     }
     return toPromise(c.write.bind(c, buff, true));
   }

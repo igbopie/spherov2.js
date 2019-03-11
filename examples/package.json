@@ -12,11 +12,16 @@
     "add-all": "git add -A",
     "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "nimbus-sm": "ts-node src/nimbus-sm",
-    "nimbus-lm": "ts-node src/nimbus-lm",
-    "patrol-sm": "ts-node src/patrol-sm",
-    "patrol-gb": "ts-node src/patrol-gb",
-    "cmd": "ts-node src/cmd",
+    "nimbus-sm": "ts-node src/nimbus SM",
+    "nimbus-lm": "ts-node src/nimbus LM",
+    "nimbus-sb": "ts-node src/nimbus SB",
+    "patrol-sm": "ts-node src/patrol SM",
+    "patrol-gb": "ts-node src/patrol GB",
+    "patrol-sb": "ts-node src/patrol SB",
+    "patrol-d2": "ts-node src/patrol D2",
+    "patrol-lm": "ts-node src/patrol LM",
+    "cmd-sm": "ts-node src/cmd SM",
+    "cmd-sb": "ts-node src/cmd SB",
     "collision": "ts-node src/collisionDetection",
     "police": "ts-node src/police",
     "ensemble": "ts-node src/ensemble",
@@ -42,7 +47,7 @@
     ]
   },
   "dependencies": {
-    "spherov2.js": "^0.0.2"
+    "spherov2.js": "^0.0.8"
   },
   "devDependencies": {
     "@types/node-hid": "^0.5.2",

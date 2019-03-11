@@ -1,20 +1,14 @@
 import { Scanner, SpheroMini, Utils } from 'spherov2.js';
+import { starter } from './utils/starter';
 
 const WAIT_TIME: number = 100;
 export const police = async (toy: SpheroMini) => {
   while (true) {
-    await toy.setMainLedColor(0xFF, 0, 0);
+    await toy.setMainLedColor(0xff, 0, 0);
     await Utils.wait(WAIT_TIME);
-    await toy.setMainLedColor(0, 0, 0xFF);
+    await toy.setMainLedColor(0, 0, 0xff);
     await Utils.wait(WAIT_TIME);
   }
 };
 
-const main = async () => {
-  const sphero = await Scanner.findSpheroMini();
-  if (sphero) {
-    police(sphero);
-  }
-};
-
-main();
+starter(police);
