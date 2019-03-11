@@ -1,5 +1,6 @@
 import { Scanner, SpheroMini, Utils } from 'spherov2.js';
 import { Toys } from 'spherov2.js';
+import { starter } from './utils/starter';
 
 // SORRY FOR THIS CODE, It is my playground for now
 const cmdPlay = (toy: SpheroMini) => {
@@ -105,13 +106,4 @@ const cmdPlay = (toy: SpheroMini) => {
   loop();
 };
 
-const robot: string = `${process.argv[2]}-`;
-const main = async () => {
-  const adv = Toys.find(toy => toy.prefix === robot);
-  const sphero = await Scanner.find(adv);
-  if (sphero) {
-    cmdPlay(sphero);
-  }
-};
-
-main();
+starter(cmdPlay);

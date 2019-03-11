@@ -1,7 +1,8 @@
-import { Core, IQueuePayload } from './core';
 import { IToyAdvertisement } from './types';
+import { RollableToy } from './rollable-toy';
+import { IQueuePayload } from './core';
 
-export class LightningMcQueen extends Core {
+export class LightningMcQueen extends RollableToy {
   public static advertisement: IToyAdvertisement = {
     name: 'Lightning McQueen',
     prefix: 'LM-',

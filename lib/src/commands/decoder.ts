@@ -6,9 +6,7 @@ export function number(buffer: number[], offset: number) {
   return Buffer.from(buffer).readInt16BE(offset);
 }
 
-const classifyPacket = (packet: Uint8Array): ICommandWithRaw => {
-  const [_startPacket, flags, ...rest] = packet;
-
+const decodeFlags = (flags: number) => {
   // tslint:disable:no-bitwise
   const isResponse: boolean = !!(flags & Flags.isResponse);
   const requestsResponse: boolean = !!(flags & Flags.requestsResponse);
@@ -21,6 +19,20 @@ const classifyPacket = (packet: Uint8Array): ICommandWithRaw => {
   const commandHasTargetId: boolean = !!(flags & Flags.commandHasTargetId);
   const commandHasSourceId: boolean = !!(flags & Flags.commandHasSourceId);
   // tslint:enable:no-bitwise
+  return {
+    isResponse,
+    requestsResponse,
+    requestsOnlyErrorResponse,
+    resetsInactivityTimeout,
+    commandHasTargetId,
+    commandHasSourceId
+  };
+};
+
+const classifyPacket = (packet: Uint8Array): ICommandWithRaw => {
+  const [_startPacket, flags, ...rest] = packet;
+  const { commandHasTargetId, commandHasSourceId } = decodeFlags(flags);
+
   let sourceId;
   let targetId;
 

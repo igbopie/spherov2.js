@@ -18,6 +18,8 @@
     "patrol-sm": "ts-node src/patrol SM",
     "patrol-gb": "ts-node src/patrol GB",
     "patrol-sb": "ts-node src/patrol SB",
+    "patrol-d2": "ts-node src/patrol D2",
+    "patrol-lm": "ts-node src/patrol LM",
     "cmd-sm": "ts-node src/cmd SM",
     "cmd-sb": "ts-node src/cmd SB",
     "collision": "ts-node src/collisionDetection",
