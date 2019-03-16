@@ -7,4 +7,5 @@ export const starter = async <T extends Core>(fn: (sphero: T) => void) => {
   if (sphero) {
     fn(sphero);
   }
+  return sphero;
 };

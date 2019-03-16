@@ -15,12 +15,12 @@ test('toPromise', async () => {
     return callback(undefined, 4);
   };
 
-  expect(await toPromise(mockFn)).toBe(4);
+  expect(await toPromise({}, mockFn)).toBe(4);
 
   returnError = true;
 
   try {
-    await toPromise(mockFn);
+    await toPromise({}, mockFn);
     expect('').toBe('Should not run this');
   } catch (e) {
     expect(e).toBe('Some error');

@@ -24,3 +24,4 @@ export { Core } from './toys/core';
 export { Event } from './toys/core';
 export { Stance } from './toys/types';
 export { ICommandWithRaw } from './commands/types';
+export * from './utils';

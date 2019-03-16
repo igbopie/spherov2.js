@@ -6,9 +6,14 @@ import { Core } from './toys/core';
 import { BB9E } from './toys/bb9e';
 import { R2D2 } from './toys/r2d2';
 import { R2Q5 } from './toys/r2q5';
+import { toPromise } from './utils';
 import { LightningMcQueen } from './toys/lightning-mcqueen';
 import { SpheroMini } from './toys/sphero-mini';
 import noble from './noble-wrapper';
+
+import debug from 'debug';
+
+const scannerDebug = debug('spherov2-scanner');
 
 export interface IToyDiscovered extends IToyAdvertisement {
   peripheral: Peripheral;
@@ -19,6 +24,7 @@ const discover = async (
   toys: IToyDiscovered[],
   p: Peripheral
 ) => {
+  scannerDebug('Dicovered', p.address);
   const { advertisement, uuid } = p;
   const { localName = '' } = advertisement;
   validToys.forEach(async toyAdvertisement => {
@@ -41,15 +47,18 @@ const discover = async (
  * Searches (but does not start) toys that matcht the passed criteria
  */
 export const findToys = async (toysType: IToyAdvertisement[]) => {
+  scannerDebug('findToys');
   const toys: IToyDiscovered[] = [];
   // tslint:disable-next-line:no-console
   console.log('Scanning devices...');
   const discoverBinded = discover.bind(this, toysType, toys);
 
   noble.on('discover', discoverBinded);
-  noble.startScanning(); // any service UUID, no duplicates
+  scannerDebug('findToys-nobleStartScanning');
+  await toPromise(noble, noble.startScanning, [[], false]); // any service UUID, no duplicates
+  scannerDebug('findToys-wait5seconds');
   await wait(5000);
-  noble.stopScanning();
+  await toPromise(noble, noble.stopScanning);
   noble.removeListener('discover', discoverBinded);
 
   // tslint:disable-next-line:no-console
