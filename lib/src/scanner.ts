@@ -1,6 +1,6 @@
 import { IToyDiscovered } from './scanner';
 import { Peripheral } from 'noble';
-import { IToyAdvertisement } from './toys/types';
+import { IToyAdvertisement, ServicesUUID } from './toys/types';
 import { wait } from './utils';
 import { Core } from './toys/core';
 import { BB9E } from './toys/bb9e';
@@ -21,6 +21,7 @@ const discover = async (
 ) => {
   const { advertisement, uuid } = p;
   const { localName = '' } = advertisement;
+  console.log('discovered', p);
   validToys.forEach(async toyAdvertisement => {
     if (localName.indexOf(toyAdvertisement.prefix) === 0) {
       toys.push({
@@ -47,7 +48,7 @@ export const findToys = async (toysType: IToyAdvertisement[]) => {
   const discoverBinded = discover.bind(this, toysType, toys);
 
   noble.on('discover', discoverBinded);
-  noble.startScanning(); // any service UUID, no duplicates
+  noble.startScanning(Object.keys(ServicesUUID).map(key => ServicesUUID[key])); // any service UUID, no duplicates
   await wait(5000);
   noble.stopScanning();
   noble.removeListener('discover', discoverBinded);

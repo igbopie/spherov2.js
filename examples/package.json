@@ -7,6 +7,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
+    "prepublishOnly": "rm -fR dist; tsc --declaration",
     "debug": "ts-node --inspect-brk src/index.ts",
     "start": "ts-node src/index.ts",
     "add-all": "git add -A",
@@ -26,7 +27,8 @@
     "police": "ts-node src/police",
     "ensemble": "ts-node src/ensemble",
     "sensor": "ts-node src/sensor",
-    "prettier": "lint-staged"
+    "prettier": "lint-staged",
+    "serve": "http-server ."
   },
   "pre-commit": [
     "precommit-msg",
@@ -47,41 +49,26 @@
     ]
   },
   "dependencies": {
-    "spherov2.js": "^0.0.8"
+    "bufferutil": "^4.0.1",
+    "http-server": "^0.11.1",
+    "net": "^1.0.2",
+    "spherov2.js": "^0.0.8",
+    "tls": "^0.0.1",
+    "ts-loader": "^5.3.3",
+    "utf-8-validate": "^5.0.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
   },
   "devDependencies": {
-    "@types/node-hid": "^0.5.2",
+    "@types/node-hid": "^0.7.0",
     "husky": "^1.1.4",
     "lint-staged": "^8.0.5",
     "node-hid": "^0.7.2",
     "node-inspect": "^1.11.3",
     "prettier": "^1.15.2",
-    "ts-jest": "^22.4.1",
-    "ts-node": "^5.0.0",
+    "ts-node": "^8.0.3",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.16.0",
-    "typescript": "^2.7.2"
-  },
-  "jest": {
-    "verbose": true,
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts}",
-      "!src/examples/**",
-      "!**/node_modules/**",
-      "!**/vendor/**"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "typescript": "^3.3.4000"
   }
 }

@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "outDir": "./lib",
+    "outDir": "./dist",
 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es2018"],
+    "lib": ["DOM"],
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,

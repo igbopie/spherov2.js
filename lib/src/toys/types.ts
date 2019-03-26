@@ -1,8 +1,8 @@
 import { Core } from './core';
 
 export enum ServicesUUID {
-  apiV2ControlService = '00010001574f4f2053706865726f2121',
-  nordicDfuService = '00020001574f4f2053706865726f2121'
+  apiV2ControlService = '00010001-574f-4f20-5370-6865726f2121',
+  nordicDfuService = '00020001-574f-4f20-5370-6865726f2121'
 }
 
 export enum CharacteristicUUID {

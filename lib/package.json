@@ -45,13 +45,11 @@
     ]
   },
   "dependencies": {
-    "noble": "^1.9.0",
-    "noble-mac": "git+https://github.com/Timeular/noble-mac.git"
+    "noble": "^1.9.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.0",
     "@types/noble": "^0.0.39",
-    "@types/noble-mac": "0.0.1",
     "husky": "^1.1.4",
     "jest": "^24.0.0",
     "lint-staged": "^8.0.5",

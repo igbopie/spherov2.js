@@ -1,4 +1,6 @@
-import { ICharacteristic, IPeripheral } from '../ble';
+import { Characteristic, Peripheral } from 'noble';
+// @ts-ignore
+import * as Service from 'noble/lib/service';
 import { factory } from '../commands';
 import { factory as decodeFactory, number } from '../commands/decoder';
 import {
@@ -9,7 +11,8 @@ import {
 } from '../commands/types';
 import { toPromise } from '../utils';
 import { Queue } from './queue';
-import { CharacteristicUUID, Stance } from './types';
+import { CharacteristicUUID, Stance, ServicesUUID } from './types';
+import noble from '../noble-wrapper';
 
 // WORKAROUND for https://github.com/Microsoft/TypeScript/issues/5711
 export interface IReExport {
@@ -23,7 +26,7 @@ export const decodeType = (false as true) && decodeFactory(_ => null);
 
 export interface IQueuePayload {
   command: ICommandWithRaw;
-  characteristic?: ICharacteristic;
+  characteristic?: Characteristic;
 }
 
 export enum Event {
@@ -35,11 +38,11 @@ type EventMap = { [key in Event]?: (command: ICommandWithRaw) => void };
 
 export class Core {
   protected commands: typeof commandsType;
-  private peripheral: IPeripheral;
-  private apiV2Characteristic?: ICharacteristic;
-  private dfuControlCharacteristic?: ICharacteristic;
+  private peripheral: Peripheral;
+  private apiV2Characteristic?: Characteristic;
+  private dfuControlCharacteristic?: Characteristic;
   // private dfuInfoCharacteristic?: ICharacteristic;
-  private antiDoSCharacteristic?: ICharacteristic;
+  private antiDoSCharacteristic?: Characteristic;
   private decoder: typeof decodeType;
   private started: boolean;
   private queue: Queue<IQueuePayload>;
@@ -47,7 +50,7 @@ export class Core {
   private initPromiseResolve: () => any;
   private eventsListeners: EventMap;
 
-  constructor(p: IPeripheral) {
+  constructor(p: Peripheral) {
     this.peripheral = p;
   }
 
@@ -150,7 +153,19 @@ export class Core {
     this.started = false;
 
     await toPromise(p.connect.bind(p));
-    await toPromise(p.discoverAllServicesAndCharacteristics.bind(p));
+
+    // @ts-ignore
+    noble.onServicesDiscover(
+      p.uuid,
+      Object.keys(ServicesUUID).map(key => ServicesUUID[key])
+    );
+    const charac1 = await toPromise(
+      p.services[0].discoverCharacteristics.bind(p.services[0], [])
+    );
+    const charac2 = await toPromise(
+      p.services[0].discoverCharacteristics.bind(p.services[1], [])
+    );
+
     this.bindServices();
     this.bindListeners();
   }
@@ -273,7 +288,7 @@ export class Core {
     return this.write(this.dfuControlCharacteristic, new Uint8Array([0x30]));
   }
 
-  private write(c: ICharacteristic, data: Uint8Array | string) {
+  private write(c: Characteristic, data: Uint8Array | string) {
     let buff;
     if (typeof data === 'string') {
       buff = Buffer.from(data);
