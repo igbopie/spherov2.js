@@ -6,9 +6,6 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "engines": {
-    "node": ">=10.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/igbopie/spherov2.js.git"
@@ -48,6 +45,7 @@
     "noble": "^1.9.0"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.2",
     "@types/jest": "^24.0.0",
     "@types/noble": "^0.0.39",
     "husky": "^1.1.4",
