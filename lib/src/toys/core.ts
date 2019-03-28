@@ -8,7 +8,6 @@ import {
   ICommandWithRaw,
   SensorCommandIds
 } from '../commands/types';
-import noble from '../noble-wrapper';
 import { toPromise } from '../utils';
 
 import { Queue } from './queue';
@@ -43,7 +42,7 @@ export class Core {
   private peripheral: Peripheral;
   private apiV2Characteristic?: Characteristic;
   private dfuControlCharacteristic?: Characteristic;
-  // private dfuInfoCharacteristic?: ICharacteristic;
+  private subsCharacteristic?: Characteristic;
   private antiDoSCharacteristic?: Characteristic;
   private decoder: typeof decodeType;
   private started: boolean;
@@ -103,8 +102,24 @@ export class Core {
       this.apiV2Characteristic.subscribe
     );
 
+    // coreDebug('start-subsCharacteristic-subscribe');
+    // var valueBuffer = new Buffer(2);
+    // valueBuffer.writeUInt16LE(0x01, 0);
+
+    // await toPromise(
+    //   this.dfuControlCharacteristic,
+    //   this.dfuControlCharacteristic.write,
+    //   [valueBuffer, true]
+    // );
+
+    // coreDebug('start-apiV2Characteristic-subscribe');
+    // await toPromise(this.apiV2Characteristic, this.apiV2Characteristic.write, [
+    //   valueBuffer,
+    //   true
+    // ]);
+
     coreDebug('start-initPromise');
-    await this.initPromise;
+    // await this.initPromise;
     this.initPromiseResolve = null;
     this.started = true;
 
@@ -171,15 +186,16 @@ export class Core {
     await toPromise(p, p.connect);
 
     coreDebug('init-discoverAllServicesAndCharacteristics');
-    // @ts-ignore
-    noble.onServicesDiscover(
-      p.uuid,
-      Object.keys(ServicesUUID).map(key => ServicesUUID[key])
-    );
-    await toPromise(p.services[0], p.services[0].discoverCharacteristics, []);
-    await toPromise(p.services[1], p.services[1].discoverCharacteristics, []);
-
     await toPromise(p, p.discoverAllServicesAndCharacteristics);
+    // WEB
+    // @ts-ignore
+    // noble.onServicesDiscover(
+    //   p.uuid,
+    //   Object.keys(ServicesUUID).map(key => ServicesUUID[key])
+    // );
+    // await toPromise(p.services[0], p.services[0].discoverCharacteristics,
+    // []); await toPromise(p.services[1],
+    // p.services[1].discoverCharacteristics, []);
     this.bindServices();
     this.bindListeners();
 
@@ -208,17 +224,16 @@ export class Core {
       s.characteristics.forEach(c => {
         if (c.uuid === CharacteristicUUID.antiDoSCharacteristic) {
           this.antiDoSCharacteristic = c;
-          coreDebug('bindServices antiDoSCharacteristic found');
+          coreDebug('bindServices antiDoSCharacteristic found ', c);
         } else if (c.uuid === CharacteristicUUID.apiV2Characteristic) {
           this.apiV2Characteristic = c;
-          coreDebug('bindServices apiV2Characteristic found');
+          coreDebug('bindServices apiV2Characteristic found', c);
         } else if (c.uuid === CharacteristicUUID.dfuControlCharacteristic) {
           this.dfuControlCharacteristic = c;
-          coreDebug('bindServices dfuControlCharacteristic found');
+          coreDebug('bindServices dfuControlCharacteristic found', c);
+        } else if (c.uuid === CharacteristicUUID.subsCharacteristic) {
+          this.subsCharacteristic = c;
         }
-        // else if (c.uuid === CharacteristicUUID.dfuInfoCharacteristic) {
-        //   this.dfuInfoCharacteristic = c;
-        // }
       })
     );
   }

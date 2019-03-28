@@ -27,7 +27,6 @@ const discover = async (
   scannerDebug('Dicovered', p.address);
   const { advertisement, uuid } = p;
   const { localName = '' } = advertisement;
-  console.log('discovered', p);
   validToys.forEach(async toyAdvertisement => {
     if (localName.indexOf(toyAdvertisement.prefix) === 0) {
       toys.push({ ...toyAdvertisement, peripheral: p });
@@ -51,14 +50,18 @@ export const findToys = async (toysType: IToyAdvertisement[]) => {
   console.log('Scanning devices...');
   const discoverBinded = discover.bind(this, toysType, toys);
 
+  // @ts-ignore
   noble.on('discover', discoverBinded);
   scannerDebug('findToys-nobleStartScanning');
   await toPromise(noble, noble.startScanning, [
-    Object.keys(ServicesUUID).map(key => ServicesUUID[key])
+    Object.keys(ServicesUUID).map(key => ServicesUUID[key]),
+    false
   ]); // any service UUID, no duplicates
   scannerDebug('findToys-wait5seconds');
   await wait(5000);
   await toPromise(noble, noble.stopScanning);
+
+  // @ts-ignore
   noble.removeListener('discover', discoverBinded);
 
   // tslint:disable-next-line:no-console

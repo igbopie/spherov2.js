@@ -12,7 +12,7 @@
   },
   "scripts": {
     "watch": "watch 'yarn prepublishOnly' src",
-    "prepublishOnly": "rm -fR dist; tsc --declaration",
+    "prepublishOnly": "rm -fR dist; tsc; cp -r src/noble dist",
     "debug": "ts-node --inspect-brk src/index.ts",
     "start": "ts-node src/index.ts",
     "add-all": "git add -A",
