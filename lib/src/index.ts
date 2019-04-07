@@ -1,16 +1,6 @@
-import * as scanner from './scanner';
-import * as utils from './utils';
-import { toys } from './toys';
-
-export const Toys = toys;
-/**
- * Use Scanner to find toys
- */
-export const Scanner = scanner;
-/**
- * Utility functions
- */
-export const Utils = utils;
+import { toys as Toys } from './toys';
+import * as Scanner from './scanner';
+import * as Utils from './utils';
 
 export { BB9E } from './toys/bb9e';
 export { LightningMcQueen } from './toys/lightning-mcqueen';
@@ -24,3 +14,5 @@ export { Core } from './toys/core';
 export { Event } from './toys/core';
 export { Stance } from './toys/types';
 export { ICommandWithRaw } from './commands/types';
+
+export { Toys, Scanner, Utils };

@@ -7,6 +7,37 @@
     "examples"
   ],
   "scripts": {
-    "test": "cd lib && npm test"
+    "test": "cd lib && npm test",
+    "husky": "node ./node_modules/husky/run install",
+    "lint": "tslint --project lib/tsconfig.json -c tslint.json '**/src/**/*.ts'",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
+    "prettier": "lint-staged",
+    "add-all": "git add -A",
+    "docs": "rm -fR docs; typedoc --excludeExternals --excludeProtected --excludePrivate --exclude './lib/src/**/*.ts' --theme minimal --readme none --out docs --mode modules ."
+  },
+  "pre-commit": [
+    "precommit-msg",
+    "lint",
+    "test",
+    "add-all"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn precommit-msg && yarn prettier && yarn lint && yarn test && yarn add-all"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^1.1.4",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.16.0",
+    "lint-staged": "^8.0.5",
+    "prettier": "^1.15.2",
+    "typedoc": "0.14.2"
   }
 }

@@ -1,14 +1,18 @@
-import { IToyDiscovered } from './scanner';
+import debug from 'debug';
 import { Peripheral } from 'noble';
-import { IToyAdvertisement } from './toys/types';
-import { wait } from './utils';
-import { Core } from './toys/core';
+import noble from './noble-wrapper';
+import { IToyDiscovered } from './scanner';
 import { BB9E } from './toys/bb9e';
+import { Core } from './toys/core';
+import { LightningMcQueen } from './toys/lightning-mcqueen';
 import { R2D2 } from './toys/r2d2';
 import { R2Q5 } from './toys/r2q5';
-import { LightningMcQueen } from './toys/lightning-mcqueen';
 import { SpheroMini } from './toys/sphero-mini';
-import noble from './noble-wrapper';
+import { IToyAdvertisement, ServicesUUID } from './toys/types';
+import { wait } from './utils';
+import { toPromise } from './utils';
+
+const scannerDebug = debug('spherov2-scanner');
 
 export interface IToyDiscovered extends IToyAdvertisement {
   peripheral: Peripheral;
@@ -19,14 +23,12 @@ const discover = async (
   toys: IToyDiscovered[],
   p: Peripheral
 ) => {
+  scannerDebug('Dicovered', p.address);
   const { advertisement, uuid } = p;
   const { localName = '' } = advertisement;
   validToys.forEach(async toyAdvertisement => {
     if (localName.indexOf(toyAdvertisement.prefix) === 0) {
-      toys.push({
-        ...toyAdvertisement,
-        peripheral: p
-      });
+      toys.push({ ...toyAdvertisement, peripheral: p });
       // tslint:disable-next-line:no-console
       console.log(
         `name: ${toyAdvertisement.name}, uuid: ${uuid}, mac-address: ${
@@ -41,15 +43,24 @@ const discover = async (
  * Searches (but does not start) toys that matcht the passed criteria
  */
 export const findToys = async (toysType: IToyAdvertisement[]) => {
+  scannerDebug('findToys');
   const toys: IToyDiscovered[] = [];
   // tslint:disable-next-line:no-console
   console.log('Scanning devices...');
   const discoverBinded = discover.bind(this, toysType, toys);
 
+  // @ts-ignore
   noble.on('discover', discoverBinded);
-  noble.startScanning(); // any service UUID, no duplicates
+  scannerDebug('findToys-nobleStartScanning');
+  await toPromise(noble, noble.startScanning, [
+    Object.keys(ServicesUUID).map(key => ServicesUUID[key]),
+    false
+  ]); // any service UUID, no duplicates
+  scannerDebug('findToys-wait5seconds');
   await wait(5000);
-  noble.stopScanning();
+  await toPromise(noble, noble.stopScanning);
+
+  // @ts-ignore
   noble.removeListener('discover', discoverBinded);
 
   // tslint:disable-next-line:no-console
@@ -62,20 +73,21 @@ const startToy = async (toy: Core) => {
   console.log('Starting...');
   await toy.start();
 
-  // // tslint:disable-next-line:no-console
+  // tslint:disable-next-line:no-console
   console.log('Started');
-  // const version = await toy.appVersion();
+  const version = await toy.appVersion();
 
-  // // tslint:disable-next-line:no-console
-  // console.log('Version', version);
-  // const battery = await toy.batteryVoltage();
+  // tslint:disable-next-line:no-console
+  console.log('Version', version);
+  const battery = await toy.batteryVoltage();
 
-  // // tslint:disable-next-line:no-console
-  // console.log('Battery', battery);
+  // tslint:disable-next-line:no-console
+  console.log('Battery', battery);
 };
 
 /**
- * Searches toys that match the passed criteria, starts the first found toy and returns it
+ * Searches toys that match the passed criteria, starts the first found toy and
+ * returns it
  */
 export const find = async <T extends Core>(
   toyType: IToyAdvertisement,
@@ -160,7 +172,8 @@ export const findAllSpheroMini = async () => {
 };
 
 /**
- * Searches Lightning McQueen toys, starts the first one that was found and returns it
+ * Searches Lightning McQueen toys, starts the first one that was found and
+ * returns it
  */
 export const findLightningMcQueen = async () => {
   return (await find(LightningMcQueen.advertisement)) as LightningMcQueen;

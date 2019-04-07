@@ -4,14 +4,11 @@
   "description": "Examples - V2 api version for sphero toys (not official)",
   "author": "igbopie",
   "license": "MIT",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
   "scripts": {
+    "prepublishOnly": "rm -fR dist; tsc --declaration",
     "debug": "ts-node --inspect-brk src/index.ts",
     "start": "ts-node src/index.ts",
     "add-all": "git add -A",
-    "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "nimbus-sm": "ts-node src/nimbus SM",
     "nimbus-lm": "ts-node src/nimbus LM",
     "nimbus-sb": "ts-node src/nimbus SB",
@@ -19,69 +16,34 @@
     "patrol-gb": "ts-node src/patrol GB",
     "patrol-sb": "ts-node src/patrol SB",
     "patrol-d2": "ts-node src/patrol D2",
-    "patrol-lm": "ts-node src/patrol LM",
+    "wake-sm": "ts-node src/wake-sleep SM",
+    "wake-sb": "ts-node src/wake-sleep SB",
+    "wake": "ts-node src/wake-sleep",
     "cmd-sm": "ts-node src/cmd SM",
     "cmd-sb": "ts-node src/cmd SB",
     "collision": "ts-node src/collisionDetection",
     "police": "ts-node src/police",
     "ensemble": "ts-node src/ensemble",
     "sensor": "ts-node src/sensor",
-    "prettier": "lint-staged"
-  },
-  "pre-commit": [
-    "precommit-msg",
-    "lint",
-    "test",
-    "build",
-    "add-all"
-  ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn precommit-msg && yarn prettier && yarn lint && yarn test && yarn build && yarn add-all"
-    }
-  },
-  "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
+    "prettier": "lint-staged",
+    "serve": "http-server ."
   },
   "dependencies": {
-    "spherov2.js": "^0.0.8"
+    "bufferutil": "^4.0.1",
+    "http-server": "^0.11.1",
+    "net": "^1.0.2",
+    "spherov2.js": "^0.0.8",
+    "tls": "^0.0.1",
+    "ts-loader": "^5.3.3",
+    "utf-8-validate": "^5.0.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
   },
   "devDependencies": {
-    "@types/node-hid": "^0.5.2",
-    "husky": "^1.1.4",
-    "lint-staged": "^8.0.5",
+    "@types/node-hid": "^0.7.0",
     "node-hid": "^0.7.2",
     "node-inspect": "^1.11.3",
-    "prettier": "^1.15.2",
-    "ts-jest": "^22.4.1",
-    "ts-node": "^5.0.0",
-    "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.16.0",
-    "typescript": "^2.7.2"
-  },
-  "jest": {
-    "verbose": true,
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts}",
-      "!src/examples/**",
-      "!**/node_modules/**",
-      "!**/vendor/**"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "ts-node": "^8.0.3",
+    "typescript": "^3.3.4000"
   }
 }

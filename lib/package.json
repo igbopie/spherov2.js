@@ -6,62 +6,30 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "engines": {
-    "node": ">=10.0.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/igbopie/spherov2.js.git"
   },
   "scripts": {
     "watch": "watch 'yarn prepublishOnly' src",
-    "prepublishOnly": "rm -fR dist; tsc --declaration",
+    "prepublishOnly": "echo 'Compiling...';rm -fR dist; tsc; echo 'DONE';",
     "debug": "ts-node --inspect-brk src/index.ts",
     "start": "ts-node src/index.ts",
-    "add-all": "git add -A",
-    "test": "jest",
-    "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
-    "prettier": "lint-staged",
-    "docs": "./node_modules/.bin/typedoc --excludeExternals --excludeProtected --excludePrivate --exclude './{lib,dist,test}/**/*.ts' --theme minimal --readme none --out ../docs --mode modules ."
-  },
-  "pre-commit": [
-    "precommit-msg",
-    "lint",
-    "test",
-    "build",
-    "docs",
-    "add-all"
-  ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn precommit-msg && yarn prettier && yarn lint && yarn test && yarn build && yarn docs && yarn add-all"
-    }
-  },
-  "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
+    "test": "jest"
   },
   "dependencies": {
     "noble": "^1.9.0",
     "noble-mac": "git+https://github.com/Timeular/noble-mac.git"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.2",
     "@types/jest": "^24.0.0",
     "@types/noble": "^0.0.39",
-    "@types/noble-mac": "0.0.1",
-    "husky": "^1.1.4",
+    "@types/noble-mac": "^0.0.1",
     "jest": "^24.0.0",
-    "lint-staged": "^8.0.5",
     "node-inspect": "^1.11.3",
-    "prettier": "^1.15.2",
     "ts-jest": "^24.0.0",
     "ts-node": "^8.0.0",
-    "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.16.0",
-    "typedoc": "0.14.2",
     "typescript": "^3.0.0",
     "watch": "^1.0.2"
   },
