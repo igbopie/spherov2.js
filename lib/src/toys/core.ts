@@ -102,24 +102,8 @@ export class Core {
       this.apiV2Characteristic.subscribe
     );
 
-    // coreDebug('start-subsCharacteristic-subscribe');
-    // var valueBuffer = new Buffer(2);
-    // valueBuffer.writeUInt16LE(0x01, 0);
-
-    // await toPromise(
-    //   this.dfuControlCharacteristic,
-    //   this.dfuControlCharacteristic.write,
-    //   [valueBuffer, true]
-    // );
-
-    // coreDebug('start-apiV2Characteristic-subscribe');
-    // await toPromise(this.apiV2Characteristic, this.apiV2Characteristic.write, [
-    //   valueBuffer,
-    //   true
-    // ]);
-
     coreDebug('start-initPromise');
-    // await this.initPromise;
+    await this.initPromise;
     this.initPromiseResolve = null;
     this.started = true;
 
