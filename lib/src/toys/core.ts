@@ -11,7 +11,7 @@ import {
 import { toPromise } from '../utils';
 
 import { Queue } from './queue';
-import { CharacteristicUUID, ServicesUUID, Stance } from './types';
+import { CharacteristicUUID, Stance } from './types';
 
 const coreDebug = debug('spherov2-core');
 
@@ -42,6 +42,7 @@ export class Core {
   private peripheral: Peripheral;
   private apiV2Characteristic?: Characteristic;
   private dfuControlCharacteristic?: Characteristic;
+  // @ts-ignore
   private subsCharacteristic?: Characteristic;
   private antiDoSCharacteristic?: Characteristic;
   private decoder: typeof decodeType;

@@ -4,15 +4,11 @@
   "description": "Examples - V2 api version for sphero toys (not official)",
   "author": "igbopie",
   "license": "MIT",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
   "scripts": {
     "prepublishOnly": "rm -fR dist; tsc --declaration",
     "debug": "ts-node --inspect-brk src/index.ts",
     "start": "ts-node src/index.ts",
     "add-all": "git add -A",
-    "lint": "tslint --project tsconfig.json -c tslint.json 'src/**/*.ts'",
-    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "nimbus-sm": "ts-node src/nimbus SM",
     "nimbus-lm": "ts-node src/nimbus LM",
     "nimbus-sb": "ts-node src/nimbus SB",
@@ -32,24 +28,6 @@
     "prettier": "lint-staged",
     "serve": "http-server ."
   },
-  "pre-commit": [
-    "precommit-msg",
-    "lint",
-    "test",
-    "build",
-    "add-all"
-  ],
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn precommit-msg && yarn prettier && yarn lint && yarn test && yarn build && yarn add-all"
-    }
-  },
-  "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "dependencies": {
     "bufferutil": "^4.0.1",
     "http-server": "^0.11.1",
@@ -63,14 +41,9 @@
   },
   "devDependencies": {
     "@types/node-hid": "^0.7.0",
-    "husky": "^1.1.4",
-    "lint-staged": "^8.0.5",
     "node-hid": "^0.7.2",
     "node-inspect": "^1.11.3",
-    "prettier": "^1.15.2",
     "ts-node": "^8.0.3",
-    "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.16.0",
     "typescript": "^3.3.4000"
   }
 }
