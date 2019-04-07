@@ -1,6 +1,5 @@
 import debug from 'debug';
 import { Peripheral } from 'noble';
-
 import noble from './noble-wrapper';
 import { IToyDiscovered } from './scanner';
 import { BB9E } from './toys/bb9e';
@@ -74,16 +73,16 @@ const startToy = async (toy: Core) => {
   console.log('Starting...');
   await toy.start();
 
-  // // tslint:disable-next-line:no-console
+  // tslint:disable-next-line:no-console
   console.log('Started');
-  // const version = await toy.appVersion();
+  const version = await toy.appVersion();
 
-  // // tslint:disable-next-line:no-console
-  // console.log('Version', version);
-  // const battery = await toy.batteryVoltage();
+  // tslint:disable-next-line:no-console
+  console.log('Version', version);
+  const battery = await toy.batteryVoltage();
 
-  // // tslint:disable-next-line:no-console
-  // console.log('Battery', battery);
+  // tslint:disable-next-line:no-console
+  console.log('Battery', battery);
 };
 
 /**

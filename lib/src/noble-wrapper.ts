@@ -1,11 +1,7 @@
+import './noble-fix-rasp';
 import * as noble from 'noble';
-// export const Peripheral = noble.Peripheral;
-// export default noble;
-// import * as nobleMac from 'noble-mac';
-// export const Peripheral = nobleMac.Peripheral;
-// export default nobleMac;
+import * as nobleMac from 'noble-mac';
 
-// @ts-ignore
-import * as myNoble from './noble';
 export const Peripheral = noble.Peripheral;
-export default myNoble;
+
+export default nobleMac;

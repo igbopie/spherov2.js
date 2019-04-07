@@ -393,6 +393,13 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
+"@types/noble-mac@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@types/noble-mac/-/noble-mac-0.0.1.tgz#580b23b557474416b43fff6a752ffa3cc38470dd"
+  integrity sha512-800VrB0auTo+QJBuGRGUDoP1QtW7xenB4FCrQRNc3zgC8TuhQ2Zhj5hMN1KeTFAWDJYRLly8+UDRjjcp1fyjqQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/noble@^0.0.39":
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/noble/-/noble-0.0.39.tgz#e2bbdfd42445255450b0c5c6a0c6a17b454513d0"
@@ -3909,6 +3916,11 @@ napi-build-utils@^1.0.1:
   resolved "https://registry.yarnpkg.com/napi-build-utils/-/napi-build-utils-1.0.1.tgz#1381a0f92c39d66bf19852e7873432fc2123e508"
   integrity sha512-boQj1WFgQH3v4clhu3mTNfP+vOBxorDlE8EKiMjUlLG3C4qAESnn9AxIOkFgTR2c9LtzNjPrjS60cT27ZKBhaA==
 
+napi-thread-safe-callback@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/napi-thread-safe-callback/-/napi-thread-safe-callback-0.0.6.tgz#ef86a149b5312e480f74e89a614e6d9e3b17b456"
+  integrity sha512-X7uHCOCdY4u0yamDxDrv3jF2NtYc8A1nvPzBQgvpoSX+WB3jAe2cVNsY448V1ucq7Whf9Wdy02HEUoLW5rJKWg==
+
 natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
@@ -3938,7 +3950,17 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
-noble@^1.9.0:
+"noble-mac@git+https://github.com/Timeular/noble-mac.git":
+  version "0.0.4"
+  resolved "git+https://github.com/Timeular/noble-mac.git#e7bde3278691b3516b41b7c48fec1d66f6336c21"
+  dependencies:
+    cross-spawn "^6.0.5"
+    napi-thread-safe-callback "0.0.6"
+    noble "^1.9.1"
+    node-addon-api "^1.1.0"
+    node-pre-gyp "^0.10.0"
+
+noble@^1.9.0, noble@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/noble/-/noble-1.9.1.tgz#2ccd31ead8ec92dbff6f19a42e420b258bcdcdd0"
   integrity sha1-LM0x6tjsktv/bxmkLkILJYvNzdA=
@@ -3955,6 +3977,11 @@ node-abi@^2.7.0:
   integrity sha512-OV8Bq1OrPh6z+Y4dqwo05HqrRL9YNF7QVMRfq1/pguwKLG+q9UB/Lk0x5qXjO23JjJg+/jqCHSTaG1P3tfKfuw==
   dependencies:
     semver "^5.4.1"
+
+node-addon-api@^1.1.0:
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-1.6.3.tgz#3998d4593e2dca2ea82114670a4eb003386a9fe1"
+  integrity sha512-FXWH6mqjWgU8ewuahp4spec8LkroFZK2NicOv6bNwZC3kcwZUI8LeZdG80UzTSLLhK4T7MsgNwlYDVRlDdfTDg==
 
 node-gyp-build@~3.7.0:
   version "3.7.0"
