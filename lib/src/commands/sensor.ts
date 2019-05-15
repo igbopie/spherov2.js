@@ -36,14 +36,29 @@ export default (generator: CommandGenerator) => {
     ) =>
       encode({
         commandId: SensorCommandIds.configureCollision,
+        targetId: 0x12,
         payload: [method, xThreshold, xSpeed, yThreshold, ySpeed, deadTime]
       }),
 
-    sensorMask: (payload: number[]): ICommandWithRaw =>
-      encode({
+    sensorMask: (
+      sensorRawValue: number,
+      streamingRate: number
+    ): ICommandWithRaw => {
+      const bytes = [
+        (streamingRate >> 8) & 0xff, // tslint:disable-line:no-bitwise
+        streamingRate & 0xff, // tslint:disable-line:no-bitwise
+        0,
+        (sensorRawValue >> 24) & 0xff, // tslint:disable-line:no-bitwise
+        (sensorRawValue >> 16) & 0xff, // tslint:disable-line:no-bitwise
+        (sensorRawValue >> 8) & 0xff, // tslint:disable-line:no-bitwise
+        sensorRawValue & 0xff // tslint:disable-line:no-bitwise
+      ];
+      return encode({
         commandId: SensorCommandIds.sensorMask,
-        payload
-      }),
+        targetId: 0x12,
+        payload: bytes
+      });
+    },
 
     sensor1: (): ICommandWithRaw =>
       encode({

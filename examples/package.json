@@ -25,6 +25,7 @@
     "collision": "ts-node src/collisionDetection",
     "police": "ts-node src/police",
     "ensemble": "ts-node src/ensemble",
+    "sensor-sb": "ts-node src/sensor SB",
     "sensor": "ts-node src/sensor",
     "prettier": "lint-staged",
     "serve": "http-server ."
@@ -33,7 +34,7 @@
     "bufferutil": "^4.0.1",
     "http-server": "^0.11.1",
     "net": "^1.0.2",
-    "spherov2.js": "0.0.9",
+    "spherov2.js": "^0.0.10",
     "tls": "^0.0.1",
     "ts-loader": "^5.3.3",
     "utf-8-validate": "^5.0.2",

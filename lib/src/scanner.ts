@@ -79,7 +79,7 @@ const startToy = async (toy: Core) => {
 
   // tslint:disable-next-line:no-console
   console.log('Version', version);
-  const battery = await toy.batteryVoltage();
+  const battery = await toy.batteryLevel();
 
   // tslint:disable-next-line:no-console
   console.log('Battery', battery);
