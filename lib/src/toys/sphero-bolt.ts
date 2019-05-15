@@ -7,4 +7,7 @@ export class SpheroBolt extends RollableToy {
     prefix: 'SB-',
     class: SpheroBolt
   };
+
+  protected maxVoltage: number = 3.9;
+  protected minVoltage: number = 3.55;
 }
