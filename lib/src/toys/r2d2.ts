@@ -9,9 +9,6 @@ export class R2D2 extends RollableToy {
     class: R2D2
   };
 
-  protected maxVoltage: number = 3.65;
-  protected minVoltage: number = 3.4;
-
   public wake(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.power.wake());
   }

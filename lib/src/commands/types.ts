@@ -66,18 +66,10 @@ export enum SensorCommandIds {
 
 export enum UserIOCommandIds {
   allLEDs = 0x0e,
-  allLEDsV21 = 0x1c,
   playAudioFile = 0x07,
   audioVolume = 0x08,
   stopAudio = 0xa,
-  testSound = 0x18,
-  matrixPixel = 0x2d,
-  matrixColor = 0x2f,
-  clearMatrix = 0x38,
-  matrixRotation = 0x3a,
-  matrixScrollText = 0x3b,
-  matrixLine = 0x3d,
-  matrixFill = 0x3e
+  testSound = 0x18
 }
 
 export enum Flags {

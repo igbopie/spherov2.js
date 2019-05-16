@@ -7,7 +7,4 @@ export class BB9E extends RollableToy {
     prefix: 'GB-',
     class: BB9E
   };
-
-  protected maxVoltage: number = 7.8;
-  protected minVoltage: number = 6.5;
 }
