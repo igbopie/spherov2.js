@@ -1,4 +1,4 @@
-import { IToyAdvertisement } from './types';
+import { IToyAdvertisement, APIVersion } from './types';
 import { RollableToy } from './rollable-toy';
 
 export class SpheroBolt extends RollableToy {
@@ -10,4 +10,5 @@ export class SpheroBolt extends RollableToy {
 
   protected maxVoltage: number = 3.9;
   protected minVoltage: number = 3.55;
+  protected apiVersion: APIVersion = APIVersion.V21;
 }

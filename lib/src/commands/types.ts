@@ -61,7 +61,7 @@ export enum SensorCommandIds {
   enableCollisionAsync = 0x14,
   sensor1 = 0x0f,
   sensor2 = 0x17,
-  configureSensorStream = 0x0c
+  sensorMaskExtended = 0x0c
 }
 
 export enum UserIOCommandIds {
@@ -148,3 +148,28 @@ export interface ICommandWithRaw extends ICommand {
 export type CommandGenerator = (
   deviceId: number
 ) => (part: ICommandPartial) => ICommandWithRaw;
+
+export interface IThreeAxisSensor {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface ITwoAxisSensor {
+  x: number;
+  y: number;
+}
+
+export interface ISensorResponse {
+  angles?: { pitch: number; roll: number; yaw: number };
+  accelerometer?: {
+    filtered: IThreeAxisSensor;
+  };
+  locator?: {
+    position: ITwoAxisSensor;
+    velocity: ITwoAxisSensor;
+  };
+  gyro?: {
+    filtered: IThreeAxisSensor;
+  };
+}

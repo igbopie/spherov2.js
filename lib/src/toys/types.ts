@@ -30,6 +30,11 @@ export enum Stance {
   bipod = 0x02
 }
 
+export enum APIVersion {
+  V2,
+  V21
+}
+
 export enum SensorMaskValues {
   off = 0,
   locator = 1,
@@ -41,6 +46,11 @@ export enum SensorMaskValues {
 export enum SensorControlDefaults {
   intervalToHz = 1000,
   interval = 250
+}
+
+export interface ISensorMaskRaw {
+  v2: SensorMaskV2[];
+  v21: SensorMaskV2[];
 }
 
 // tslint:disable:no-bitwise

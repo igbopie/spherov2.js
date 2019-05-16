@@ -16,7 +16,8 @@ import {
   Stance,
   SensorMaskValues,
   SensorControlDefaults,
-  SensorMaskV2
+  APIVersion,
+  ISensorMaskRaw
 } from './types';
 import { sensorValuesToRaw, flatSensorMask, parseSensorEvent } from './utils';
 
@@ -48,6 +49,7 @@ export class Core {
   // Override in child class to get right percent
   protected maxVoltage: number = 0;
   protected minVoltage: number = 1;
+  protected apiVersion: APIVersion = APIVersion.V2;
 
   protected commands: typeof commandsType;
   private peripheral: Peripheral;
@@ -62,7 +64,10 @@ export class Core {
   private initPromise: Promise<void>;
   private initPromiseResolve: () => any;
   private eventsListeners: EventMap;
-  private sensorMask: SensorMaskV2[] = [];
+  private sensorMask: ISensorMaskRaw = {
+    v2: [],
+    v21: []
+  };
 
   constructor(p: Peripheral) {
     this.peripheral = p;
@@ -165,26 +170,29 @@ export class Core {
     await toPromise(this.peripheral, this.peripheral.disconnect);
   }
 
-  public async configureSensorStream(): Promise<IQueuePayload> {
+  public async configureSensorStream(): Promise<void> {
     const sensorMask = [
       SensorMaskValues.accelerometer,
       SensorMaskValues.orientation,
-      SensorMaskValues.locator
+      SensorMaskValues.locator,
+      SensorMaskValues.gyro
     ];
     // save it so on response we can parse it
-    this.sensorMask = sensorValuesToRaw(sensorMask);
+    this.sensorMask = sensorValuesToRaw(sensorMask, this.apiVersion);
 
-    return await this.queueCommand(
+    await this.queueCommand(
       this.commands.sensor.sensorMask(
-        flatSensorMask(this.sensorMask),
+        flatSensorMask(this.sensorMask.v2),
         SensorControlDefaults.interval
       )
     );
-
-    // TODO GYRO
-    // return await this.queueCommand(
-    //   this.commands.sensor.configureSensorStream()
-    // );
+    if (this.sensorMask.v21.length > 0) {
+      await this.queueCommand(
+        this.commands.sensor.sensorMaskExtended(
+          flatSensorMask(this.sensorMask.v21)
+        )
+      );
+    }
   }
 
   public enableCollisionDetection(): Promise<IQueuePayload> {
@@ -354,7 +362,6 @@ export class Core {
   }
 
   private handleSensorUpdate(command: ICommandWithRaw) {
-    // TODO parse sensor
     const handler = this.eventsListeners.onSensor;
     if (handler) {
       const parsedEvent = parseSensorEvent(command.payload, this.sensorMask);

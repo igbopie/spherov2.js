@@ -1,23 +1,51 @@
-import { SensorMaskValues, SensorMaskV2 } from './types';
+import {
+  SensorMaskValues,
+  SensorMaskV2,
+  APIVersion,
+  ISensorMaskRaw
+} from './types';
+import { ISensorResponse } from '../commands/types';
 
 export const sensorValuesToRaw = (
-  sensorMask: SensorMaskValues[]
-): SensorMaskV2[] =>
-  sensorMask.map(m => {
-    let mask: SensorMaskV2;
-    switch (m) {
-      case SensorMaskValues.accelerometer:
-        mask = SensorMaskV2.accelerometerFilteredAll;
-        break;
-      case SensorMaskValues.locator:
-        mask = SensorMaskV2.locatorAll;
-        break;
-      case SensorMaskValues.orientation:
-        mask = SensorMaskV2.imuAnglesFilteredAll;
-        break;
-    }
-    return mask;
-  }, []);
+  sensorMask: SensorMaskValues[],
+  apiVersion: APIVersion = APIVersion.V2
+): ISensorMaskRaw => {
+  return {
+    v2: sensorMask.reduce((v2, m) => {
+      let mask: SensorMaskV2;
+      switch (m) {
+        case SensorMaskValues.accelerometer:
+          mask = SensorMaskV2.accelerometerFilteredAll;
+          break;
+        case SensorMaskValues.locator:
+          mask = SensorMaskV2.locatorAll;
+          break;
+        case SensorMaskValues.orientation:
+          mask = SensorMaskV2.imuAnglesFilteredAll;
+          break;
+      }
+
+      if (m === SensorMaskValues.gyro && apiVersion === APIVersion.V2) {
+        mask = SensorMaskV2.gyroFilteredAllV2;
+      }
+
+      if (mask) {
+        return [...v2, mask];
+      }
+      return v2;
+    }, []),
+    v21: sensorMask.reduce((v21, m) => {
+      let mask: SensorMaskV2;
+      if (m === SensorMaskValues.gyro && apiVersion === APIVersion.V21) {
+        mask = SensorMaskV2.gyroFilteredAllV21;
+      }
+      if (mask) {
+        return [...v21, mask];
+      }
+      return v21;
+    }, [])
+  };
+};
 
 export const flatSensorMask = (sensorMask: SensorMaskV2[]): number =>
   sensorMask.reduce((bits, m) => {
@@ -51,14 +79,17 @@ export const convertBinaryToFloat = (
   return view.getFloat32(0);
 };
 
-export const parseSensorEvent = (
-  payload: number[],
-  sensorMask: SensorMaskV2[]
-): any => {
-  let location = 0;
-  const response: any = {};
+interface IParserState {
+  location: number;
+  response: ISensorResponse;
+  payload: number[];
+  sensorMask: ISensorMaskRaw;
+}
 
-  if (sensorMask.indexOf(SensorMaskV2.imuAnglesFilteredAll) >= 0) {
+const fillAngles = (state: IParserState): IParserState => {
+  const { sensorMask, payload, response } = state;
+  let { location } = state;
+  if (sensorMask.v2.indexOf(SensorMaskV2.imuAnglesFilteredAll) >= 0) {
     let yaw: number;
     let pitch: number;
     let roll: number;
@@ -78,7 +109,17 @@ export const parseSensorEvent = (
     };
   }
 
-  if (sensorMask.indexOf(SensorMaskV2.accelerometerFilteredAll) >= 0) {
+  return {
+    ...state,
+    response,
+    location
+  };
+};
+
+const fillAccelerometer = (state: IParserState): IParserState => {
+  const { sensorMask, payload, response } = state;
+  let { location } = state;
+  if (sensorMask.v2.indexOf(SensorMaskV2.accelerometerFilteredAll) >= 0) {
     let filteredX: number;
     let filteredY: number;
     let filteredZ: number;
@@ -101,30 +142,17 @@ export const parseSensorEvent = (
     };
   }
 
-  if (sensorMask.indexOf(SensorMaskV2.accelerometerFilteredAll) >= 0) {
-    let filteredX: number;
-    let filteredY: number;
-    let filteredZ: number;
+  return {
+    ...state,
+    response,
+    location
+  };
+};
 
-    filteredX = convertBinaryToFloat(payload, location);
-    location += 4;
-
-    filteredY = convertBinaryToFloat(payload, location);
-    location += 4;
-
-    filteredZ = convertBinaryToFloat(payload, location);
-    location += 4;
-
-    response.accelerometer = {
-      filtered: {
-        x: filteredX,
-        y: filteredY,
-        z: filteredZ
-      }
-    };
-  }
-
-  if (sensorMask.indexOf(SensorMaskV2.locatorAll) >= 0) {
+const fillLocator = (state: IParserState): IParserState => {
+  const { sensorMask, payload, response } = state;
+  let { location } = state;
+  if (sensorMask.v2.indexOf(SensorMaskV2.locatorAll) >= 0) {
     let positionX: number;
     let positionY: number;
     let velocityX: number;
@@ -154,5 +182,97 @@ export const parseSensorEvent = (
       }
     };
   }
-  return response;
+
+  return {
+    ...state,
+    response,
+    location
+  };
+};
+
+const fillGyroV2 = (state: IParserState): IParserState => {
+  const { sensorMask, payload, response } = state;
+  let { location } = state;
+  if (sensorMask.v2.indexOf(SensorMaskV2.gyroFilteredAllV2) >= 0) {
+    const multiplier = 2000.0 / 32767.0;
+    let filteredX: number;
+    let filteredY: number;
+    let filteredZ: number;
+
+    filteredX = convertBinaryToFloat(payload, location) * multiplier;
+    location = location + 4;
+
+    filteredY = convertBinaryToFloat(payload, location) * multiplier;
+    location = location + 4;
+
+    filteredZ = convertBinaryToFloat(payload, location) * multiplier;
+    location = location + 4;
+
+    response.gyro = {
+      filtered: {
+        x: filteredX,
+        y: filteredY,
+        z: filteredZ
+      }
+    };
+  }
+
+  return {
+    ...state,
+    response,
+    location
+  };
+};
+
+const fillGyroV21 = (state: IParserState): IParserState => {
+  const { sensorMask, payload, response } = state;
+  let { location } = state;
+  if (sensorMask.v21.indexOf(SensorMaskV2.gyroFilteredAllV21) >= 0) {
+    let filteredX: number;
+    let filteredY: number;
+    let filteredZ: number;
+
+    filteredX = convertBinaryToFloat(payload, location);
+    location = location + 4;
+
+    filteredY = convertBinaryToFloat(payload, location);
+    location = location + 4;
+
+    filteredZ = convertBinaryToFloat(payload, location);
+    location = location + 4;
+
+    response.gyro = {
+      filtered: {
+        x: filteredX,
+        y: filteredY,
+        z: filteredZ
+      }
+    };
+  }
+
+  return {
+    ...state,
+    response,
+    location
+  };
+};
+
+export const parseSensorEvent = (
+  payload: number[],
+  sensorMask: ISensorMaskRaw
+): ISensorResponse => {
+  let state: IParserState = {
+    payload,
+    sensorMask,
+    location: 0,
+    response: {}
+  };
+
+  state = fillAngles(state);
+  state = fillAccelerometer(state);
+  state = fillGyroV2(state);
+  state = fillLocator(state);
+  state = fillGyroV21(state);
+
+  return state.response;
 };
