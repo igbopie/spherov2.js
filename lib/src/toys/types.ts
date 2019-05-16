@@ -65,7 +65,6 @@ export enum SensorMaskV2 {
   gyroYFilteredV2 = 1 << 11,
   gyroXFilteredV2 = 1 << 12,
 
-  // Need this for V2.1
   gyroZFilteredV21 = 1 << 23,
   gyroYFilteredV21 = 1 << 24,
   gyroXFilteredV21 = 1 << 25,
@@ -82,7 +81,7 @@ export enum SensorMaskV2 {
     SensorMaskV2.gyroXFilteredV2,
   gyroFilteredAllV21 = SensorMaskV2.gyroZFilteredV21 |
     SensorMaskV2.gyroYFilteredV21 |
-    SensorMaskV2.gyroXFilteredV21, // Need this for V21
+    SensorMaskV2.gyroXFilteredV21,
   imuAnglesFilteredAll = SensorMaskV2.imuYawAngleFiltered |
     SensorMaskV2.imuRollAngleFiltered |
     SensorMaskV2.imuPitchAngleFiltered,
