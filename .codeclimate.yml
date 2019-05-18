@@ -2,3 +2,8 @@ exclude_patterns:
 - "lib/tests/"
 - "lib/lib/"
 - "examples/lib/"
+version: "2"
+checks:
+  file-lines:
+    config:
+      threshold: 400

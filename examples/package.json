@@ -26,6 +26,8 @@
     "police": "ts-node src/police",
     "ensemble": "ts-node src/ensemble",
     "sensor-sb": "ts-node src/sensor SB",
+    "sensor-sm": "ts-node src/sensor SM",
+    "sensor-d2": "ts-node src/sensor D2",
     "sensor": "ts-node src/sensor",
     "prettier": "lint-staged",
     "serve": "http-server ."

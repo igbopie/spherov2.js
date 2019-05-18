@@ -6,44 +6,56 @@ import {
 } from './types';
 import { ISensorResponse } from '../commands/types';
 
+const sensorValuesToRawV2 = (
+  sensorMask: SensorMaskValues[],
+  apiVersion: APIVersion = APIVersion.V2
+) =>
+  sensorMask.reduce((v2, m) => {
+    let mask: SensorMaskV2;
+    switch (m) {
+      case SensorMaskValues.accelerometer:
+        mask = SensorMaskV2.accelerometerFilteredAll;
+        break;
+      case SensorMaskValues.locator:
+        mask = SensorMaskV2.locatorAll;
+        break;
+      case SensorMaskValues.orientation:
+        mask = SensorMaskV2.imuAnglesFilteredAll;
+        break;
+    }
+
+    if (m === SensorMaskValues.gyro && apiVersion === APIVersion.V2) {
+      mask = SensorMaskV2.gyroFilteredAllV2;
+    }
+
+    if (mask) {
+      return [...v2, mask];
+    }
+    return v2;
+  }, []);
+
+const sensorValuesToRawV21 = (
+  sensorMask: SensorMaskValues[],
+  apiVersion: APIVersion = APIVersion.V2
+) =>
+  sensorMask.reduce((v21, m) => {
+    let mask: SensorMaskV2;
+    if (m === SensorMaskValues.gyro && apiVersion === APIVersion.V21) {
+      mask = SensorMaskV2.gyroFilteredAllV21;
+    }
+    if (mask) {
+      return [...v21, mask];
+    }
+    return v21;
+  }, []);
+
 export const sensorValuesToRaw = (
   sensorMask: SensorMaskValues[],
   apiVersion: APIVersion = APIVersion.V2
 ): ISensorMaskRaw => {
   return {
-    v2: sensorMask.reduce((v2, m) => {
-      let mask: SensorMaskV2;
-      switch (m) {
-        case SensorMaskValues.accelerometer:
-          mask = SensorMaskV2.accelerometerFilteredAll;
-          break;
-        case SensorMaskValues.locator:
-          mask = SensorMaskV2.locatorAll;
-          break;
-        case SensorMaskValues.orientation:
-          mask = SensorMaskV2.imuAnglesFilteredAll;
-          break;
-      }
-
-      if (m === SensorMaskValues.gyro && apiVersion === APIVersion.V2) {
-        mask = SensorMaskV2.gyroFilteredAllV2;
-      }
-
-      if (mask) {
-        return [...v2, mask];
-      }
-      return v2;
-    }, []),
-    v21: sensorMask.reduce((v21, m) => {
-      let mask: SensorMaskV2;
-      if (m === SensorMaskValues.gyro && apiVersion === APIVersion.V21) {
-        mask = SensorMaskV2.gyroFilteredAllV21;
-      }
-      if (mask) {
-        return [...v21, mask];
-      }
-      return v21;
-    }, [])
+    v2: sensorValuesToRawV2(sensorMask, apiVersion),
+    v21: sensorValuesToRawV21(sensorMask, apiVersion)
   };
 };
 
@@ -82,179 +94,119 @@ export const convertBinaryToFloat = (
 interface IParserState {
   location: number;
   response: ISensorResponse;
-  payload: number[];
+  floats: number[];
   sensorMask: ISensorMaskRaw;
 }
 
 const fillAngles = (state: IParserState): IParserState => {
-  const { sensorMask, payload, response } = state;
-  let { location } = state;
+  const { sensorMask, floats, response, location } = state;
   if (sensorMask.v2.indexOf(SensorMaskV2.imuAnglesFilteredAll) >= 0) {
-    let yaw: number;
-    let pitch: number;
-    let roll: number;
-
-    pitch = convertBinaryToFloat(payload, location);
-    location += 4;
-
-    roll = convertBinaryToFloat(payload, location);
-    location += 4;
-
-    yaw = convertBinaryToFloat(payload, location);
-    location += 4;
     response.angles = {
-      pitch,
-      roll,
-      yaw
+      pitch: floats[location],
+      roll: floats[location + 1],
+      yaw: floats[location + 2]
+    };
+
+    return {
+      ...state,
+      response,
+      location: location + 3
     };
   }
-
-  return {
-    ...state,
-    response,
-    location
-  };
+  return state;
 };
 
 const fillAccelerometer = (state: IParserState): IParserState => {
-  const { sensorMask, payload, response } = state;
-  let { location } = state;
+  const { sensorMask, floats, response, location } = state;
   if (sensorMask.v2.indexOf(SensorMaskV2.accelerometerFilteredAll) >= 0) {
-    let filteredX: number;
-    let filteredY: number;
-    let filteredZ: number;
-
-    filteredX = convertBinaryToFloat(payload, location);
-    location += 4;
-
-    filteredY = convertBinaryToFloat(payload, location);
-    location += 4;
-
-    filteredZ = convertBinaryToFloat(payload, location);
-    location += 4;
-
     response.accelerometer = {
       filtered: {
-        x: filteredX,
-        y: filteredY,
-        z: filteredZ
+        x: floats[location],
+        y: floats[location + 1],
+        z: floats[location + 2]
       }
     };
+    return {
+      ...state,
+      response,
+      location: location + 3
+    };
   }
-
-  return {
-    ...state,
-    response,
-    location
-  };
+  return state;
 };
 
 const fillLocator = (state: IParserState): IParserState => {
-  const { sensorMask, payload, response } = state;
-  let { location } = state;
+  const { sensorMask, floats, response, location } = state;
   if (sensorMask.v2.indexOf(SensorMaskV2.locatorAll) >= 0) {
-    let positionX: number;
-    let positionY: number;
-    let velocityX: number;
-    let velocityY: number;
     const metersToCentimeters = 100.0;
-
-    positionX = convertBinaryToFloat(payload, location) * metersToCentimeters;
-    location += 4;
-
-    positionY = convertBinaryToFloat(payload, location) * metersToCentimeters;
-    location += 4;
-
-    velocityX = convertBinaryToFloat(payload, location) * metersToCentimeters;
-    location += 4;
-
-    velocityY = convertBinaryToFloat(payload, location) * metersToCentimeters;
-    location += 4;
-
     response.locator = {
       position: {
-        x: positionX,
-        y: positionY
+        x: floats[location] * metersToCentimeters,
+        y: floats[location + 1] * metersToCentimeters
       },
       velocity: {
-        x: velocityX,
-        y: velocityY
+        x: floats[location + 2] * metersToCentimeters,
+        y: floats[location + 3] * metersToCentimeters
       }
+    };
+    return {
+      ...state,
+      response,
+      location: location + 4
     };
   }
 
-  return {
-    ...state,
-    response,
-    location
-  };
+  return state;
 };
 
 const fillGyroV2 = (state: IParserState): IParserState => {
-  const { sensorMask, payload, response } = state;
-  let { location } = state;
+  const { sensorMask, floats, response, location } = state;
   if (sensorMask.v2.indexOf(SensorMaskV2.gyroFilteredAllV2) >= 0) {
     const multiplier = 2000.0 / 32767.0;
-    let filteredX: number;
-    let filteredY: number;
-    let filteredZ: number;
-
-    filteredX = convertBinaryToFloat(payload, location) * multiplier;
-    location = location + 4;
-
-    filteredY = convertBinaryToFloat(payload, location) * multiplier;
-    location = location + 4;
-
-    filteredZ = convertBinaryToFloat(payload, location) * multiplier;
-    location = location + 4;
-
     response.gyro = {
       filtered: {
-        x: filteredX,
-        y: filteredY,
-        z: filteredZ
+        x: floats[location] * multiplier,
+        y: floats[location + 1] * multiplier,
+        z: floats[location + 2] * multiplier
       }
     };
-  }
 
-  return {
-    ...state,
-    response,
-    location
-  };
+    return {
+      ...state,
+      response,
+      location: location + 3
+    };
+  }
+  return state;
 };
 
 const fillGyroV21 = (state: IParserState): IParserState => {
-  const { sensorMask, payload, response } = state;
-  let { location } = state;
+  const { sensorMask, floats, response, location } = state;
   if (sensorMask.v21.indexOf(SensorMaskV2.gyroFilteredAllV21) >= 0) {
-    let filteredX: number;
-    let filteredY: number;
-    let filteredZ: number;
-
-    filteredX = convertBinaryToFloat(payload, location);
-    location = location + 4;
-
-    filteredY = convertBinaryToFloat(payload, location);
-    location = location + 4;
-
-    filteredZ = convertBinaryToFloat(payload, location);
-    location = location + 4;
-
     response.gyro = {
       filtered: {
-        x: filteredX,
-        y: filteredY,
-        z: filteredZ
+        x: floats[location],
+        y: floats[location + 1],
+        z: floats[location + 2]
       }
     };
-  }
 
-  return {
-    ...state,
-    response,
-    location
-  };
+    return {
+      ...state,
+      response,
+      location: location + 3
+    };
+  }
+  return state;
+};
+
+const tranformToFloat = (bytes: number[]): number[] => {
+  const floats: number[] = [];
+
+  for (let i = 0; i < bytes.length; i += 4) {
+    floats.push(convertBinaryToFloat(bytes, i));
+  }
+  return floats;
 };
 
 export const parseSensorEvent = (
@@ -262,7 +214,7 @@ export const parseSensorEvent = (
   sensorMask: ISensorMaskRaw
 ): ISensorResponse => {
   let state: IParserState = {
-    payload,
+    floats: tranformToFloat(payload),
     sensorMask,
     location: 0,
     response: {}
