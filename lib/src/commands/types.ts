@@ -61,15 +61,23 @@ export enum SensorCommandIds {
   enableCollisionAsync = 0x14,
   sensor1 = 0x0f,
   sensor2 = 0x17,
-  configureSensorStream = 0x0c
+  sensorMaskExtended = 0x0c
 }
 
 export enum UserIOCommandIds {
   allLEDs = 0x0e,
+  allLEDsV21 = 0x1c,
   playAudioFile = 0x07,
   audioVolume = 0x08,
   stopAudio = 0xa,
-  testSound = 0x18
+  testSound = 0x18,
+  matrixPixel = 0x2d,
+  matrixColor = 0x2f,
+  clearMatrix = 0x38,
+  matrixRotation = 0x3a,
+  matrixScrollText = 0x3b,
+  matrixLine = 0x3d,
+  matrixFill = 0x3e
 }
 
 export enum Flags {
@@ -140,3 +148,28 @@ export interface ICommandWithRaw extends ICommand {
 export type CommandGenerator = (
   deviceId: number
 ) => (part: ICommandPartial) => ICommandWithRaw;
+
+export interface IThreeAxisSensor {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface ITwoAxisSensor {
+  x: number;
+  y: number;
+}
+
+export interface ISensorResponse {
+  angles?: { pitch: number; roll: number; yaw: number };
+  accelerometer?: {
+    filtered: IThreeAxisSensor;
+  };
+  locator?: {
+    position: ITwoAxisSensor;
+    velocity: ITwoAxisSensor;
+  };
+  gyro?: {
+    filtered: IThreeAxisSensor;
+  };
+}

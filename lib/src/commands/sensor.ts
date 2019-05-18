@@ -36,48 +36,42 @@ export default (generator: CommandGenerator) => {
     ) =>
       encode({
         commandId: SensorCommandIds.configureCollision,
+        targetId: 0x12,
         payload: [method, xThreshold, xSpeed, yThreshold, ySpeed, deadTime]
       }),
 
-    sensorMask: (payload: number[]): ICommandWithRaw =>
-      encode({
+    sensorMask: (
+      sensorRawValue: number,
+      streamingRate: number
+    ): ICommandWithRaw => {
+      const bytes = [
+        (streamingRate >> 8) & 0xff, // tslint:disable-line:no-bitwise
+        streamingRate & 0xff, // tslint:disable-line:no-bitwise
+        0,
+        (sensorRawValue >> 24) & 0xff, // tslint:disable-line:no-bitwise
+        (sensorRawValue >> 16) & 0xff, // tslint:disable-line:no-bitwise
+        (sensorRawValue >> 8) & 0xff, // tslint:disable-line:no-bitwise
+        sensorRawValue & 0xff // tslint:disable-line:no-bitwise
+      ];
+      return encode({
         commandId: SensorCommandIds.sensorMask,
-        payload
-      }),
+        targetId: 0x12,
+        payload: bytes
+      });
+    },
 
-    sensor1: (): ICommandWithRaw =>
-      encode({
-        commandId: SensorCommandIds.sensor1,
-        payload: [0x01]
-      }),
-
-    sensor2: (): ICommandWithRaw =>
-      encode({
-        commandId: SensorCommandIds.sensor2,
-        payload: [0x00]
-      }),
-
-    configureSensorStream: (): ICommandWithRaw =>
-      encode({
-        commandId: SensorCommandIds.configureSensorStream,
-        payload: [0x03, 0x80, 0x00, 0x00]
-
-        // x00 0000 0000 nada
-        // x10 0001 0000 nada
-        // x20 0010 0000 stream (4 bytes)
-        // x30 0011 0000 nada
-        // x40 0100 0000 stream (4 bytes)
-        // x50 0101 0000 nada
-        // x60 0110 0000 stream (mas bytes)
-        // x70 0111 0000 nada
-        // x80 1000 0000 stream 4bytes
-        // x90 1001 0000 nada
-        // xa0 1010 0000 stream mas bytes
-        // xb0 1011 0000 nada
-        // xc0 1100 0000 stream mas bytes
-        // xd0 1101 0000 nada
-        // xe0 1110 0000 mas bytes
-        // xf0 1111 0000 nada
-      })
+    sensorMaskExtended: (mask: number): ICommandWithRaw => {
+      const bytes = [
+        (mask >> 24) & 0xff, // tslint:disable-line:no-bitwise
+        (mask >> 16) & 0xff, // tslint:disable-line:no-bitwise
+        (mask >> 8) & 0xff, // tslint:disable-line:no-bitwise
+        mask & 0xff // tslint:disable-line:no-bitwise
+      ];
+      return encode({
+        commandId: SensorCommandIds.sensorMaskExtended,
+        targetId: 0x12,
+        payload: bytes
+      });
+    }
   };
 };

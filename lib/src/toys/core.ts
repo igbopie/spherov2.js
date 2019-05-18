@@ -11,7 +11,15 @@ import {
 import { toPromise } from '../utils';
 
 import { Queue } from './queue';
-import { CharacteristicUUID, Stance } from './types';
+import {
+  CharacteristicUUID,
+  Stance,
+  SensorMaskValues,
+  SensorControlDefaults,
+  APIVersion,
+  ISensorMaskRaw
+} from './types';
+import { sensorValuesToRaw, flatSensorMask, parseSensorEvent } from './utils';
 
 const coreDebug = debug('spherov2-core');
 
@@ -35,9 +43,14 @@ export enum Event {
   onSensor = 'onSensor'
 }
 
-type EventMap = { [key in Event]?: (command: ICommandWithRaw) => void };
+type EventMap = { [key in Event]?: (args: any) => void };
 
 export class Core {
+  // Override in child class to get right percent
+  protected maxVoltage: number = 0;
+  protected minVoltage: number = 1;
+  protected apiVersion: APIVersion = APIVersion.V2;
+
   protected commands: typeof commandsType;
   private peripheral: Peripheral;
   private apiV2Characteristic?: Characteristic;
@@ -51,6 +64,10 @@ export class Core {
   private initPromise: Promise<void>;
   private initPromiseResolve: () => any;
   private eventsListeners: EventMap;
+  private sensorMask: ISensorMaskRaw = {
+    v2: [],
+    v21: []
+  };
 
   constructor(p: Peripheral) {
     this.peripheral = p;
@@ -64,6 +81,18 @@ export class Core {
       this.commands.power.batteryVoltage()
     );
     return number(response.command.payload, 1) / 100;
+  }
+
+  /**
+   * returns battery level from [0, 1] range.
+   * Child class must implement max voltage and min voltage to get
+   * correct %
+   */
+  public async batteryLevel(): Promise<number> {
+    const voltage = await this.batteryVoltage();
+    const percent =
+      (voltage - this.minVoltage) / (this.maxVoltage - this.minVoltage);
+    return percent > 1 ? 1 : percent;
   }
 
   /**
@@ -139,6 +168,55 @@ export class Core {
     // TODO handle all unbind, disconnect, etc
     this.eventsListeners = {}; // remove references
     await toPromise(this.peripheral, this.peripheral.disconnect);
+  }
+
+  public async configureSensorStream(): Promise<void> {
+    const sensorMask = [
+      SensorMaskValues.accelerometer,
+      SensorMaskValues.orientation,
+      SensorMaskValues.locator,
+      SensorMaskValues.gyro
+    ];
+    // save it so on response we can parse it
+    this.sensorMask = sensorValuesToRaw(sensorMask, this.apiVersion);
+
+    await this.queueCommand(
+      this.commands.sensor.sensorMask(
+        flatSensorMask(this.sensorMask.v2),
+        SensorControlDefaults.interval
+      )
+    );
+    if (this.sensorMask.v21.length > 0) {
+      await this.queueCommand(
+        this.commands.sensor.sensorMaskExtended(
+          flatSensorMask(this.sensorMask.v21)
+        )
+      );
+    }
+  }
+
+  public enableCollisionDetection(): Promise<IQueuePayload> {
+    return this.queueCommand(this.commands.sensor.enableCollisionAsync());
+  }
+
+  public configureCollisionDetection(
+    xThreshold: number = 100,
+    yThreshold: number = 100,
+    xSpeed: number = 100,
+    ySpeed: number = 100,
+    deadTime: number = 10,
+    method: number = 0x01
+  ): Promise<IQueuePayload> {
+    return this.queueCommand(
+      this.commands.sensor.configureCollision(
+        xThreshold,
+        yThreshold,
+        xSpeed,
+        ySpeed,
+        deadTime,
+        method
+      )
+    );
   }
 
   protected queueCommand(command: ICommandWithRaw) {
@@ -247,6 +325,7 @@ export class Core {
       // tslint:disable-next-line:no-console
       console.error('There was a parse error', error);
     } else if (command.sequenceNumber === 255) {
+      coreDebug('onEvent', error, command);
       this.eventHandler(command);
     } else {
       coreDebug('onPacketRead', error, command);
@@ -283,10 +362,10 @@ export class Core {
   }
 
   private handleSensorUpdate(command: ICommandWithRaw) {
-    // TODO parse sensor
     const handler = this.eventsListeners.onSensor;
     if (handler) {
-      handler(command);
+      const parsedEvent = parseSensorEvent(command.payload, this.sensorMask);
+      handler(parsedEvent);
     } else {
       // tslint:disable-next-line:no-console
       console.log('No handler for collision but collision was detected');
