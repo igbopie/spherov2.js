@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { Peripheral } from 'noble';
+import { Peripheral } from '@abandonware/noble';
 import noble from './noble-wrapper';
 import { IToyDiscovered } from './scanner';
 import { BB9E } from './toys/bb9e';

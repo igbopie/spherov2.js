@@ -1,5 +1,5 @@
 // @ts-ignore
-import * as Gatt from 'noble/lib/hci-socket/gatt';
+import * as Gatt from '@abandonware/noble/lib/hci-socket/gatt';
 
 const ATT_OP_WRITE_RESP = 0x13;
 

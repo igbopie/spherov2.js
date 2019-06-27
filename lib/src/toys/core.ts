@@ -1,5 +1,5 @@
 import debug from 'debug';
-import { Characteristic, Peripheral } from 'noble';
+import { Characteristic, Peripheral } from '@abandonware/noble';
 import { factory } from '../commands';
 import { factory as decodeFactory, number } from '../commands/decoder';
 import {
