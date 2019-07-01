@@ -71,6 +71,7 @@ export enum UserIOCommandIds {
   audioVolume = 0x08,
   stopAudio = 0xa,
   testSound = 0x18,
+  startIdleLedAnimation = 0x19,
   matrixPixel = 0x2d,
   matrixColor = 0x2f,
   clearMatrix = 0x38,
