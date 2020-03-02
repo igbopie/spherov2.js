@@ -38,6 +38,6 @@
     "tslint-config-prettier": "^1.16.0",
     "lint-staged": "^8.0.5",
     "prettier": "^1.15.2",
-    "typedoc": "0.16.10"
+    "typedoc": "0.16.11"
   }
 }
