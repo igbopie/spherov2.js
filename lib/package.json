@@ -29,7 +29,7 @@
     "@types/noble-mac": "^0.0.1",
     "jest": "^24.0.0",
     "node-inspect": "^1.11.3",
-    "ts-jest": "^24.0.0",
+    "ts-jest": "^25.0.0",
     "ts-node": "^8.0.0",
     "typescript": "^3.0.0",
     "watch": "^1.0.2"
