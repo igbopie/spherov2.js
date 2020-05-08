@@ -369,10 +369,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/noble@^0.0.39":
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/@types/noble/-/noble-0.0.39.tgz#e2bbdfd42445255450b0c5c6a0c6a17b454513d0"
-  integrity sha512-LcyiqFW4KGHXV2WhImece6FgJc8HWNUL/DdDWXTGzWNwhgqq3pTd36U5Wgy74TRGsTvNevvhG8D2ZxHXPDc82g==
+"@types/noble@^0.0.40":
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/@types/noble/-/noble-0.0.40.tgz#fb741967167761c79408c12ec2e657fec4c31557"
+  integrity sha512-14o/gk86uiJCCqQhcAeZsB228pHj1kVA47W6EaqIpQPt7y5IFzYSns3/rxC/nP9OqZFGOsgPwu4FTo9tlgnGTA==
   dependencies:
     "@types/node" "*"
 

@@ -25,7 +25,7 @@
   "devDependencies": {
     "@types/debug": "^4.1.2",
     "@types/jest": "^24.0.0",
-    "@types/noble": "^0.0.39",
+    "@types/noble": "^0.0.40",
     "@types/noble-mac": "^0.0.1",
     "jest": "^24.0.0",
     "node-inspect": "^1.11.3",
