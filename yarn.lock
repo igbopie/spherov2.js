@@ -362,10 +362,10 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
-"@types/noble-mac@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@types/noble-mac/-/noble-mac-0.0.1.tgz#580b23b557474416b43fff6a752ffa3cc38470dd"
-  integrity sha512-800VrB0auTo+QJBuGRGUDoP1QtW7xenB4FCrQRNc3zgC8TuhQ2Zhj5hMN1KeTFAWDJYRLly8+UDRjjcp1fyjqQ==
+"@types/noble-mac@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@types/noble-mac/-/noble-mac-0.0.2.tgz#a13bc2eb7d9b93644c83a340652ccf2fe2bd6ba0"
+  integrity sha512-kK1GKZmV9M/hHeSL1+hRvUZsthcaDMQG7mzfqkgqdkLoPIzHRqQWKrmoSK8EgdZe4eBv1jvzGyAYi5cHGu5X9A==
   dependencies:
     "@types/node" "*"
 
