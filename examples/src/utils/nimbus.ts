@@ -1,4 +1,4 @@
-import { devices, HID } from 'node-hid';
+import { HID, devices } from 'node-hid';
 
 export interface IDPad {
   xRaw: number;
@@ -30,25 +30,28 @@ enum Buttons {
   RightStickY = 16,
   RightStickX = 15,
   R2 = 11,
-  L2 = 10,
+  L2 = 10
 }
 
 const MAX_D_PAD = 127;
 const devs = devices();
-const deviceInfo = devs.find((d) => d.vendorId === 273 && d.productId === 5152);
+console.log(devs);
+const deviceInfo = devs.find(
+  d => d.vendorId === 273 && d.productId === 5152 && d.usage === 1
+);
 
-if ( !deviceInfo ) {
+if (!deviceInfo) {
   // tslint:disable-next-line:no-console
-    console.error('Could not find device in device list');
-    process.exit(1);
+  console.error('Could not find device in device list');
+  process.exit(1);
 }
 
-const device = new HID( deviceInfo.path );
-const calculate = ({ xRaw, yRaw }: { xRaw: number, yRaw: number }) => {
+const device = new HID(deviceInfo.path);
+const calculate = ({ xRaw, yRaw }: { xRaw: number; yRaw: number }) => {
   const x = xRaw / MAX_D_PAD;
   const y = yRaw / MAX_D_PAD;
   const module = Math.sqrt(x * x + y * y);
-  let angle = (Math.atan(y / x) * (180 / Math.PI)) * - 1 + 90;
+  let angle = Math.atan(y / x) * (180 / Math.PI) * -1 + 90;
   if (x < 0) {
     angle += 180;
   }
@@ -59,12 +62,14 @@ const calculate = ({ xRaw, yRaw }: { xRaw: number, yRaw: number }) => {
     x,
     y,
     module: module > 1 ? 1 : module,
-    angle,
+    angle
   };
 };
 
 let state: IControllerState;
-let cb = (_state: IControllerState) => { return; };
+let cb = (_state: IControllerState) => {
+  return;
+};
 
 // looks like buttons have intensity yay!
 device.on('data', (data: Buffer) => {
@@ -79,7 +84,7 @@ device.on('data', (data: Buffer) => {
       x: 0,
       y: 0,
       module: 0,
-      angle: 0,
+      angle: 0
     },
     rightStick: {
       xRaw: data.readInt8(Buttons.RightStickX),
@@ -87,17 +92,17 @@ device.on('data', (data: Buffer) => {
       x: 0,
       y: 0,
       module: 0,
-      angle: 0,
+      angle: 0
     },
     r2: data.readUInt8(Buttons.R2),
-    l2: data.readUInt8(Buttons.L2),
+    l2: data.readUInt8(Buttons.L2)
   };
   state.leftStick = calculate(state.leftStick);
   state.rightStick = calculate(state.rightStick);
   cb(state);
 });
 
-device.on('error', (err) => {
+device.on('error', err => {
   // tslint:disable-next-line:no-console
   console.error('error:', err);
 });
@@ -111,5 +116,5 @@ export default {
   },
   getState() {
     return state;
-  },
+  }
 };
