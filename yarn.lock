@@ -4107,6 +4107,11 @@ node-inspect@^1.11.3:
   resolved "https://registry.yarnpkg.com/node-inspect/-/node-inspect-1.11.5.tgz#637d1de17a77f1c15eca9acf57e759f505525e1e"
   integrity sha512-ps6CL9AOCEjIfQzJW7PhcxuLngqVJKw5f8f2IXgOvkBPNsODYbUe6y8uGOpYJYpr2mKDvjxkFWkdQc+HkdU5Nw==
 
+node-inspect@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/node-inspect/-/node-inspect-2.0.0.tgz#31e6be6e877fb35d4c7bcd4c6e5cd8c5209477fc"
+  integrity sha512-vaDNU6Fa/vt8gv/PV+QoeSIPhcBnHMiNOtInxcojfagspQg5KP9HloUDGJWIacamT8Agiu51eF+fuBjrE25a6w==
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
