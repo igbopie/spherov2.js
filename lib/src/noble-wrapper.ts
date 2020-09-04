@@ -1,7 +1,6 @@
 import './noble-fix-rasp';
-import * as noble from 'noble';
-import * as nobleMac from 'noble-mac';
+import * as noble from '@abandonware/noble';
 
 export const Peripheral = noble.Peripheral;
 
-export default nobleMac;
+export default noble;

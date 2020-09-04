@@ -1,6 +1,6 @@
 import { Core } from '../../src/toys/core';
 import PeripheralMock from '../ble-mock/peripheral-mock';
-import { Peripheral } from 'noble';
+import { Peripheral } from '@abandonware/noble';
 
 test('Toy', async () => {
   // @ts-ignore

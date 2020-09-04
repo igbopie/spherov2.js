@@ -1,4 +1,4 @@
-import { Peripheral, Service, Characteristic } from 'noble';
+import { Peripheral, Service, Characteristic } from '@abandonware/noble';
 import { CharacteristicUUID, ServicesUUID } from '../../src/toys/types';
 import {
   CharasteristicMock,

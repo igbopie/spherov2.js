@@ -1,4 +1,4 @@
-import { Characteristic } from 'noble';
+import { Characteristic } from '@abandonware/noble';
 
 export interface ICharacteristicListener {
   onSubscribe: (c: CharasteristicMock) => void;

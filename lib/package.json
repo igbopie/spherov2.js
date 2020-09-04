@@ -18,15 +18,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "debug": "^4.1.1",
-    "noble": "^1.9.0",
-    "noble-mac": "git+https://github.com/Timeular/noble-mac.git"
+    "@abandonware/noble": "^1.9.2-2",
+    "debug": "^4.1.1"
   },
   "devDependencies": {
     "@types/debug": "^4.1.2",
     "@types/jest": "^24.0.0",
-    "@types/noble": "^0.0.39",
-    "@types/noble-mac": "^0.0.1",
     "jest": "^24.0.0",
     "node-inspect": "^1.11.3",
     "ts-jest": "^25.0.0",

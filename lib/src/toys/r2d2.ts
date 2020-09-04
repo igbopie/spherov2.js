@@ -35,6 +35,38 @@ export class R2D2 extends RollableToy {
     return this.queueCommand(this.commands.userIo.playAnimation(animation));
   }
 
+  public setR2D2LEDColor(r: number, g: number, b: number) {
+    return this.queueCommand(this.commands.userIo.setR2D2LEDColor(r, g, b));
+  }
+
+  public setR2D2FrontLEDColor(r: number, g: number, b: number) {
+    return this.queueCommand(this.commands.userIo.setR2D2FrontLEDColor(r, g, b));
+  }
+
+  public setR2D2BackLEDcolor(r: number, g: number, b: number) {
+    return this.queueCommand(this.commands.userIo.setR2D2BackLEDcolor(r, g, b));
+  }
+
+  public setR2D2LogicDisplaysIntensity(i: number) {
+    return this.queueCommand(this.commands.userIo.setR2D2LogicDisplaysIntensity(i));
+  }
+
+  public setR2D2HoloProjectorIntensity(i: number) {
+    return this.queueCommand(this.commands.userIo.setR2D2HoloProjectorIntensity(i));
+  }
+
+  public startIdleLedAnimation(): Promise<IQueuePayload> {
+    return this.queueCommand(this.commands.userIo.startIdleLedAnimation());
+  }
+
+  public playR2D2Sound(hex1: number, hex2: number): Promise<IQueuePayload> {
+    return this.queueCommand(this.commands.userIo.playR2D2Sound(hex1, hex2));
+  }
+
+  public setAudioVolume(vol: number): Promise<IQueuePayload> {
+    return this.queueCommand(this.commands.userIo.setAudioVolume(vol));
+  }
+
   // TODO: Refractor this and simplify
   // utility calculation for dome rotation
   private calculateDomeAngle(angle: number) {
