@@ -1,18 +1,18 @@
 export interface ICommandQueueItem<P> {
   payload: P;
   timeout?: NodeJS.Timer;
-  success: (payload: P) => any;
-  reject: (error: string) => any;
+  success: (payload: P) => unknown;
+  reject: (error: string) => unknown;
 }
 
 export interface IQueueListener<P> {
-  onExecute: (command: P) => Promise<any>;
+  onExecute: (command: P) => Promise<unknown>;
   match: (commandA: P, commandB: P) => boolean;
 }
 
 export class Queue<P> {
-  private waitingForResponseQueue: Array<ICommandQueueItem<P>>;
-  private commandQueue: Array<ICommandQueueItem<P>>;
+  private waitingForResponseQueue: ICommandQueueItem<P>[];
+  private commandQueue: ICommandQueueItem<P>[];
   private queueListener: IQueueListener<P>;
 
   constructor(queueListener: IQueueListener<P>) {
@@ -21,15 +21,14 @@ export class Queue<P> {
     this.queueListener = queueListener;
   }
 
-  public onCommandProcessed(payloadReceived: P) {
+  public onCommandProcessed(payloadReceived: P): void {
     const lastCommand: ICommandQueueItem<P> = this.waitingForResponseQueue.find(
-      command => this.queueListener.match(command.payload, payloadReceived)
+      (command) => this.queueListener.match(command.payload, payloadReceived)
     );
     if (lastCommand) {
       this.removeFromWaiting(lastCommand);
       lastCommand.success(payloadReceived);
     } else {
-      // tslint:disable-next-line:no-console
       console.log('PACKET RECEIVED BUT NOT EXECUTING', payloadReceived);
     }
   }
@@ -39,7 +38,7 @@ export class Queue<P> {
       this.commandQueue.push({
         payload,
         reject,
-        success
+        success,
       });
       this.processCommand();
     });

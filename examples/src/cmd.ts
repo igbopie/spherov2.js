@@ -1,5 +1,5 @@
-import { Scanner, SpheroMini, Utils } from 'spherov2.js';
-import { Toys } from 'spherov2.js';
+import { SpheroMini, Utils } from 'spherov2.js';
+import { emitKeypressEvents } from 'readline';
 import { starter } from './utils/starter';
 
 // SORRY FOR THIS CODE, It is my playground for now
@@ -24,6 +24,7 @@ const cmdPlay = (toy: SpheroMini) => {
   };
 
   const loop = async () => {
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       if (executing) {
         toy.roll(
@@ -46,7 +47,7 @@ const cmdPlay = (toy: SpheroMini) => {
     }
   };
 
-  const handle = async (key: string = '', symbol: any = {}) => {
+  const handle = async (key = '', symbol: { name?: string } = {}) => {
     cancelPress();
     if (symbol.name === 'up') {
       heading = 0;
@@ -98,8 +99,7 @@ const cmdPlay = (toy: SpheroMini) => {
     }
   };
 
-  const readline = require('readline');
-  readline.emitKeypressEvents(process.stdin);
+  emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
   process.stdin.on('keypress', handle);
 

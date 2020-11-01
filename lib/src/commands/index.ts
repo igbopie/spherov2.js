@@ -35,7 +35,7 @@ export const factory = (seq?: () => number) => {
       ...part,
       commandFlags: [Flags.requestsResponse, Flags.resetsInactivityTimeout],
       deviceId,
-      sequenceNumber: getSequence()
+      sequenceNumber: getSequence(),
     });
 
   return {
@@ -45,6 +45,6 @@ export const factory = (seq?: () => number) => {
     somethingApi: somethingApi(gen),
     systemInfo: systemInfo(gen),
     userIo: userIo(gen),
-    sensor: sensor(gen)
+    sensor: sensor(gen),
   };
 };

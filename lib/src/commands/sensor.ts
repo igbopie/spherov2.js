@@ -2,7 +2,7 @@ import {
   CommandGenerator,
   DeviceId,
   SensorCommandIds,
-  ICommandWithRaw
+  ICommandWithRaw,
 } from './types';
 
 export default (generator: CommandGenerator) => {
@@ -10,7 +10,7 @@ export default (generator: CommandGenerator) => {
   return {
     enableCollisionAsync: (): ICommandWithRaw =>
       encode({
-        commandId: SensorCommandIds.enableCollisionAsync
+        commandId: SensorCommandIds.enableCollisionAsync,
       }),
 
     /**
@@ -32,12 +32,12 @@ export default (generator: CommandGenerator) => {
       xSpeed: number,
       ySpeed: number,
       deadTime: number,
-      method: number = 0x01
+      method = 0x01
     ) =>
       encode({
         commandId: SensorCommandIds.configureCollision,
         targetId: 0x12,
-        payload: [method, xThreshold, xSpeed, yThreshold, ySpeed, deadTime]
+        payload: [method, xThreshold, xSpeed, yThreshold, ySpeed, deadTime],
       }),
 
     sensorMask: (
@@ -45,33 +45,33 @@ export default (generator: CommandGenerator) => {
       streamingRate: number
     ): ICommandWithRaw => {
       const bytes = [
-        (streamingRate >> 8) & 0xff, // tslint:disable-line:no-bitwise
-        streamingRate & 0xff, // tslint:disable-line:no-bitwise
+        (streamingRate >> 8) & 0xff,
+        streamingRate & 0xff,
         0,
-        (sensorRawValue >> 24) & 0xff, // tslint:disable-line:no-bitwise
-        (sensorRawValue >> 16) & 0xff, // tslint:disable-line:no-bitwise
-        (sensorRawValue >> 8) & 0xff, // tslint:disable-line:no-bitwise
-        sensorRawValue & 0xff // tslint:disable-line:no-bitwise
+        (sensorRawValue >> 24) & 0xff,
+        (sensorRawValue >> 16) & 0xff,
+        (sensorRawValue >> 8) & 0xff,
+        sensorRawValue & 0xff,
       ];
       return encode({
         commandId: SensorCommandIds.sensorMask,
         targetId: 0x12,
-        payload: bytes
+        payload: bytes,
       });
     },
 
     sensorMaskExtended: (mask: number): ICommandWithRaw => {
       const bytes = [
-        (mask >> 24) & 0xff, // tslint:disable-line:no-bitwise
-        (mask >> 16) & 0xff, // tslint:disable-line:no-bitwise
-        (mask >> 8) & 0xff, // tslint:disable-line:no-bitwise
-        mask & 0xff // tslint:disable-line:no-bitwise
+        (mask >> 24) & 0xff,
+        (mask >> 16) & 0xff,
+        (mask >> 8) & 0xff,
+        mask & 0xff,
       ];
       return encode({
         commandId: SensorCommandIds.sensorMaskExtended,
         targetId: 0x12,
-        payload: bytes
+        payload: bytes,
       });
-    }
+    },
   };
 };

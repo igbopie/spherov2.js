@@ -13,7 +13,6 @@ export interface ICharacteristicListener {
 export class CharasteristicMock implements Characteristic {
   public uuid: string;
   public listener: ICharacteristicListener;
-  // @ts-ignore
   constructor(uuid: string, listener: ICharacteristicListener) {
     this.uuid = uuid;
     this.listener = listener;
@@ -31,6 +30,8 @@ export class CharasteristicMock implements Characteristic {
     cb();
   }
 
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   public on(
     eventName: string,

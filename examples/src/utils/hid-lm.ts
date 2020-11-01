@@ -14,11 +14,12 @@ export const hid = async (toy: LightningMcQueen) => {
   let heading: number;
 
   const loop = async () => {
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       if (state) {
         const { x } = state.leftStick;
         const pos = state.r2 / 255;
-        const neg = -1 * state.l2 / 255;
+        const neg = (-1 * state.l2) / 255;
         // const currentSpeed = module * 255;
         heading = isNaN(x) ? 0 : x;
 

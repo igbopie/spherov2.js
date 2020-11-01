@@ -7,25 +7,20 @@ export function number(buffer: number[], offset: number) {
 }
 
 const decodeFlags = (flags: number) => {
-  // tslint:disable:no-bitwise
-  const isResponse: boolean = !!(flags & Flags.isResponse);
-  const requestsResponse: boolean = !!(flags & Flags.requestsResponse);
-  const requestsOnlyErrorResponse: boolean = !!(
-    flags & Flags.requestsOnlyErrorResponse
-  );
-  const resetsInactivityTimeout: boolean = !!(
-    flags & Flags.resetsInactivityTimeout
-  );
-  const commandHasTargetId: boolean = !!(flags & Flags.commandHasTargetId);
-  const commandHasSourceId: boolean = !!(flags & Flags.commandHasSourceId);
-  // tslint:enable:no-bitwise
+  const isResponse = !!(flags & Flags.isResponse);
+  const requestsResponse = !!(flags & Flags.requestsResponse);
+  const requestsOnlyErrorResponse = !!(flags & Flags.requestsOnlyErrorResponse);
+  const resetsInactivityTimeout = !!(flags & Flags.resetsInactivityTimeout);
+  const commandHasTargetId = !!(flags & Flags.commandHasTargetId);
+  const commandHasSourceId = !!(flags & Flags.commandHasSourceId);
+
   return {
     isResponse,
     requestsResponse,
     requestsOnlyErrorResponse,
     resetsInactivityTimeout,
     commandHasTargetId,
-    commandHasSourceId
+    commandHasSourceId,
   };
 };
 
@@ -58,7 +53,7 @@ const classifyPacket = (packet: Uint8Array): ICommandWithRaw => {
     deviceId,
     payload,
     raw: packet,
-    sequenceNumber
+    sequenceNumber,
   };
 };
 
@@ -66,8 +61,8 @@ export function factory(
   callback: (err: string, response?: ICommandWithRaw) => void
 ) {
   let msg: number[] = [];
-  let checksum: number = 0;
-  let isEscaping: boolean = false;
+  let checksum = 0;
+  let isEscaping = false;
 
   const init = () => {
     msg = [];
@@ -110,7 +105,6 @@ export function factory(
         case APIConstants.escapedEndOfPacket:
         case APIConstants.escapedEscape:
           if (isEscaping) {
-            // tslint:disable-next-line:no-bitwise
             byte = byte | APIConstants.escapeMask;
             isEscaping = false;
           }
@@ -121,8 +115,8 @@ export function factory(
       }
 
       msg.push(byte);
-      // tslint:disable-next-line:no-bitwise
+
       checksum = (checksum & byte) | 0xff;
-    }
+    },
   };
 }

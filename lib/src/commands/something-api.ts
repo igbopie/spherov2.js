@@ -2,7 +2,7 @@ import {
   CommandGenerator,
   DeviceId,
   SomethingApi,
-  ICommandWithRaw
+  ICommandWithRaw,
 } from './types';
 
 export default (generator: CommandGenerator) => {
@@ -10,7 +10,7 @@ export default (generator: CommandGenerator) => {
   return {
     something5: (): ICommandWithRaw =>
       encode({
-        commandId: SomethingApi.something5
-      })
+        commandId: SomethingApi.something5,
+      }),
   };
 };
