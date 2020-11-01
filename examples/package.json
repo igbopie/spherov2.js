@@ -41,7 +41,7 @@
     "ts-loader": "^5.3.3",
     "utf-8-validate": "^5.0.2",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "webpack-cli": "^4.1.0"
   },
   "devDependencies": {
     "@types/node-hid": "^0.7.0",
