@@ -1,9 +1,8 @@
-// @ts-ignore
 import * as Gatt from '@abandonware/noble/lib/hci-socket/gatt';
 
 const ATT_OP_WRITE_RESP = 0x13;
 
-Gatt.prototype.notify = function(
+Gatt.prototype.notify = function (
   serviceUuid: string,
   characteristicUuid: string,
   notify: boolean
@@ -14,7 +13,7 @@ Gatt.prototype.notify = function(
 
   this._queueCommand(
     this.writeRequest(characteristic.endHandle, valueBuffer, false),
-    function(data: any[]) {
+    function (data: any[]) {
       const opcode = data[0];
       if (opcode === ATT_OP_WRITE_RESP) {
         this.emit(

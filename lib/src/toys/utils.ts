@@ -2,7 +2,7 @@ import {
   SensorMaskValues,
   SensorMaskV2,
   APIVersion,
-  ISensorMaskRaw
+  ISensorMaskRaw,
 } from './types';
 import { ISensorResponse } from '../commands/types';
 
@@ -55,13 +55,13 @@ export const sensorValuesToRaw = (
 ): ISensorMaskRaw => {
   return {
     v2: sensorValuesToRawV2(sensorMask, apiVersion),
-    v21: sensorValuesToRawV21(sensorMask, apiVersion)
+    v21: sensorValuesToRawV21(sensorMask, apiVersion),
   };
 };
 
 export const flatSensorMask = (sensorMask: SensorMaskV2[]): number =>
   sensorMask.reduce((bits, m) => {
-    return (bits |= m); // tslint:disable-line:no-bitwise
+    return (bits |= m);
   }, 0);
 
 export const convertBinaryToFloat = (
@@ -72,7 +72,6 @@ export const convertBinaryToFloat = (
   // Position in array is defined by offset variable
   // 1 Float value is always 4 bytes!
   if (offset + 4 > nums.length) {
-    // tslint:disable-next-line:no-console
     console.log('offset exceeded Limit of array ' + nums.length);
     return 0;
   }
@@ -82,7 +81,7 @@ export const convertBinaryToFloat = (
     nums[0 + offset],
     nums[1 + offset],
     nums[2 + offset],
-    nums[3 + offset]
+    nums[3 + offset],
   ]); // [0, 0, 0, 0]
   // set the uInt8 Array as source for data view
   const view = new DataView(ui8.buffer);
@@ -104,13 +103,13 @@ const fillAngles = (state: IParserState): IParserState => {
     response.angles = {
       pitch: floats[location],
       roll: floats[location + 1],
-      yaw: floats[location + 2]
+      yaw: floats[location + 2],
     };
 
     return {
       ...state,
       response,
-      location: location + 3
+      location: location + 3,
     };
   }
   return state;
@@ -123,13 +122,13 @@ const fillAccelerometer = (state: IParserState): IParserState => {
       filtered: {
         x: floats[location],
         y: floats[location + 1],
-        z: floats[location + 2]
-      }
+        z: floats[location + 2],
+      },
     };
     return {
       ...state,
       response,
-      location: location + 3
+      location: location + 3,
     };
   }
   return state;
@@ -142,17 +141,17 @@ const fillLocator = (state: IParserState): IParserState => {
     response.locator = {
       position: {
         x: floats[location] * metersToCentimeters,
-        y: floats[location + 1] * metersToCentimeters
+        y: floats[location + 1] * metersToCentimeters,
       },
       velocity: {
         x: floats[location + 2] * metersToCentimeters,
-        y: floats[location + 3] * metersToCentimeters
-      }
+        y: floats[location + 3] * metersToCentimeters,
+      },
     };
     return {
       ...state,
       response,
-      location: location + 4
+      location: location + 4,
     };
   }
 
@@ -167,14 +166,14 @@ const fillGyroV2 = (state: IParserState): IParserState => {
       filtered: {
         x: floats[location] * multiplier,
         y: floats[location + 1] * multiplier,
-        z: floats[location + 2] * multiplier
-      }
+        z: floats[location + 2] * multiplier,
+      },
     };
 
     return {
       ...state,
       response,
-      location: location + 3
+      location: location + 3,
     };
   }
   return state;
@@ -187,14 +186,14 @@ const fillGyroV21 = (state: IParserState): IParserState => {
       filtered: {
         x: floats[location],
         y: floats[location + 1],
-        z: floats[location + 2]
-      }
+        z: floats[location + 2],
+      },
     };
 
     return {
       ...state,
       response,
-      location: location + 3
+      location: location + 3,
     };
   }
   return state;
@@ -217,7 +216,7 @@ export const parseSensorEvent = (
     floats: tranformToFloat(payload),
     sensorMask,
     location: 0,
-    response: {}
+    response: {},
   };
 
   state = fillAngles(state);

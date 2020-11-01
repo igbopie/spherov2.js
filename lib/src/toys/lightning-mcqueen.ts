@@ -6,7 +6,7 @@ export class LightningMcQueen extends RollableToy {
   public static advertisement: IToyAdvertisement = {
     name: 'Lightning McQueen',
     prefix: 'LM-',
-    class: LightningMcQueen
+    class: LightningMcQueen,
   };
 
   public driveAsRc(heading: number, speed: number): Promise<IQueuePayload> {

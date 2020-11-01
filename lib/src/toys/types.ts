@@ -8,7 +8,7 @@ import { Core } from './core';
 
 export enum ServicesUUID {
   apiV2ControlService = '00010001574f4f2053706865726f2121',
-  nordicDfuService = '00020001574f4f2053706865726f2121'
+  nordicDfuService = '00020001574f4f2053706865726f2121',
 }
 
 export enum CharacteristicUUID {
@@ -16,7 +16,7 @@ export enum CharacteristicUUID {
   dfuControlCharacteristic = '00020002574f4f2053706865726f2121',
   dfuInfoCharacteristic = '00020004574f4f2053706865726f2121',
   antiDoSCharacteristic = '00020005574f4f2053706865726f2121',
-  subsCharacteristic = '00020003574f4f2053706865726f2121'
+  subsCharacteristic = '00020003574f4f2053706865726f2121',
 }
 
 export interface IToyAdvertisement {
@@ -27,12 +27,12 @@ export interface IToyAdvertisement {
 
 export enum Stance {
   tripod = 0x01,
-  bipod = 0x02
+  bipod = 0x02,
 }
 
 export enum APIVersion {
   V2,
-  V21
+  V21,
 }
 
 export enum SensorMaskValues {
@@ -40,12 +40,12 @@ export enum SensorMaskValues {
   locator = 1,
   gyro = 2,
   orientation = 3,
-  accelerometer = 4
+  accelerometer = 4,
 }
 
 export enum SensorControlDefaults {
   intervalToHz = 1000,
-  interval = 250
+  interval = 250,
 }
 
 export interface ISensorMaskRaw {
@@ -53,7 +53,6 @@ export interface ISensorMaskRaw {
   v21: SensorMaskV2[];
 }
 
-// tslint:disable:no-bitwise
 export enum SensorMaskV2 {
   off = 0,
   velocityY = 1 << 3,
@@ -91,6 +90,5 @@ export enum SensorMaskV2 {
   locatorAll = SensorMaskV2.locatorX |
     SensorMaskV2.locatorY |
     SensorMaskV2.velocityX |
-    SensorMaskV2.velocityY
+    SensorMaskV2.velocityY,
 }
-// tslint:enable:no-bitwise

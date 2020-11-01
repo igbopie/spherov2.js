@@ -6,7 +6,7 @@ import {
   DeviceId,
   DriveFlag,
   ICommandWithRaw,
-  SensorCommandIds
+  SensorCommandIds,
 } from '../commands/types';
 import { toPromise } from '../utils';
 
@@ -17,7 +17,7 @@ import {
   SensorMaskValues,
   SensorControlDefaults,
   APIVersion,
-  ISensorMaskRaw
+  ISensorMaskRaw,
 } from './types';
 import { sensorValuesToRaw, flatSensorMask, parseSensorEvent } from './utils';
 
@@ -31,7 +31,7 @@ export interface IReExport {
 
 // TS workaround until 2.8 (not released), then ReturnType<factory>
 export const commandsType = (false as true) && factory();
-export const decodeType = (false as true) && decodeFactory(_ => null);
+export const decodeType = (false as true) && decodeFactory((_) => null);
 
 export interface IQueuePayload {
   command: ICommandWithRaw;
@@ -40,22 +40,22 @@ export interface IQueuePayload {
 
 export enum Event {
   onCollision = 'onCollision',
-  onSensor = 'onSensor'
+  onSensor = 'onSensor',
 }
 
 type EventMap = { [key in Event]?: (args: any) => void };
 
 export class Core {
   // Override in child class to get right percent
-  protected maxVoltage: number = 0;
-  protected minVoltage: number = 1;
+  protected maxVoltage = 0;
+  protected minVoltage = 1;
   protected apiVersion: APIVersion = APIVersion.V2;
 
   protected commands: typeof commandsType;
   private peripheral: Peripheral;
   private apiV2Characteristic?: Characteristic;
   private dfuControlCharacteristic?: Characteristic;
-  // @ts-ignore
+
   private subsCharacteristic?: Characteristic;
   private antiDoSCharacteristic?: Characteristic;
   private decoder: typeof decodeType;
@@ -66,7 +66,7 @@ export class Core {
   private eventsListeners: EventMap;
   private sensorMask: ISensorMaskRaw = {
     v2: [],
-    v21: []
+    v21: [],
   };
 
   constructor(p: Peripheral) {
@@ -141,7 +141,6 @@ export class Core {
       coreDebug('start-wake');
       await this.wake();
     } catch (e) {
-      // tslint:disable-next-line:no-console
       console.error('error', e);
     }
     coreDebug('start-end');
@@ -156,7 +155,7 @@ export class Core {
     );
     return {
       major: number(response.command.payload, 1),
-      minor: number(response.command.payload, 3)
+      minor: number(response.command.payload, 3),
     };
   }
 
@@ -175,7 +174,7 @@ export class Core {
       SensorMaskValues.accelerometer,
       SensorMaskValues.orientation,
       SensorMaskValues.locator,
-      SensorMaskValues.gyro
+      SensorMaskValues.gyro,
     ];
     // save it so on response we can parse it
     this.sensorMask = sensorValuesToRaw(sensorMask, this.apiVersion);
@@ -200,12 +199,12 @@ export class Core {
   }
 
   public configureCollisionDetection(
-    xThreshold: number = 100,
-    yThreshold: number = 100,
-    xSpeed: number = 100,
-    ySpeed: number = 100,
-    deadTime: number = 10,
-    method: number = 0x01
+    xThreshold = 100,
+    yThreshold = 100,
+    xSpeed = 100,
+    ySpeed = 100,
+    deadTime = 10,
+    method = 0x01
   ): Promise<IQueuePayload> {
     return this.queueCommand(
       this.commands.sensor.configureCollision(
@@ -219,10 +218,10 @@ export class Core {
     );
   }
 
-  protected queueCommand(command: ICommandWithRaw) {
+  protected queueCommand(command: ICommandWithRaw): Promise<IQueuePayload> {
     return this.queue.queue({
       characteristic: this.apiV2Characteristic,
-      command
+      command,
     });
   }
 
@@ -230,13 +229,13 @@ export class Core {
     coreDebug('init-start');
     const p = this.peripheral;
 
-    this.initPromise = new Promise(async resolve => {
+    this.initPromise = new Promise((resolve) => {
       this.initPromiseResolve = resolve;
     });
 
     this.queue = new Queue<IQueuePayload>({
       match: (cA, cB) => this.match(cA, cB),
-      onExecute: item => this.onExecute(item)
+      onExecute: (item) => this.onExecute(item),
     });
     this.eventsListeners = {};
     this.commands = factory();
@@ -251,7 +250,6 @@ export class Core {
     coreDebug('init-discoverAllServicesAndCharacteristics');
     await toPromise(p, p.discoverAllServicesAndCharacteristics);
     // WEB
-    // @ts-ignore
     // noble.onServicesDiscover(
     //   p.uuid,
     //   Object.keys(ServicesUUID).map(key => ServicesUUID[key])
@@ -283,8 +281,8 @@ export class Core {
 
   private bindServices() {
     coreDebug('bindServices');
-    this.peripheral.services.forEach(s =>
-      s.characteristics.forEach(c => {
+    this.peripheral.services.forEach((s) =>
+      s.characteristics.forEach((c) => {
         if (c.uuid === CharacteristicUUID.antiDoSCharacteristic) {
           this.antiDoSCharacteristic = c;
           coreDebug('bindServices antiDoSCharacteristic found ', c);
@@ -322,7 +320,6 @@ export class Core {
 
   private onPacketRead(error: string, command: ICommandWithRaw) {
     if (error) {
-      // tslint:disable-next-line:no-console
       console.error('There was a parse error', error);
     } else if (command.sequenceNumber === 255) {
       coreDebug('onEvent', error, command);
@@ -345,7 +342,6 @@ export class Core {
     ) {
       this.handleSensorUpdate(command);
     } else {
-      // tslint:disable-next-line:no-console
       console.log('UNKOWN EVENT', command.raw);
     }
   }
@@ -356,7 +352,6 @@ export class Core {
     if (handler) {
       handler(command);
     } else {
-      // tslint:disable-next-line:no-console
       console.log('No handler for collision but collision was detected');
     }
   }
@@ -367,13 +362,12 @@ export class Core {
       const parsedEvent = parseSensorEvent(command.payload, this.sensorMask);
       handler(parsedEvent);
     } else {
-      // tslint:disable-next-line:no-console
       console.log('No handler for collision but collision was detected');
     }
   }
 
   private onApiRead(data: Buffer, isNotification: boolean) {
-    data.forEach(byte => this.decoder.add(byte));
+    data.forEach((byte) => this.decoder.add(byte));
   }
 
   private onApiNotify(data: any, isNotification: any) {

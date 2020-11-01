@@ -6,11 +6,11 @@ export class R2D2 extends RollableToy {
   public static advertisement: IToyAdvertisement = {
     name: 'R2-D2',
     prefix: 'D2-',
-    class: R2D2
+    class: R2D2,
   };
 
-  protected maxVoltage: number = 3.65;
-  protected minVoltage: number = 3.4;
+  protected maxVoltage = 3.65;
+  protected minVoltage = 3.4;
 
   public wake(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.power.wake());
@@ -40,7 +40,9 @@ export class R2D2 extends RollableToy {
   }
 
   public setR2D2FrontLEDColor(r: number, g: number, b: number) {
-    return this.queueCommand(this.commands.userIo.setR2D2FrontLEDColor(r, g, b));
+    return this.queueCommand(
+      this.commands.userIo.setR2D2FrontLEDColor(r, g, b)
+    );
   }
 
   public setR2D2BackLEDcolor(r: number, g: number, b: number) {
@@ -48,11 +50,15 @@ export class R2D2 extends RollableToy {
   }
 
   public setR2D2LogicDisplaysIntensity(i: number) {
-    return this.queueCommand(this.commands.userIo.setR2D2LogicDisplaysIntensity(i));
+    return this.queueCommand(
+      this.commands.userIo.setR2D2LogicDisplaysIntensity(i)
+    );
   }
 
   public setR2D2HoloProjectorIntensity(i: number) {
-    return this.queueCommand(this.commands.userIo.setR2D2HoloProjectorIntensity(i));
+    return this.queueCommand(
+      this.commands.userIo.setR2D2HoloProjectorIntensity(i)
+    );
   }
 
   public startIdleLedAnimation(): Promise<IQueuePayload> {
@@ -90,52 +96,38 @@ export class R2D2 extends RollableToy {
     const unshift = Math.min(8 - hob, 6);
     const shift = 6 - unshift;
 
-    // tslint:disable-next-line:no-bitwise
     uAngle = uAngle << unshift;
     if (angle < 0) {
-      // tslint:disable-next-line:no-bitwise
       uAngle = 0x8000 | uAngle;
     }
 
-    // tslint:disable-next-line:no-bitwise
     uAngle = 0x4000 | uAngle;
 
-    // tslint:disable-next-line:no-bitwise
     const flagA = (0x04 & shift) >> 2;
 
-    // tslint:disable-next-line:no-bitwise
     const flagB = (0x02 & shift) >> 1;
 
-    // tslint:disable-next-line:no-bitwise
     const flagC = 0x01 & shift;
     if (flagA === 1) {
-      // tslint:disable-next-line:no-bitwise
       uAngle |= 1 << 9;
     } else {
-      // tslint:disable-next-line:no-bitwise
       uAngle &= uAngle ^ (1 << 9);
     }
 
     if (flagB === 1) {
-      // tslint:disable-next-line:no-bitwise
       uAngle |= 1 << 8;
     } else {
-      // tslint:disable-next-line:no-bitwise
       uAngle &= uAngle ^ (1 << 8);
     }
 
     if (flagC === 1) {
-      // tslint:disable-next-line:no-bitwise
       uAngle |= 1 << 7;
     } else {
-      // tslint:disable-next-line:no-bitwise
       uAngle &= uAngle ^ (1 << 7);
     }
 
-    // tslint:disable-next-line:no-bitwise
     result[0] = 0x00ff & uAngle;
 
-    // tslint:disable-next-line:no-bitwise
     result[1] = (0xff00 & uAngle) >> 8;
 
     return result;
@@ -146,7 +138,6 @@ export class R2D2 extends RollableToy {
     values[1] = 0;
     values[0] = val;
     while (values[0] > 0) {
-      // tslint:disable-next-line
       values[0] = values[0] >> 1;
       values[1] = values[1] + 1;
     }

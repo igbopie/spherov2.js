@@ -11,5 +11,5 @@ export const toys = [
   R2D2,
   R2Q5,
   SpheroMini,
-  SpheroBolt
-].map(c => c.advertisement);
+  SpheroBolt,
+].map((c) => c.advertisement);

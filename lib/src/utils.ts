@@ -23,8 +23,7 @@ export const toPromise = (
  * @return promise
  */
 export const wait = (time: number) =>
-  new Promise(callback => setTimeout(callback, time));
+  new Promise((callback) => setTimeout(callback, time));
 
 export const combineFlags = (flags: number[]) =>
-  // tslint:disable-next-line:no-bitwise
   flags.reduce((memo, flag) => memo | flag, 0);

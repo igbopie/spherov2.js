@@ -1,6 +1,6 @@
 import { Scanner, Stance, Utils } from 'spherov2.js';
 
-const WAIT_TIME: number = 1000;
+const WAIT_TIME = 1000;
 
 const main = async () => {
   const r2d2 = await Scanner.findR2D2();

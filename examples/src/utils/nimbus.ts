@@ -30,18 +30,17 @@ enum Buttons {
   RightStickY = 16,
   RightStickX = 15,
   R2 = 11,
-  L2 = 10
+  L2 = 10,
 }
 
 const MAX_D_PAD = 127;
 const devs = devices();
 console.log(devs);
 const deviceInfo = devs.find(
-  d => d.vendorId === 273 && d.productId === 5152 && d.usage === 1
+  (d) => d.vendorId === 273 && d.productId === 5152 && d.usage === 1
 );
 
 if (!deviceInfo) {
-  // tslint:disable-next-line:no-console
   console.error('Could not find device in device list');
   process.exit(1);
 }
@@ -62,7 +61,7 @@ const calculate = ({ xRaw, yRaw }: { xRaw: number; yRaw: number }) => {
     x,
     y,
     module: module > 1 ? 1 : module,
-    angle
+    angle,
   };
 };
 
@@ -84,7 +83,7 @@ device.on('data', (data: Buffer) => {
       x: 0,
       y: 0,
       module: 0,
-      angle: 0
+      angle: 0,
     },
     rightStick: {
       xRaw: data.readInt8(Buttons.RightStickX),
@@ -92,18 +91,17 @@ device.on('data', (data: Buffer) => {
       x: 0,
       y: 0,
       module: 0,
-      angle: 0
+      angle: 0,
     },
     r2: data.readUInt8(Buttons.R2),
-    l2: data.readUInt8(Buttons.L2)
+    l2: data.readUInt8(Buttons.L2),
   };
   state.leftStick = calculate(state.leftStick);
   state.rightStick = calculate(state.rightStick);
   cb(state);
 });
 
-device.on('error', err => {
-  // tslint:disable-next-line:no-console
+device.on('error', (err) => {
   console.error('error:', err);
 });
 
@@ -116,5 +114,5 @@ export default {
   },
   getState() {
     return state;
-  }
+  },
 };

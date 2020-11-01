@@ -15,6 +15,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "target": "es2017"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "types/**/*"],
   "exclude": ["node_modules", "test", "**/*.spec.ts"]
 }

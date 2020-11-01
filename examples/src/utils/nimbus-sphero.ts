@@ -14,6 +14,7 @@ export const hid = async (toy: SpheroMini) => {
   let heading: number;
 
   const loop = async () => {
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       if (state) {
         const { angle, module } = state.leftStick;
@@ -32,7 +33,11 @@ export const hid = async (toy: SpheroMini) => {
           stopped = false;
         }
         if (!stopped || calibrating) {
-          toy.roll(calibrating ?  0 : currentSpeed, calibrating ? offset : (heading + offset) % 360, []);
+          toy.roll(
+            calibrating ? 0 : currentSpeed,
+            calibrating ? offset : (heading + offset) % 360,
+            []
+          );
 
           if (currentSpeed === 0) {
             stopped = true;

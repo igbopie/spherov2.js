@@ -8,7 +8,7 @@ const main = async (sphero: RollableToy) => {
   console.log('Sensor enabled');
 
   // sphero.on(Event.onCollision, (command: ICommandWithRaw) => {
-  //   // tslint:disable-next-line:no-console
+  //
   //   console.log('Sensor Read', command);
   // });
 
@@ -16,6 +16,7 @@ const main = async (sphero: RollableToy) => {
     console.log('onSensor', command);
   });
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     await Utils.wait(1000);
   }

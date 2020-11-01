@@ -32,7 +32,7 @@ export class RollableToy extends Core {
     time: number,
     flags: number[]
   ) {
-    let drive: boolean = true;
+    let drive = true;
     setTimeout(() => (drive = false), time);
     while (drive) {
       await this.queueCommand(

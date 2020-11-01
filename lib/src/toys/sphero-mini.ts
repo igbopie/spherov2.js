@@ -6,11 +6,11 @@ export class SpheroMini extends RollableToy {
   public static advertisement: IToyAdvertisement = {
     name: 'Sphero Mini',
     prefix: 'SM-',
-    class: SpheroMini
+    class: SpheroMini,
   };
 
-  protected maxVoltage: number = 3.65;
-  protected minVoltage: number = 3.4;
+  protected maxVoltage = 3.65;
+  protected minVoltage = 3.4;
 
   public something1(): Promise<IQueuePayload> {
     return this.queueCommand(this.commands.systemInfo.something());

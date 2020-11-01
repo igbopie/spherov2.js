@@ -1,7 +1,6 @@
 import debug from 'debug';
 import { Peripheral } from '@abandonware/noble';
 import noble from './noble-wrapper';
-import { IToyDiscovered } from './scanner';
 import { BB9E } from './toys/bb9e';
 import { Core } from './toys/core';
 import { LightningMcQueen } from './toys/lightning-mcqueen';
@@ -26,14 +25,12 @@ const discover = async (
   scannerDebug('Dicovered', p.address);
   const { advertisement, uuid } = p;
   const { localName = '' } = advertisement;
-  validToys.forEach(async toyAdvertisement => {
+  validToys.forEach(async (toyAdvertisement) => {
     if (localName.indexOf(toyAdvertisement.prefix) === 0) {
       toys.push({ ...toyAdvertisement, peripheral: p });
-      // tslint:disable-next-line:no-console
+
       console.log(
-        `name: ${toyAdvertisement.name}, uuid: ${uuid}, mac-address: ${
-          p.address
-        }`
+        `name: ${toyAdvertisement.name}, uuid: ${uuid}, mac-address: ${p.address}`
       );
     }
   });
@@ -45,43 +42,36 @@ const discover = async (
 export const findToys = async (toysType: IToyAdvertisement[]) => {
   scannerDebug('findToys');
   const toys: IToyDiscovered[] = [];
-  // tslint:disable-next-line:no-console
+
   console.log('Scanning devices...');
   const discoverBinded = discover.bind(this, toysType, toys);
 
-  // @ts-ignore
   noble.on('discover', discoverBinded);
   scannerDebug('findToys-nobleStartScanning');
   await toPromise(noble, noble.startScanning, [
-    Object.keys(ServicesUUID).map(key => ServicesUUID[key]),
-    false
+    Object.keys(ServicesUUID).map((key) => ServicesUUID[key]),
+    false,
   ]); // any service UUID, no duplicates
   scannerDebug('findToys-wait5seconds');
   await wait(5000);
   await toPromise(noble, noble.stopScanning);
 
-  // @ts-ignore
   noble.removeListener('discover', discoverBinded);
 
-  // tslint:disable-next-line:no-console
   console.log('Done scanning devices.');
   return toys;
 };
 
 const startToy = async (toy: Core) => {
-  // tslint:disable-next-line:no-console
   console.log('Starting...');
   await toy.start();
 
-  // tslint:disable-next-line:no-console
   console.log('Started');
   const version = await toy.appVersion();
 
-  // tslint:disable-next-line:no-console
   console.log('Version', version);
   const battery = await toy.batteryLevel();
 
-  // tslint:disable-next-line:no-console
   console.log('Battery', battery);
 };
 
@@ -95,11 +85,11 @@ export const find = async <T extends Core>(
 ) => {
   const discovered = await findToys([toyType]);
   const discoveredItem: IToyDiscovered =
-    discovered.find(item => item.peripheral.advertisement.localName === name) ||
-    discovered[0];
+    discovered.find(
+      (item) => item.peripheral.advertisement.localName === name
+    ) || discovered[0];
 
   if (!discoveredItem) {
-    // tslint:disable-next-line:no-console
     return console.log('Not found');
   }
 
@@ -124,7 +114,6 @@ export const findAll = async (toyType: IToyAdvertisement) => {
       return [...toyArray, toy];
     }, Promise.resolve([]));
   } else {
-    // tslint:disable-next-line:no-console
     console.log('Not found');
   }
 };

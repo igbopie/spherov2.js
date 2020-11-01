@@ -9,9 +9,11 @@
   "scripts": {
     "test": "cd lib && npm test",
     "husky": "node ./node_modules/husky/run install",
-    "lint": "tslint --project lib/tsconfig.json -c tslint.json '**/src/**/*.ts'",
+    "lint": "eslint . --ext .ts",
+    "lint-fix": "eslint . --ext .ts --fix",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "prettier": "lint-staged",
+    "prettier-format": "prettier --config .prettierrc '**/*.ts' --write",
     "add-all": "git add -A",
     "docs": "rm -fR docs; typedoc --excludeExternals --excludeProtected --excludePrivate --exclude './lib/src/**/*.ts' --theme minimal --readme none --out docs --mode modules ."
   },
@@ -28,16 +30,20 @@
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
-      "prettier --write",
+      "prettier --write --config .prettierrc ",
       "git add"
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.3.0",
-    "tslint": "^6.0.0",
-    "tslint-config-prettier": "^1.16.0",
     "lint-staged": "^10.0.0",
     "prettier": "^2.0.0",
-    "typedoc": "0.19.1"
+    "typedoc": "0.19.1",
+    "typescript": "^4.0.0"
   }
 }
