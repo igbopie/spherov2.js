@@ -7,7 +7,7 @@
     "examples"
   ],
   "scripts": {
-    "test": "cd lib && npm test",
+    "test": "yarn workspaces run test",
     "husky": "node ./node_modules/husky/run install",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",

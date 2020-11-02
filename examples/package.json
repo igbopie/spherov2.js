@@ -30,7 +30,8 @@
     "sensor-d2": "ts-node src/sensor D2",
     "sensor": "ts-node src/sensor",
     "prettier": "lint-staged",
-    "serve": "http-server ."
+    "serve": "http-server .",
+    "test": "echo 'No tests for examples'"
   },
   "dependencies": {
     "bufferutil": "^4.0.1",

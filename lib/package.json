@@ -34,6 +34,14 @@
   "jest": {
     "verbose": true,
     "collectCoverage": true,
+    "coverageReporters": [
+      [
+        "lcov",
+        {
+          "projectRoot": ".."
+        }
+      ]
+    ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts}",
       "!**/node_modules/**",
