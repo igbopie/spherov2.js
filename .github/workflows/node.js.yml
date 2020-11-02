@@ -40,9 +40,14 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: '12'
-    - run: yarn test
-    - uses: paambaati/codeclimate-action@v2.2.4
+    - run: sudo apt-get update
+    - run: sudo apt-get install build-essential git -y
+    - run: sudo apt-get install libudev-dev -y
+    - run: sudo apt-get install libusb-1.0-0-dev -y
+    - run: sudo apt-get install gcc-4.8 g++-4.8 -y
+    - run: yarn install --frozen-lockfile
+    - uses: paambaati/codeclimate-action@v2.7.4
       env:
-        CC_TEST_REPORTER_ID: 945dfb58a832d233a3caeb84e3e6d3be212e8c7abcb48117fce63b9adcb43647
+        CC_TEST_REPORTER_ID: c0e9c3e4feb7d67fb4221428b2efb0c2745ff27c69fb76ba4965b4319040b4d5
       with:
-        coverageCommand: yarn coverage
+        coverageCommand: yarn test
