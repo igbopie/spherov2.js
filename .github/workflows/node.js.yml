@@ -30,5 +30,4 @@ jobs:
     - run: sudo apt-get install libusb-1.0-0-dev -y
     - run: sudo apt-get install gcc-4.8 g++-4.8 -y
     - run: yarn install --frozen-lockfile
-    - run: yarn build --if-present
     - run: yarn test
