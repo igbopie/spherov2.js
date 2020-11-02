@@ -54,5 +54,6 @@
       "release-it-yarn-workspaces": true
     },
     "npm": false
-  }
+  },
+  "version": "0.1.3"
 }
