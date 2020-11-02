@@ -30,4 +30,8 @@ jobs:
     - run: sudo apt-get install libusb-1.0-0-dev -y
     - run: sudo apt-get install gcc-4.8 g++-4.8 -y
     - run: yarn install --frozen-lockfile
+    - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - run: chmod +x ./cc-test-reporter
+    - run: ./cc-test-reporter before-build
     - run: yarn test
+    - run: ./cc-test-reporter after-build --exit-code 0
