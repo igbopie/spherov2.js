@@ -1,6 +1,6 @@
 {
   "name": "spherov2.js-examples",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Examples - V2 api version for sphero toys (not official)",
   "author": "igbopie",
   "license": "MIT",
@@ -37,7 +37,7 @@
     "bufferutil": "^4.0.1",
     "http-server": "^0.11.1",
     "net": "^1.0.2",
-    "spherov2.js": "^0.1.5",
+    "spherov2.js": "^0.1.6",
     "tls": "^0.0.1",
     "ts-loader": "^5.3.3",
     "utf-8-validate": "^5.0.2",
