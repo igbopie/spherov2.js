@@ -7,6 +7,7 @@
     "examples"
   ],
   "scripts": {
+    "release": "release-it",
     "test": "yarn workspaces run test",
     "husky": "node ./node_modules/husky/run install",
     "lint": "eslint . --ext .ts",
@@ -43,7 +44,15 @@
     "husky": "^4.3.0",
     "lint-staged": "^10.0.0",
     "prettier": "^2.0.0",
+    "release-it": "^14.2.1",
+    "release-it-yarn-workspaces": "^2.0.0",
     "typedoc": "0.19.1",
     "typescript": "^4.0.0"
+  },
+  "release-it": {
+    "plugins": {
+      "release-it-yarn-workspaces": true
+    },
+    "npm": false
   }
 }
