@@ -38,6 +38,7 @@ jobs:
       - run: sudo apt-get install libusb-1.0-0-dev -y
       - run: sudo apt-get install gcc-4.8 g++-4.8 -y
       - run: yarn install --frozen-lockfile
+      - run: yarn npm set //registry.npmjs.org/:_authToken $NPM_TOKEN
       - run: yarn release --ci
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
