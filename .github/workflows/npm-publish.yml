@@ -15,6 +15,11 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - run: sudo apt-get update
+      - run: sudo apt-get install build-essential git -y
+      - run: sudo apt-get install libudev-dev -y
+      - run: sudo apt-get install libusb-1.0-0-dev -y
+      - run: sudo apt-get install gcc-4.8 g++-4.8 -y
       - run: yarn install --frozen-lockfile
       - run: yarn test
 
@@ -27,6 +32,11 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+      - run: sudo apt-get update
+      - run: sudo apt-get install build-essential git -y
+      - run: sudo apt-get install libudev-dev -y
+      - run: sudo apt-get install libusb-1.0-0-dev -y
+      - run: sudo apt-get install gcc-4.8 g++-4.8 -y
       - run: yarn install --frozen-lockfile
       - run: yarn release
         env:
