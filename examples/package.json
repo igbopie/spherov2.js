@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "bufferutil": "^4.0.1",
-    "http-server": "^0.11.1",
+    "http-server": "^0.12.3",
     "net": "^1.0.2",
     "spherov2.js": "^0.1.10",
     "tls": "^0.0.1",
