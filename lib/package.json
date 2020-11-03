@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/debug": "^4.1.2",
     "@types/jest": "^26.0.0",
-    "jest": "^26.0.0",
+    "jest": "^26.6.2",
     "node-inspect": "^2.0.0",
     "ts-jest": "^26.0.0",
     "ts-node": "^9.0.0",
