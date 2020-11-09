@@ -39,7 +39,7 @@
     "net": "^1.0.2",
     "spherov2.js": "^0.1.25",
     "tls": "^0.0.1",
-    "ts-loader": "^8.0.8",
+    "ts-loader": "^8.0.10",
     "utf-8-validate": "^5.0.2",
     "webpack": "^5.4.0",
     "webpack-cli": "^4.1.0"
