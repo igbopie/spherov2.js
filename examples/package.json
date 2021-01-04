@@ -34,13 +34,13 @@
     "test": "echo 'No tests for examples'"
   },
   "dependencies": {
-    "bufferutil": "^4.0.1",
+    "bufferutil": "^4.0.3",
     "http-server": "^0.12.3",
     "net": "^1.0.2",
     "spherov2.js": "^0.1.25",
     "tls": "^0.0.1",
     "ts-loader": "^8.0.13",
-    "utf-8-validate": "^5.0.2",
+    "utf-8-validate": "^5.0.4",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.1"
   },
