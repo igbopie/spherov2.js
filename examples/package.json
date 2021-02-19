@@ -41,7 +41,7 @@
     "tls": "^0.0.1",
     "ts-loader": "^8.0.17",
     "utf-8-validate": "^5.0.4",
-    "webpack": "^5.22.0",
+    "webpack": "^5.23.0",
     "webpack-cli": "^4.5.0"
   },
   "devDependencies": {
