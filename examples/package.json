@@ -50,6 +50,6 @@
     "node-hid": "^2.1.1",
     "node-inspect": "^1.11.3",
     "ts-node": "^9.1.1",
-    "typescript": "^3.3.4000"
+    "typescript": "^4.1.5"
   }
 }
