@@ -18,7 +18,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@abandonware/noble": "^1.9.2-11",
+    "@abandonware/noble": "^1.9.2-13",
     "debug": "^4.3.1"
   },
   "devDependencies": {
